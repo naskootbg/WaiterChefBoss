@@ -1,10 +1,18 @@
-﻿namespace WaiterChefBoss.Contracts.Boss
+﻿using WaiterChefBoss.Data.Models;
+
+namespace WaiterChefBoss.Contracts.Boss
 {
     public interface IBossService
     {
-        Task AddWaiter(int waiterId, string waiterName);
+        /// <summary>
+        /// When IdentityUsers.Count == 0 //First user will become a Boss - super admin
+        /// </summary>
+         
+        Task BecomeBoss();
 
-        Task AddChef(int chefId, string chefName);
+        Task AddWaiter(Waiter waiter);
+
+        Task AddChef(Chef chef);
 
         Task RemoveWaiter(int waiterId);
 
@@ -20,23 +28,23 @@
 
         Task FullReport();
 
-        Task ActiveOrders();
-
         Task OutOfStock();
 
         Task AllProducts();
 
         Task RemoveProduct(int productId);
 
-        Task UpdateProduct(int productId);
+        Task UpdateProduct(Product product);
 
-        Task AddProduct(int categoryId, int productId);
+        Task AddProduct(Product product);
 
-        Task AddCategory(int categoryId, int productId);
+        Task AddCategory(Category category);
 
         Task RemoveCategory(int categoryId);
 
         Task UpdateCategory(int categoryId);
+
+        //Task Reviews();
 
     }
 }

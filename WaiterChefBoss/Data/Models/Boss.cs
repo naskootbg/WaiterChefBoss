@@ -7,7 +7,7 @@ namespace WaiterChefBoss.Data.Models
     public class Boss
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
     }

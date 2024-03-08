@@ -11,7 +11,7 @@ namespace WaiterChefBoss.Data.Models
         [Required]
         public int Table;
         public IEnumerable<Order> Orders { get; init; } = new List<Order>();
-        public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
     }
