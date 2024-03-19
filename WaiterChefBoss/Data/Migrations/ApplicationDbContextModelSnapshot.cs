@@ -224,13 +224,19 @@ namespace WaiterChefBoss.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Boss", b =>
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.Basket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Table")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -240,7 +246,7 @@ namespace WaiterChefBoss.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bosses");
+                    b.ToTable("Baskets");
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Category", b =>
@@ -253,11 +259,13 @@ namespace WaiterChefBoss.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -290,44 +298,6 @@ namespace WaiterChefBoss.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Chef", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Chefs");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -335,12 +305,6 @@ namespace WaiterChefBoss.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ChefId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -354,16 +318,13 @@ namespace WaiterChefBoss.Data.Migrations
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("WaiterId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChefId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("WaiterId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -376,24 +337,31 @@ namespace WaiterChefBoss.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("BasketId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Calories")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("CategotyId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -404,38 +372,75 @@ namespace WaiterChefBoss.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TimeCooking")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TimeCooking")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Weight")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategotyId");
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OrderId");
 
                     b.ToTable("Products");
-                });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Waiter", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Waiters");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Calories = "555 cal",
+                            CategoryId = 1,
+                            Description = "Pizza with meal and chease",
+                            ImageUrl = "https://thumbs.dreamstime.com/z/pepperoni-pizza-thinly-sliced-popular-topping-american-style-pizzerias-30402134.jpg",
+                            Name = "Pizza",
+                            Price = 25.97m,
+                            Status = 1,
+                            TimeCooking = 10,
+                            Weight = 0.5m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Calories = "551 cal",
+                            CategoryId = 2,
+                            Description = "Shkembe chorba with shkembe and a lot garlic and vinegar",
+                            ImageUrl = "https://thumbs.dreamstime.com/b/soup-3843446.jpg",
+                            Name = "Shkembe chorba",
+                            Price = 2.97m,
+                            Status = 1,
+                            TimeCooking = 15,
+                            Weight = 0.5m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Calories = "44 cal",
+                            CategoryId = 3,
+                            Description = "Hot coffee with very special taste of coffee",
+                            ImageUrl = "https://thumbs.dreamstime.com/b/coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-113807195.jpg",
+                            Name = "Coffee",
+                            Price = 2m,
+                            Status = 1,
+                            TimeCooking = 5,
+                            Weight = 0.05m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Calories = "5555 cal",
+                            CategoryId = 4,
+                            Description = "Cold natural beer, but maybe alchohol",
+                            ImageUrl = "https://thumbs.dreamstime.com/b/beer-959519.jpg",
+                            Name = "Beer",
+                            Price = 5.97m,
+                            Status = 1,
+                            TimeCooking = 1,
+                            Weight = 0.5m
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -489,29 +494,7 @@ namespace WaiterChefBoss.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Boss", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Chef", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Customer", b =>
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.Basket", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
@@ -524,28 +507,24 @@ namespace WaiterChefBoss.Data.Migrations
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>
                 {
-                    b.HasOne("WaiterChefBoss.Data.Models.Chef", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("ChefId");
-
-                    b.HasOne("WaiterChefBoss.Data.Models.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WaiterChefBoss.Data.Models.Waiter", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("WaiterId");
-
-                    b.Navigation("Customer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Product", b =>
                 {
-                    b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
+                    b.HasOne("WaiterChefBoss.Data.Models.Basket", null)
                         .WithMany("Products")
-                        .HasForeignKey("CategotyId")
+                        .HasForeignKey("BasketId");
+
+                    b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -556,40 +535,14 @@ namespace WaiterChefBoss.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Waiter", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Category", b =>
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.Basket", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Chef", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Waiter", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

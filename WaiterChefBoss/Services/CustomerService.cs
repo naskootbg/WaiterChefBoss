@@ -1,19 +1,19 @@
-﻿using WaiterChefBoss.Contracts.ICustomerService;
-using WaiterChefBoss.Data;
+﻿//using WaiterChefBoss.Contracts.ICustomerService;
+//using WaiterChefBoss.Data;
 
-namespace WaiterChefBoss.Services
-{
-    public class CustomerService : ICustomerService
-    {
-        public readonly ApplicationDbContext context;
+//namespace WaiterChefBoss.Services
+//{
+//    public class CustomerService : ICustomerService
+//    {
+//        public readonly ApplicationDbContext context;
 
-        public CustomerService(ApplicationDbContext _context)
-        {
-            context = _context;
-        }
-        public async Task OrderProducts(int productId, int orderId, int productsQuantity)
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
+//        public CustomerService(ApplicationDbContext _context)
+//        {
+//            context = _context;
+//        }
+//        public async Task OrderProducts(int productId, int orderId, int productsQuantity)
+//        {
+//            throw new NotImplementedException();
+//        }
+//    }
+//}

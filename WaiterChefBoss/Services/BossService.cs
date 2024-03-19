@@ -1,6 +1,9 @@
-﻿using WaiterChefBoss.Contracts.Boss;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using WaiterChefBoss.Contracts.Boss;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Services
 {
@@ -13,29 +16,34 @@ namespace WaiterChefBoss.Services
             context = _context;
         }
 
-        public async Task AddCategory(Category category)
+        //public async Task<IActionResult> AddUserRole()
+        //{
+
+        //}
+
+        public Task AddCategory(CategoryViewModel category)
         {
             throw new NotImplementedException();
         }
 
-        public async Task AddChef(Chef chef)
+        public async Task AddChef(string id)
         {
-            throw new NotImplementedException();
+
         }
 
-        public async Task AddProduct(Product product)
+        public async Task AddProduct(ProductViewModel product)
         {
-            throw new NotImplementedException();
+
         }
 
-        public async Task AddWaiter(Waiter waiter)
+        public async Task AddWaiter(string id)
         {
-            throw new NotImplementedException();
+
         }
 
         public async Task AllProducts()
         {
-            throw new NotImplementedException();
+
         }
 
         public async Task BecomeBoss()
@@ -88,17 +96,32 @@ namespace WaiterChefBoss.Services
             throw new NotImplementedException();
         }
 
-        public async Task UpdateCategory(int categoryId)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<bool> UpdateCategory(CategoryViewModel category, int categoryId)
+        //{
+        //    var cat = await context.Categories.FindAsync(categoryId);
 
-        public async Task UpdateProduct(Product product)
+        //    if (cat == null)
+        //    {
+        //        return false;
+        //    }
+        //    cat.Id = category.Id;
+        //    cat.Name = category.Name;
+        //    cat.Description = category.Description;
+        //    return true;
+        //}
+
+
+        public Task UpdateProduct(ProductViewModel product, int productId)
         {
             throw new NotImplementedException();
         }
 
         public async Task WaiterReport(int waiterId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IBossService.UpdateCategory(CategoryViewModel category, int categoryId)
         {
             throw new NotImplementedException();
         }

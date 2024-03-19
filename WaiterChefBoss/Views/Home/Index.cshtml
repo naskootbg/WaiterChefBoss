@@ -1,8 +1,27 @@
-﻿@{
+﻿@model HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
+ 
+@*<select onchange="location = this.value;">
+    <option value="#">All Products</option>
+@foreach (var category in Model.Categories)
+{
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        <option value="/food/category/@category.Id">@category.Name</option>
+    
+}
+</select>
+*@
+
+
+@foreach (var product in Model.Products)
+{
+    <h2>@product.Name</h2>
+        <p>@product.Description</p>
+        <img class="img-thumbnail" src="@product.ImageUrl">
+        <div>Category: <a href="/food/category/@product.CategoryId">@product.CategoryName</a></div>
+        <input id="table" ><br/>
+        <button asp-action="" type="button" class="btn-primary">Add to Basket</button>
+}

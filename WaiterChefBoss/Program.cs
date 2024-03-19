@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WaiterChefBoss.Contracts.All;
-using WaiterChefBoss.Contracts.Boss;
-using WaiterChefBoss.Contracts.ICustomerService;
+using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
-using WaiterChefBoss.Services;
+using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Services.Product;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +13,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<IBossService, BossService>();
-builder.Services.AddTransient<IAllService, AllService>();
-builder.Services.AddTransient<ICustomerService, CustomerService>();
+//builder.Services.AddTransient<IBossService, BossService>();
+//builder.Services.AddTransient<IAllService, AllService>();
+
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IProductService, ProductService>();
+
+builder.Services.AddAuthentication()
+    .AddFacebook(options =>
+    {
+        options.AppId = "650052678393469";
+        options.AppSecret = "fa35d015b2bab31696852c23cd8b752f";
+    });
+
 
 var app = builder.Build();
 

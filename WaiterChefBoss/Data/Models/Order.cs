@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,15 +13,15 @@ namespace WaiterChefBoss.Data.Models
         public int Status { get; set; }
         [Required]
         public int Table { get; set; }
-
+        [Required]
         public DateTime DateAdded { get; set; }
 
         public IEnumerable<Product> Products { get; init; } = new List<Product>();
-
+        [Required]
         public decimal Total { get; set; }
-        public int CustomerId { get; set; }
-        [ForeignKey(nameof(CustomerId))]
-        public Customer Customer { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+        [ForeignKey(nameof(UserId))]
+        public IdentityUser User { get; set; } = null!;
         
         
     }

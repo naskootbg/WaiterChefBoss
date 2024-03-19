@@ -1,4 +1,5 @@
 ﻿using WaiterChefBoss.Data.Models;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Contracts.Boss
 {
@@ -10,16 +11,12 @@ namespace WaiterChefBoss.Contracts.Boss
          
         Task BecomeBoss();
 
-        Task AddWaiter(Waiter waiter);
-
-        Task AddChef(Chef chef);
+       
 
         Task RemoveWaiter(int waiterId);
 
         Task RemoveChef(int chefId);
-
-        Task DailyReport(DateTime today);
-
+        
         Task CustomReport(DateTime start, int howManyDays);
 
         Task ChefReport(int chefId);
@@ -34,15 +31,15 @@ namespace WaiterChefBoss.Contracts.Boss
 
         Task RemoveProduct(int productId);
 
-        Task UpdateProduct(Product product);
+        Task UpdateProduct(ProductViewModel product, int productId);
 
-        Task AddProduct(Product product);
+        Task AddProduct(ProductViewModel product);
 
-        Task AddCategory(Category category);
+        Task AddCategory(CategoryViewModel category);
 
         Task RemoveCategory(int categoryId);
 
-        Task UpdateCategory(int categoryId);
+        Task UpdateCategory(CategoryViewModel category, int categoryId);
 
         //Task Reviews();
 

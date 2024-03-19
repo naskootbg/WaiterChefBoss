@@ -1,0 +1,18 @@
+﻿@model CategoryViewModel
+
+@{
+    ViewData["Title"] = @Model.CategoryDetails.Name;
+}
+<h1>@Model.CategoryDetails.Name</h1>
+<div id="category-description">@Model.CategoryDetails.Description</div>
+
+@foreach (var product in @Model.Products)
+{
+    <h2>@product.Name</h2>
+    <p>@product.Description</p>
+    <img class="img-thumbnail" src="@product.ImageUrl">
+    <div>
+        Category: <a asp-controller="Food" asp-action="Category" asp-route-id="@product.CategoryId">@product.CategoryName</a>
+
+    </div>
+}
