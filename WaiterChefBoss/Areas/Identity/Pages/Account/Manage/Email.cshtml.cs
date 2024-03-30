@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 {
@@ -22,18 +22,16 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly ICategoryService category;
+       
 
         public EmailModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IEmailSender emailSender,
-            ICategoryService _category)
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            category = _category;
         }
         public IEnumerable<CategoryViewModelService> Categories { get; set; }
 
@@ -81,7 +79,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(IdentityUser user)
         {
-            Categories = await category.AllCategories();
             var email = await _userManager.GetEmailAsync(user);
             Email = email;
 
@@ -95,7 +92,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Categories = await category.AllCategories();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -108,7 +104,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostChangeEmailAsync()
         {
-            Categories = await category.AllCategories();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

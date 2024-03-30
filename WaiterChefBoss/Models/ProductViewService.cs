@@ -1,6 +1,7 @@
-﻿using WaiterChefBoss.Services.Category;
+﻿using System.Globalization;
+using WaiterChefBoss.Data.Models;
 
-namespace WaiterChefBoss.Services.Product
+namespace WaiterChefBoss.Models
 {
     public class ProductViewService
     {
@@ -14,6 +15,11 @@ namespace WaiterChefBoss.Services.Product
         public string ImageUrl { get; set; } = string.Empty;
         public string Calories { get; set; } = string.Empty;
         public int CategoryId { get; set; }
+
+        public int OrderId { get; set; }
+
         public string CategoryName { get; set; } = string.Empty;
+
+        public string CurencySymbol = CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
     }
 }

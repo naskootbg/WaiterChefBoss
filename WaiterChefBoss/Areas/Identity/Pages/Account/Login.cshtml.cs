@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
+using System.Security.Claims;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account
 {
@@ -23,13 +24,12 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly ICategoryService category;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, ICategoryService _category )
+
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger )
         {
             _signInManager = signInManager;
             _logger = logger;
-            category = _category;
         }
 
         /// <summary>
@@ -100,17 +100,16 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            Categories = await category.AllCategories();
-
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
         }
+        
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = $"~/UserPanel")
         {
             returnUrl ??= Url.Content("~/");
-            Categories = await category.AllCategories();
+             
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)

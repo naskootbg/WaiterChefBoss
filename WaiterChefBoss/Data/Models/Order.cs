@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Data.Models
 {
@@ -14,15 +15,14 @@ namespace WaiterChefBoss.Data.Models
         [Required]
         public int Table { get; set; }
         [Required]
-        public DateTime DateAdded { get; set; }
-
-        public IEnumerable<Product> Products { get; init; } = new List<Product>();
+        public DateTime DateAdded { get; set; }     
+        
         [Required]
         public decimal Total { get; set; }
         public string UserId { get; set; } = null!;
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
-        
-        
+
+        public IEnumerable<OrderProducts> Products { get; set; } = new List<OrderProducts>();
     }
 }

@@ -1,77 +1,110 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using WaiterChefBoss.Contracts.Boss;
+using Microsoft.Win32;
+using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
-
+using static WaiterChefBoss.Data.DataConstants;
 namespace WaiterChefBoss.Services
 {
     public class BossService : IBossService
     {
         public readonly ApplicationDbContext context;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<IdentityUser> usermanager;
 
-        public BossService(ApplicationDbContext _context)
+        public BossService(ApplicationDbContext _context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _usermanager)
         {
+            roleManager = _roleManager;
             context = _context;
+            usermanager = _usermanager;
         }
 
-        //public async Task<IActionResult> AddUserRole()
-        //{
-
-        //}
-
-        public Task AddCategory(CategoryViewModel category)
+        public Task AddCategory(CategoryViewModelService category)
         {
             throw new NotImplementedException();
         }
 
-        public async Task AddChef(string id)
-        {
-
-        }
-
-        public async Task AddProduct(ProductViewModel product)
-        {
-
-        }
-
-        public async Task AddWaiter(string id)
-        {
-
-        }
-
-        public async Task AllProducts()
-        {
-
-        }
-
-        public async Task BecomeBoss()
+        public Task AddProduct(ProductViewService product)
         {
             throw new NotImplementedException();
         }
 
-        public async Task ChefReport(int chefId)
+        public async Task<string> AddToRole(string userId, string roleName)
+        {
+            var user = await usermanager.FindByIdAsync(userId);
+            if (roleName == ChefRole || roleName == WaiterRole || roleName == BossRole)
+            {
+                if (await roleManager.RoleExistsAsync(roleName) == false)
+                {
+                    var role = new IdentityRole()
+                    {
+                        Name = roleName
+                    };
+
+                    await roleManager.CreateAsync(role);
+                    return $"Role {roleName} added successful!";
+                }
+
+            }
+            else
+            {
+                return $"Role {roleName} must be {ChefRole},{WaiterRole} or {BossRole} and can't be created";
+            }
+
+
+
+            if (user != null)
+            {
+                if (await usermanager.IsInRoleAsync(user,roleName) == false)
+                {
+                    await usermanager.AddToRoleAsync(user, roleName);
+                    return $"The user {user.UserName} is now {roleName}!";
+                }
+                else
+                {
+                    return $"The user {user.UserName} is already {roleName}!";
+
+                }
+            }
+            else
+            {
+                return $"User with {userId} do not exists!";
+            }
+           
+        }
+
+            
+        
+
+        public Task AllProducts()
         {
             throw new NotImplementedException();
         }
 
-        public async Task CustomReport(DateTime start, int howManyDays)
+        public Task BecomeBoss()
         {
             throw new NotImplementedException();
         }
 
-        public async Task DailyReport(DateTime today)
+        public Task ChefReport(int chefId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task FullReport()
+        public Task CustomReport(DateTime start, int howManyDays)
         {
             throw new NotImplementedException();
         }
 
-        public async Task OutOfStock()
+        public Task FullReport()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task OutOfStock()
         {
             throw new NotImplementedException();
         }
@@ -81,47 +114,58 @@ namespace WaiterChefBoss.Services
             throw new NotImplementedException();
         }
 
-        public async Task RemoveChef(int chefId)
+        public Task RemoveProduct(int productId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task RemoveProduct(int productId)
+        public async Task<string> RemoveFromRole(string userId, string roleName)
+        {
+            var user = await usermanager.FindByIdAsync(userId);
+            string[] roles = {ChefRole, WaiterRole, BossRole };
+
+            if (user == null)
+            {
+                return $"User with ID:{userId} do not exists!";
+               
+            }
+            else
+            {
+                if (await usermanager.IsInRoleAsync(user, roleName) == false)
+                {
+                    await usermanager.RemoveFromRolesAsync(user, roles);
+                    return $"The user {user.UserName} is now removed from the roles {string.Join(", ", roles)}!";
+                }
+                else
+                {
+                    return $"The user {user.UserName} is not {roleName}!";
+
+                }
+
+            }
+        }
+
+
+        public async Task UpdateCategory(CategoryViewModelService category, int categoryId)
+        {
+            var cat = await context.Categories.FindAsync(categoryId);
+            if (cat != null)
+            {
+                cat.Id = category.Id;
+                cat.Name = category.Name;
+                cat.Description = category.Description;
+                await context.SaveChangesAsync();
+            }
+            
+
+        }
+
+        public Task UpdateProduct(ProductViewService product, int productId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task RemoveWaiter(int waiterId)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public async Task<bool> UpdateCategory(CategoryViewModel category, int categoryId)
-        //{
-        //    var cat = await context.Categories.FindAsync(categoryId);
-
-        //    if (cat == null)
-        //    {
-        //        return false;
-        //    }
-        //    cat.Id = category.Id;
-        //    cat.Name = category.Name;
-        //    cat.Description = category.Description;
-        //    return true;
-        //}
-
-
-        public Task UpdateProduct(ProductViewModel product, int productId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task WaiterReport(int waiterId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task IBossService.UpdateCategory(CategoryViewModel category, int categoryId)
+        public Task WaiterReport(int waiterId)
         {
             throw new NotImplementedException();
         }

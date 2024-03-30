@@ -20,14 +20,12 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data.Models;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly ICategoryService category;
-
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
@@ -40,8 +38,8 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
         ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            ICategoryService _category)
+            IEmailSender emailSender
+            )
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,7 +47,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            category = _category;
         }
 
         /// <summary>
@@ -111,15 +108,12 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            Categories = await category.AllCategories();
-
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            Categories = await category.AllCategories();
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)

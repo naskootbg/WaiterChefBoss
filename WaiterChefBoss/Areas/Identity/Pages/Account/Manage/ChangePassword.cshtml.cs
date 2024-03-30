@@ -10,14 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly ICategoryService category;
-
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
@@ -31,7 +29,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            category = _category;
         }
         public IEnumerable<CategoryViewModelService> Categories { get; set; }
 
@@ -86,7 +83,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Categories = await category.AllCategories();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -104,7 +100,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Categories = await category.AllCategories();
             if (!ModelState.IsValid)
             {
                 return Page();

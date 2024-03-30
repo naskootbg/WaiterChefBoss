@@ -1,22 +1,18 @@
 ﻿using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
 
-namespace WaiterChefBoss.Contracts.Boss
+namespace WaiterChefBoss.Contracts
 {
     public interface IBossService
     {
         /// <summary>
         /// When IdentityUsers.Count == 0 //First user will become a Boss - super admin
         /// </summary>
-         
+
         Task BecomeBoss();
 
-       
-
-        Task RemoveWaiter(int waiterId);
-
-        Task RemoveChef(int chefId);
-        
+        Task<string> RemoveFromRole(string userId, string roleName);
+        Task<string> AddToRole(string userId, string roleName);
         Task CustomReport(DateTime start, int howManyDays);
 
         Task ChefReport(int chefId);
@@ -31,15 +27,15 @@ namespace WaiterChefBoss.Contracts.Boss
 
         Task RemoveProduct(int productId);
 
-        Task UpdateProduct(ProductViewModel product, int productId);
+        Task UpdateProduct(ProductViewService product, int productId);
 
-        Task AddProduct(ProductViewModel product);
+        Task AddProduct(ProductViewService product);
 
-        Task AddCategory(CategoryViewModel category);
+        Task AddCategory(CategoryViewModelService category);
 
         Task RemoveCategory(int categoryId);
 
-        Task UpdateCategory(CategoryViewModel category, int categoryId);
+        Task UpdateCategory(CategoryViewModelService category, int categoryId);
 
         //Task Reviews();
 

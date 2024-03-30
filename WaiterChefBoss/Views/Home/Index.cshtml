@@ -14,14 +14,30 @@
 }
 </select>
 *@
-
+<div class="container-fluid text-center">
+    <div class="row">
 
 @foreach (var product in Model.Products)
-{
-    <h2>@product.Name</h2>
-        <p>@product.Description</p>
-        <img class="img-thumbnail" src="@product.ImageUrl">
-        <div>Category: <a href="/food/category/@product.CategoryId">@product.CategoryName</a></div>
-        <input id="table" ><br/>
-        <button asp-action="" type="button" class="btn-primary">Add to Basket</button>
+    {
+        
+            <div class="col">
+                <div class="card" style="width: 25rem;">
+                     <h3>@product.Name</h3> 
+                     
+                    <img class="img-thumbnail" src="@product.ImageUrl">
+                    <p>@product.Description</p>
+                    <div>Category: <a href="/food/category/@product.CategoryId">@product.CategoryName</a></div>
+        
+                    @if (this.User.Identity!.IsAuthenticated)
+                        {
+                    <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
+                        <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+                    </form>
+                        }
+                </div>
+            </div>
+        
 }
+    </div>
+</div>
+ 

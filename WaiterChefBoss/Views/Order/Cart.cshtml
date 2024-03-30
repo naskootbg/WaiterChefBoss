@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ProductViewService>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+<table class="table table-striped grid-table">
+    <thead>
+        <tr>
+        <th>Product</th>
+    <th>Price</th>             
+        </tr>
+    </thead>
+    <tbody>
+        @{decimal total = 0;}
+@foreach(var product in Model)
+        {
+            total += @product.Price;
+
+            <tr>
+                <th>@product.Name</th>
+                <th> @product.Price @product.CurencySymbol</th>
+            </tr>
+        }
+        <tr></tr>
+        <tr>
+            <th>Total</th>
+            <th>@total @Model.FirstOrDefault()!.CurencySymbol</th>
+        </tr>
+    </tbody>
+</table>
+  
+ 
+<form asp-controller="Order" asp-action="PlaceOrder" asp-route-orderId="@Model.FirstOrDefault()!.OrderId" asp-route-table="1" method="post">
+    <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Send to the Waiter" />
+</form>

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account
 {

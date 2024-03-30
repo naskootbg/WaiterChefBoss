@@ -2,19 +2,43 @@
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Services.Product
 {
     public class ProductService : IProductService
     {
-        public readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext context;
 
         public ProductService(ApplicationDbContext _context)
         {
             context = _context;
         }
+        public async Task<ProductViewService> ProductById(int id)
+        {
+            var model = new ProductViewService();
+            var p = await context.Products.FindAsync(id);
+            if (p != null)
+            {
 
+                model =  new ProductViewService()
+                {
+                    Id = id,
+                    Calories = p.Calories,
+                    CategoryId = p.CategoryId,
+                    Description = p.Description,
+                    CategoryName = p.Category.Name,
+                    ImageUrl = p.ImageUrl,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Status = p.Status,
+                    TimeCooking = p.TimeCooking,
+                    Weight = p.Weight                    
+                };
+                
+            }
+            return model;
+        }
         public async Task<IEnumerable<ProductViewService>> AllProductsPerCategory(int categoryId)
         {
             
@@ -35,7 +59,8 @@ namespace WaiterChefBoss.Services.Product
                     Status = p.Status,
                     TimeCooking = p.TimeCooking,
                     CategoryName = p.Category.Name,
-                    CategoryId = categoryId
+                    CategoryId = categoryId,
+                    
                 })
                 .ToListAsync();
         }
@@ -63,9 +88,84 @@ namespace WaiterChefBoss.Services.Product
              .ToListAsync();
         }
 
-        public Task<bool> ProductExists(int id)
+        public async Task<bool> ProductExists(int id)
         {
-            throw new NotImplementedException();
+            var product = await context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return false;
+            }
+            return true;
         }
+
+        public async Task<int> BlankOrder(string userId)
+        {
+            var order = new Order()
+            {
+                UserId = userId,
+                Status = 0
+            };
+            await context.AddAsync(order);
+            await context.SaveChangesAsync();
+            return order.Id;
+
+        }
+        public async Task<int> GetOrderId(string userId)
+        {
+            var o = await context.OrdersProducts.FirstOrDefaultAsync(o => o.User.Id == userId && o.Status == 1);
+ 
+            return o!.OrderId;
+        }
+        public async Task<bool> IsBlankOrder(string userId)
+        {
+            if (await context.Orders.FirstOrDefaultAsync(o => o.User.Id == userId && o.Status == 0) != null )
+            {
+                return false;
+            }
+            return true;
+        }
+        public async Task AddToCart(string userId, int productId, int orderId)
+        {
+             
+            var orderProduct = new OrderProducts
+            {
+                ProductId = productId,
+                UserId = userId,
+                Status = 1,
+                OrderId = orderId
+                
+            };
+           
+            await context.AddAsync(orderProduct);
+            await context.SaveChangesAsync();       
+        }
+
+        public async Task<IEnumerable<ProductViewService>> ProductsInTheOrder(string userId)
+        { 
+            var model = await context
+                .OrdersProducts
+                .AsNoTracking()
+                .Include(x => x.Product)
+                .Where(o => o.User.Id == userId && o.Status == 1)
+                .Select(p => new ProductViewService
+                {
+                    Id = p.Product.Id,
+                    Name = p.Product.Name,
+                    Description = p.Product.Description,
+                    Weight = p.Product.Weight,
+                    Calories = p.Product.Calories,
+                    Price = p.Product.Price,
+                    ImageUrl = p.Product.ImageUrl,
+                    TimeCooking = p.Product.TimeCooking,
+                    CategoryName = p.Product.Category.Name,
+                    OrderId = p.OrderId
+
+                })                
+                .ToListAsync();
+             
+
+            return model;
+        }
+       
     }
 }

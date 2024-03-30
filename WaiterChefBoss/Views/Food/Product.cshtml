@@ -1,0 +1,14 @@
+﻿@model ProductViewService
+
+@{
+    ViewData["Title"] = $"{@Model.Name} {nameof(WaiterChefBoss)}";
+}
+<h1>@Model.Name></h1>
+<p>@Model.Description</p>
+<img class="img-thumbnail" src="@Model.ImageUrl">
+@if (this.User.Identity!.IsAuthenticated)
+{
+    <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@Model.Id" method="post">
+        <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+    </form>
+}

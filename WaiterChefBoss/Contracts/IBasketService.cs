@@ -8,6 +8,6 @@ namespace WaiterChefBoss.Contracts
 
         public Task RemoveProduct(int id);
 
-        public Task Total(List<ProductViewModel> products);
+        public Task Total(List<ProductViewService> products);
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 {
@@ -21,18 +21,15 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IUserStore<IdentityUser> _userStore;
-        private readonly ICategoryService category;
 
         public ExternalLoginsModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IUserStore<IdentityUser> userStore,
-            ICategoryService _category)
+            IUserStore<IdentityUser> userStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userStore = userStore;
-            category = _category;
         }
         public IEnumerable<CategoryViewModelService> Categories { get; set; }
 
@@ -63,7 +60,7 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Categories = await category.AllCategories();
+           
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -88,7 +85,7 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostRemoveLoginAsync(string loginProvider, string providerKey)
         {
-            Categories = await category.AllCategories();
+            
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -110,7 +107,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostLinkLoginAsync(string provider)
         {
-            Categories = await category.AllCategories();
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -123,8 +119,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
         {
-            Categories = await category.AllCategories();
-
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

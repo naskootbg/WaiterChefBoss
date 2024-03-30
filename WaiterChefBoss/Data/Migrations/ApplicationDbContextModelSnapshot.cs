@@ -17,7 +17,7 @@ namespace WaiterChefBoss.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.27")
+                .HasAnnotation("ProductVersion", "6.0.28")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -224,31 +224,6 @@ namespace WaiterChefBoss.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Basket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Table")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Baskets");
-                });
-
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -329,7 +304,7 @@ namespace WaiterChefBoss.Data.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Product", b =>
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.OrderProducts", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -337,8 +312,37 @@ namespace WaiterChefBoss.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("BasketId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("OrdersProducts");
+                });
+
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Calories")
                         .IsRequired()
@@ -363,9 +367,6 @@ namespace WaiterChefBoss.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -380,11 +381,7 @@ namespace WaiterChefBoss.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BasketId");
-
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Products");
 
@@ -494,17 +491,6 @@ namespace WaiterChefBoss.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Basket", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
@@ -516,28 +502,42 @@ namespace WaiterChefBoss.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.OrderProducts", b =>
+                {
+                    b.HasOne("WaiterChefBoss.Data.Models.Order", "Order")
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WaiterChefBoss.Data.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Product", b =>
                 {
-                    b.HasOne("WaiterChefBoss.Data.Models.Basket", null)
-                        .WithMany("Products")
-                        .HasForeignKey("BasketId");
-
                     b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WaiterChefBoss.Data.Models.Order", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId");
-
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Basket", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>

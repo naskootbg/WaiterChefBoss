@@ -1,4 +1,4 @@
-﻿ <!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,10 +7,17 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WaiterChefBoss.styles.css" asp-append-version="true" />
+
 </head>
-<body>
+<body >
     <header>
-        @await Html.PartialAsync("_Menu")
+
+        
+        @await Component.InvokeAsync("Menu")
+        
+
+
+
     </header>
       
 
@@ -22,12 +29,26 @@
     
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.Now.Year - WaiterChefBoss - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - WaiterChefBoss 
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $.ajax({
+            url: '~/Home/Menu',
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+        })
+            .success(function (result) {
+                $('#menu').html(result);
+            })
+            .error(function (xhr, status) {
+                alert(status);
+            });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

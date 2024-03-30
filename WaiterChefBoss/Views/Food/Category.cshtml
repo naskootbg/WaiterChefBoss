@@ -15,4 +15,10 @@
         Category: <a asp-controller="Food" asp-action="Category" asp-route-id="@product.CategoryId">@product.CategoryName</a>
 
     </div>
+    @if (this.User.Identity!.IsAuthenticated)
+    {
+        <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
+            <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+        </form>
+    }
 }

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 {
@@ -17,16 +17,13 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly ICategoryService category;
 
         public SetPasswordModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            ICategoryService _category)
+            SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            category = _category;
         }
         public IEnumerable<CategoryViewModelService> Categories { get; set; }
 
@@ -73,8 +70,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Categories = await category.AllCategories();
-
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -93,8 +88,6 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Categories = await category.AllCategories();
-
             if (!ModelState.IsValid)
             {
                 return Page();

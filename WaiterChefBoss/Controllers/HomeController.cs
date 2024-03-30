@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WaiterChefBoss.Contracts;
@@ -12,23 +14,20 @@ namespace WaiterChefBoss.Controllers
     {
 
         private readonly IProductService product;
-        private readonly ApplicationDbContext data;
-        private readonly ICategoryService category;
-        public HomeController(IProductService _product, ApplicationDbContext _data, ICategoryService _category)
+
+        public HomeController(IProductService _product)
         {
-            category = _category;
+
             product = _product;
-            data = _data;
         }
-        //public ActionResult _Menu()
-        //{
-        //    return PartialView("_MMenu", data.Categories.ToList());
-        //}
+
+        
         public async Task<IActionResult> Index()
         {
+
             var newModel = new HomeViewModel
             {
-                Categories = await category.AllCategories(),
+
                 Products = await product.AllProducts()
 
             };
@@ -49,5 +48,7 @@ namespace WaiterChefBoss.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }

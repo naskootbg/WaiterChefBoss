@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
+using WaiterChefBoss.Models;
+
 namespace WaiterChefBoss.Services.Category
 {
     public class CategoryService : ICategoryService
@@ -12,8 +14,8 @@ namespace WaiterChefBoss.Services.Category
         {
             context = _context;
         }
-  
-        public async Task<IEnumerable<CategoryViewModelService>> AllCategories()
+
+        public async Task<List<CategoryViewModelService>> AllCategories()
         {
             return await context
                 .Categories
@@ -27,20 +29,21 @@ namespace WaiterChefBoss.Services.Category
 
         public async Task<CategoryViewModelService> CategoryDetails(int id)
         {
-              
-
-            var cat = context
-                .Categories
-                .Where(c => c.Id == id)
-                .AsNoTracking()
-                .Select(c => new CategoryViewModelService
+            var model = new CategoryViewModelService();
+            var c = await context.Categories.FindAsync(id);
+            
+            if (c != null)
+            {
+                model = new CategoryViewModelService
                 {
                     Id = c.Id,
                     Name = c.Name,
                     Description = c.Description
-                }).FirstOrDefaultAsync();
-             
-            return await cat;
+                };
+            }
+
+
+            return model;
         }
 
         public async Task<bool> CategoryExists(int id)

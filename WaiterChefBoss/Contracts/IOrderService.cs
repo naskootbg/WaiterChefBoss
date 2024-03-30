@@ -1,6 +1,9 @@
-﻿namespace WaiterChefBoss.Contracts.All
+﻿using WaiterChefBoss.Data.Models;
+using WaiterChefBoss.Models;
+
+namespace WaiterChefBoss.Contracts
 {
-    public interface IAllService
+    public interface IOrderService
     {
         /// <summary>
         /// ---- WAITER ---
@@ -18,7 +21,8 @@
         /// Order completed (status 5)
         /// ---------------
         /// </summary>
-        Task ChangeOrderStatus(int orderId, int status);
+        Task<bool> ChangeOrderStatus(Order order, int status);
+        Task<bool> ChangeOrderProductStatus(string userId, int status);
 
         /// <summary>
         /// Status 0 for the BOSS only
@@ -28,6 +32,13 @@
         /// Status 4 for the CUSTOMER
         /// The BOSS can spy
         /// </summary>
-        Task ActiveOrders(int status);
+        Task<IEnumerable<OrderViewModel>> OrdersByStatus(int status);
+        Task<IEnumerable<OrderViewModel>> OrdersForBoss();
+        Task<IEnumerable<OrderViewModel>> OrdersForChef();
+        Task<IEnumerable<OrderViewModel>> OrdersForWaiter();
+        Task<IEnumerable<OrderViewModel>> OrdersForCustomer();
+        Task PlaceOrder(string userId, int table);
+        Task<OrderViewModel> FindOrderById(int orderId);
+        Task<bool> OrderExists(int id);
     }
 }

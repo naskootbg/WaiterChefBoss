@@ -23,7 +23,7 @@ namespace WaiterChefBoss.Controllers
             {
                 return View(new CategoryViewModel
                 {
-                    Categories = await category.AllCategories(),
+                    
                     CategoryDetails = await category.CategoryDetails(id),
                     Products = await product.AllProductsPerCategory(id)
 
@@ -31,11 +31,18 @@ namespace WaiterChefBoss.Controllers
                 }); ;
             }
             
-            return RedirectToAction("Home");
+            return RedirectToAction("Index","Home");
         }
-        //public async Task<IEnumerable<CategoryViewModelService>> AllCategories()
-        //{
-        //    return await category.AllCategories();
-        //}
+        public async Task<IActionResult> Product(int id)
+        {
+
+            if (await product.ProductExists(id))
+            {
+                var model = product.ProductById(id);
+                return View(model); 
+            }
+
+            return BadRequest();
+        }
     }
 }

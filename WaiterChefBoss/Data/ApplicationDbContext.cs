@@ -12,6 +12,13 @@ namespace WaiterChefBoss.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //builder
+            //    .Entity<Order>()
+            //    .HasMany(o => o.Products)
+            //    .WithOne(o => o.Order)
+            //    .OnDelete(DeleteBehavior.NoAction);
+            
+             
             builder
                .Entity<Category>()
                .HasData(new Category()
@@ -93,12 +100,10 @@ namespace WaiterChefBoss.Data
 
             base.OnModelCreating(builder);
         }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<Basket> Baskets { get; set; }
-
-
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<OrderProducts> OrdersProducts { get; set; } = null!;
 
     }
 }
