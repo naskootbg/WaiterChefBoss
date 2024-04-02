@@ -19,10 +19,10 @@ namespace WaiterChefBoss.Data.Models
         public int TimeCooking { get; set; }
         [Required]
         [Range(0, 50)]
-        public decimal Weight { get; set; }
+        public double Weight { get; set; }
         [Required]
-        [Range(1, 500)]
-        public decimal Price { get; set; }
+        [Range(1.00, 500.00)]
+        public double Price { get; set; }
         [Required]
         [Range(0, 5)]
         public int Status { get; set; }

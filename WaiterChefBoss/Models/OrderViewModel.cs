@@ -9,7 +9,7 @@ namespace WaiterChefBoss.Models
         public int Table { get; set; }
         public DateTime DateAdded { get; set; }
         public IEnumerable<OrderProducts> Products { get; set; } = null!;
-        public decimal Total { get; set; }
+        public double Total { get; set; }
         public string UserId { get; set; } = string.Empty;
 
 

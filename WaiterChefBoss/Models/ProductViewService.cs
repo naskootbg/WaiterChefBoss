@@ -8,9 +8,9 @@ namespace WaiterChefBoss.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public decimal TimeCooking { get; set; }
-        public decimal Weight { get; set; }
-        public decimal Price { get; set; }
+        public int TimeCooking { get; set; }
+        public double Weight { get; set; }
+        public double Price { get; set; }
         public int Status { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
         public string Calories { get; set; } = string.Empty;

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
@@ -31,19 +32,7 @@ namespace WaiterChefBoss.Services
                 }).ToListAsync();            
 
         }
-        public async Task<bool> ChangeOrderProductStatus(string userId, int status)
-        {
-            var order = await context.OrdersProducts
-                .AsNoTracking()
-                .Where(o => o.UserId == userId && o.Status == 1)
-                .ToListAsync();
-            foreach (var item in order)
-            {
-                _ = item.Status == status;
-            }
-            await context.SaveChangesAsync();
-            return true;
-        }
+
         public async Task<bool> ChangeOrderStatus(Order orderId, int status)
         {
             var order = await context.Orders.FindAsync(orderId);
@@ -81,13 +70,15 @@ namespace WaiterChefBoss.Services
 
         public async Task PlaceOrder(string userId, int table)
         {
+
+
+
             DateTime dateAdded = DateTime.Now;
-            decimal total = 0.00M;
+            double total = 0.00;
             var orderProducts = await context
                 .OrdersProducts
                 .AsNoTracking()
                 .Where(op => op.UserId == userId && op.Status ==  1)
-                .Include(o => o.Order)
                 .Select(p => p.Product)
                 .ToListAsync();
             foreach (var product in orderProducts)
@@ -102,13 +93,28 @@ namespace WaiterChefBoss.Services
                 DateAdded = dateAdded,
                 Table = table,
                 Total = total
-                
             };
 
             await context.AddAsync(model);
             await context.SaveChangesAsync();
+            var id = model.Id;
+            await ChangeStatusOfAllOrdersProducts(userId,id);
         }
 
+        public async Task ChangeStatusOfAllOrdersProducts(string userId, int orderId)
+        {
+
+            var orderProductModel = await context
+          .OrdersProducts
+          .AsNoTracking()
+          .Where(o => o.UserId == userId && o.Status == 1)
+          .ToListAsync();
+            orderProductModel.ForEach(s => s.Status = 2);
+            orderProductModel.ForEach(s => s.OrderId = orderId);
+            context.UpdateRange(orderProductModel);
+            await context.SaveChangesAsync();
+             
+        }
 
 
         public async Task<OrderViewModel> FindOrderById(int orderId)

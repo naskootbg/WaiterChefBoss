@@ -18,7 +18,7 @@ namespace WaiterChefBoss.Data.Models
         public DateTime DateAdded { get; set; }     
         
         [Required]
-        public decimal Total { get; set; }
+        public double Total { get; set; }
         public string UserId { get; set; } = null!;
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;

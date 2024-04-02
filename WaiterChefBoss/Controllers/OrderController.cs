@@ -24,25 +24,13 @@ namespace WaiterChefBoss.Controllers
         {
             var userId = UserId();
             await order.PlaceOrder(userId, table);
-            await order.ChangeOrderProductStatus(userId,0);
             return RedirectToAction("Index","Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId)
-        {
-            var userId = UserId();
-            var id = 0;
-            if (await product.IsBlankOrder(userId))
-            {
-                id = await product.BlankOrder(userId);
-            }
-            else
-            {
-                id = await product.GetOrderId(userId);
-            }
-            
-            await product.AddToCart(userId, productId, id);
+        {            
+            await product.AddToCart(UserId(), productId);
 
             return RedirectToAction(nameof(Cart));             
 

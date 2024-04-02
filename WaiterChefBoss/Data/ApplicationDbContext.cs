@@ -13,12 +13,12 @@ namespace WaiterChefBoss.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //builder
-            //    .Entity<Order>()
-            //    .HasMany(o => o.Products)
-            //    .WithOne(o => o.Order)
-            //    .OnDelete(DeleteBehavior.NoAction);
-            
+            //    .Entity<OrderProducts>()
+            //    .HasOne(o => o.Order)
+            //    .WithMany(o => o.Products)
+            //    .OnDelete(DeleteBehavior.Cascade);
              
+
             builder
                .Entity<Category>()
                .HasData(new Category()
@@ -52,9 +52,9 @@ namespace WaiterChefBoss.Data
            CategoryId = 1,
            Status = 1,
            TimeCooking = 10,
-           Weight = 0.5M,
+           Weight = 0.5,
            ImageUrl = "https://thumbs.dreamstime.com/z/pepperoni-pizza-thinly-sliced-popular-topping-american-style-pizzerias-30402134.jpg",
-           Price = 25.97M,
+           Price = 25.97,
            Calories= "555 cal"
        
        },
@@ -66,9 +66,9 @@ namespace WaiterChefBoss.Data
            CategoryId = 2,
            Status = 1,
            TimeCooking = 15,
-           Weight = 0.5M,
+           Weight = 0.5,
            ImageUrl = "https://thumbs.dreamstime.com/b/soup-3843446.jpg",
-           Price = 2.97M,
+           Price = 2.97,
            Calories = "551 cal"
        },
        new Product()
@@ -79,9 +79,9 @@ namespace WaiterChefBoss.Data
            CategoryId = 3,
            Status = 1,
            TimeCooking = 5,
-           Weight = 0.05M,
+           Weight = 0.05,
            ImageUrl = "https://thumbs.dreamstime.com/b/coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-113807195.jpg",
-           Price = 2M,
+           Price = 2,
            Calories = "44 cal"
        },
        new Product()
@@ -92,9 +92,9 @@ namespace WaiterChefBoss.Data
            CategoryId = 4,
            Status = 1,
            TimeCooking = 1,
-           Weight = 0.5M,
+           Weight = 0.5,
            ImageUrl = "https://thumbs.dreamstime.com/b/beer-959519.jpg",
-           Price = 5.97M,
+           Price = 5.97,
            Calories = "5555 cal"
        });
 

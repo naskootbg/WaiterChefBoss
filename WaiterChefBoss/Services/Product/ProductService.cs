@@ -110,12 +110,7 @@ namespace WaiterChefBoss.Services.Product
             return order.Id;
 
         }
-        public async Task<int> GetOrderId(string userId)
-        {
-            var o = await context.OrdersProducts.FirstOrDefaultAsync(o => o.User.Id == userId && o.Status == 1);
- 
-            return o!.OrderId;
-        }
+
         public async Task<bool> IsBlankOrder(string userId)
         {
             if (await context.Orders.FirstOrDefaultAsync(o => o.User.Id == userId && o.Status == 0) != null )
@@ -124,15 +119,14 @@ namespace WaiterChefBoss.Services.Product
             }
             return true;
         }
-        public async Task AddToCart(string userId, int productId, int orderId)
+        public async Task AddToCart(string userId, int productId)
         {
              
             var orderProduct = new OrderProducts
             {
                 ProductId = productId,
                 UserId = userId,
-                Status = 1,
-                OrderId = orderId
+                Status = 1
                 
             };
            
@@ -146,7 +140,7 @@ namespace WaiterChefBoss.Services.Product
                 .OrdersProducts
                 .AsNoTracking()
                 .Include(x => x.Product)
-                .Where(o => o.User.Id == userId && o.Status == 1)
+                .Where(o => o.UserId == userId && o.Status == 1)
                 .Select(p => new ProductViewService
                 {
                     Id = p.Product.Id,

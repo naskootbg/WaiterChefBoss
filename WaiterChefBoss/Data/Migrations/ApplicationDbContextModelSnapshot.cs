@@ -290,8 +290,8 @@ namespace WaiterChefBoss.Data.Migrations
                     b.Property<int>("Table")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Total")
+                        .HasColumnType("float");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -367,8 +367,8 @@ namespace WaiterChefBoss.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -376,8 +376,8 @@ namespace WaiterChefBoss.Data.Migrations
                     b.Property<int>("TimeCooking")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -394,10 +394,10 @@ namespace WaiterChefBoss.Data.Migrations
                             Description = "Pizza with meal and chease",
                             ImageUrl = "https://thumbs.dreamstime.com/z/pepperoni-pizza-thinly-sliced-popular-topping-american-style-pizzerias-30402134.jpg",
                             Name = "Pizza",
-                            Price = 25.97m,
+                            Price = 25.969999999999999,
                             Status = 1,
                             TimeCooking = 10,
-                            Weight = 0.5m
+                            Weight = 0.5
                         },
                         new
                         {
@@ -407,10 +407,10 @@ namespace WaiterChefBoss.Data.Migrations
                             Description = "Shkembe chorba with shkembe and a lot garlic and vinegar",
                             ImageUrl = "https://thumbs.dreamstime.com/b/soup-3843446.jpg",
                             Name = "Shkembe chorba",
-                            Price = 2.97m,
+                            Price = 2.9700000000000002,
                             Status = 1,
                             TimeCooking = 15,
-                            Weight = 0.5m
+                            Weight = 0.5
                         },
                         new
                         {
@@ -420,10 +420,10 @@ namespace WaiterChefBoss.Data.Migrations
                             Description = "Hot coffee with very special taste of coffee",
                             ImageUrl = "https://thumbs.dreamstime.com/b/coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-113807195.jpg",
                             Name = "Coffee",
-                            Price = 2m,
+                            Price = 2.0,
                             Status = 1,
                             TimeCooking = 5,
-                            Weight = 0.05m
+                            Weight = 0.050000000000000003
                         },
                         new
                         {
@@ -433,10 +433,10 @@ namespace WaiterChefBoss.Data.Migrations
                             Description = "Cold natural beer, but maybe alchohol",
                             ImageUrl = "https://thumbs.dreamstime.com/b/beer-959519.jpg",
                             Name = "Beer",
-                            Price = 5.97m,
+                            Price = 5.9699999999999998,
                             Status = 1,
                             TimeCooking = 1,
-                            Weight = 0.5m
+                            Weight = 0.5
                         });
                 });
 
@@ -504,10 +504,10 @@ namespace WaiterChefBoss.Data.Migrations
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.OrderProducts", b =>
                 {
-                    b.HasOne("WaiterChefBoss.Data.Models.Order", "Order")
+                    b.HasOne("WaiterChefBoss.Data.Models.Order", null)
                         .WithMany("Products")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WaiterChefBoss.Data.Models.Product", "Product")
@@ -521,8 +521,6 @@ namespace WaiterChefBoss.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
 
                     b.Navigation("Product");
 

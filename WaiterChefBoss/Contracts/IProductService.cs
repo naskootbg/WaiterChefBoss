@@ -8,10 +8,8 @@ namespace WaiterChefBoss.Contracts
         Task<IEnumerable<ProductViewService>> AllProductsPerCategory(int categoryId);
         Task<bool> ProductExists(int id);
         Task<ProductViewService> ProductById(int id);        
-        Task AddToCart(string userId, int productId, int orderId);
-        Task<int> BlankOrder(string userId);
-
-        Task<int> GetOrderId(string userId);
+        Task AddToCart(string userId, int productId);
+        Task<int> BlankOrder(string userId);        
         Task<bool> IsBlankOrder(string userId);
         Task<IEnumerable<ProductViewService>> ProductsInTheOrder(string userId);
     }

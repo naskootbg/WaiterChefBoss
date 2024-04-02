@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
+using WaiterChefBoss.ModelBinders;
 using WaiterChefBoss.Services;
 using WaiterChefBoss.Services.Category;
 using WaiterChefBoss.Services.Product;
@@ -17,11 +18,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(
+    options =>
+    {
+        options.ModelBinderProviders.Insert(0, new DoubleModelBinderProvider());
+    });
 
 //builder.Services.AddTransient<IBossService, BossService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
-
+builder.Services.AddTransient<IEditService, EditService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 

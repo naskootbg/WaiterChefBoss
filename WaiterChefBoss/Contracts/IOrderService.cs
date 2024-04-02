@@ -22,7 +22,6 @@ namespace WaiterChefBoss.Contracts
         /// ---------------
         /// </summary>
         Task<bool> ChangeOrderStatus(Order order, int status);
-        Task<bool> ChangeOrderProductStatus(string userId, int status);
 
         /// <summary>
         /// Status 0 for the BOSS only
@@ -40,5 +39,7 @@ namespace WaiterChefBoss.Contracts
         Task PlaceOrder(string userId, int table);
         Task<OrderViewModel> FindOrderById(int orderId);
         Task<bool> OrderExists(int id);
+
+        Task ChangeStatusOfAllOrdersProducts(string userId, int orderId);
     }
 }
