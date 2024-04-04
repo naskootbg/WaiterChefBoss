@@ -29,5 +29,19 @@ namespace WaiterChefBoss.Controllers
 
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> Category(int id)
+        {
+            var model = await editService.EditCategory(null, id);
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Category(CategoryViewModelService category, int id)
+        {
+            var model = await editService.EditCategory(category, id);
+
+            return View(model);
+        }
     }
 }

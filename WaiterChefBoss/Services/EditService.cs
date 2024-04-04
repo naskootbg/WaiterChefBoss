@@ -71,15 +71,43 @@ namespace WaiterChefBoss.Services
             }
         }
 
-        public async Task<CategoryViewModelService> EditCategory(CategoryViewModelService category, int categoryId)
+        public async Task<CategoryViewModelService> EditCategory(CategoryViewModelService? category, int categoryId)
         {
             var entity = await context.Categories.FindAsync(categoryId);
-            if (category == null)
+            if (entity != null)
             {
-
+                if (category == null)
+                {
+                    var model = new CategoryViewModelService
+                    {
+                        Id = entity.Id,
+                        Name = entity.Name,
+                        Description = entity.Description
+                    };
+                    return model;
+                }
+                else
+                {
+                    entity.Id = category.Id;
+                    entity.Name = category.Name;
+                    entity.Description = category.Description;
+                    await context.SaveChangesAsync();
+                    var cat = new CategoryViewModelService
+                    {
+                        Id = category.Id,
+                        Name = category.Name,
+                        Description = category.Description
+                    };
+                    return cat;
+                }
+            
+                
+                
             }
-            var model = new CategoryViewModelService();
-            return model;
+            else
+            {
+                return new CategoryViewModelService { Name = "No Such Category" };
+            }
         }
 
        
