@@ -23,6 +23,15 @@
 
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData["message"] != null)
+            {
+                <div calss="alert alert-success alert-dismissible fade show">
+                    @TempData["message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>

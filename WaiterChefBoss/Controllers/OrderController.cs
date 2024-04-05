@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using System.Security.Claims;
 using WaiterChefBoss.Contracts;
+using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
+using static WaiterChefBoss.Data.TempMessages;
 
 namespace WaiterChefBoss.Controllers
 {
@@ -24,6 +27,8 @@ namespace WaiterChefBoss.Controllers
         {
             var userId = UserId();
             await order.PlaceOrder(userId, table);
+            TempData["message"] = TempSendOrderToWaiter();
+
             return RedirectToAction("Index","Home");
         }
 
@@ -31,9 +36,10 @@ namespace WaiterChefBoss.Controllers
         public async Task<IActionResult> AddToCart(int productId)
         {            
             await product.AddToCart(UserId(), productId);
+            TempData["message"] = TempAddToCart(await product.ProductName(productId));
+            return RedirectToAction(nameof(Cart));
 
-            return RedirectToAction(nameof(Cart));             
-
+           // return LocalRedirect("/");
         }
 
         public async Task<IActionResult> Cart()

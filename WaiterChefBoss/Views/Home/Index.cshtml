@@ -34,6 +34,12 @@
                         <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
                     </form>
                         }
+                    @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
+                    {
+                        <form asp-controller="Edit" asp-action="Product" asp-route-id="@product.Id" method="get">
+                            <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
+                        </form>
+                    }
                 </div>
             </div>
         

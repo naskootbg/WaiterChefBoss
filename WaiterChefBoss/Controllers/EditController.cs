@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Data;
 using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Controllers
 {
+    [Authorize(Roles = Data.DataConstants.BossRole)]
     public class EditController : Controller
     {
         
@@ -14,7 +14,7 @@ namespace WaiterChefBoss.Controllers
         {
                 editService = _editService;
         }
-        [Authorize]
+         
         [HttpGet]
         public async Task<IActionResult> Product(int id)
         {

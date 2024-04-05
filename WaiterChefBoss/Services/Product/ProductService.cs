@@ -14,6 +14,16 @@ namespace WaiterChefBoss.Services.Product
         {
             context = _context;
         }
+        public async Task<string> ProductName(int id)
+        {
+            var name = "";
+            var p = await context.Products.FindAsync(id);
+            if (p != null)
+            {
+                name = p.Name;
+            }
+                return name;
+        }
         public async Task<ProductViewService> ProductById(int id)
         {
             var model = new ProductViewService();

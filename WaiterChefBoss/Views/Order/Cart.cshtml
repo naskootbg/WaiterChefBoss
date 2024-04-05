@@ -32,7 +32,7 @@
             <tr></tr>
             <tr>
                 <th>Total</th>
-                <th>@total @Model.FirstOrDefault()!.CurencySymbol</th>
+                <th>@Math.Round(total,2) @Model.FirstOrDefault()!.CurencySymbol</th>
             </tr>
         </tbody>
     </table>

@@ -28,7 +28,7 @@ namespace WaiterChefBoss.Models
         public int Status { get; set; }
         [Required]
         public string ImageUrl { get; set; } = string.Empty;
-        [StringLength(150, MinimumLength = 15)]
+        [StringLength(150, MinimumLength = 5)]
 
         public string Calories { get; set; } = string.Empty;
         [Required]

@@ -8,7 +8,6 @@ namespace WaiterChefBoss.Component
     public class MenuViewComponent : ViewComponent
     {
         private readonly ICategoryService categoryService;
-        private readonly StringBuilder sb = new StringBuilder();
          
         public MenuViewComponent(ICategoryService _categoryService)
         {

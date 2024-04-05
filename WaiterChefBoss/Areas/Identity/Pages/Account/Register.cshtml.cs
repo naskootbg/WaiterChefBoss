@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -21,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
+using static WaiterChefBoss.Data.DataConstants;
 
 namespace WaiterChefBoss.Areas.Identity.Pages.Account
 {
@@ -32,13 +34,15 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
         ILogger<RegisterModel> logger,
-            IEmailSender emailSender
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager
             )
         {
             _userManager = userManager;
@@ -47,6 +51,7 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -127,6 +132,19 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    if (await _roleManager.RoleExistsAsync(BossRole) == false)
+                    {
+                        var role = new IdentityRole { Name = BossRole };
+                        await _roleManager.CreateAsync(role);
+                    }
+                    var rolesUserlist = await _userManager.GetUsersInRoleAsync(BossRole);
+                    if (rolesUserlist.Count() < 1)
+                    {
+                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, BossRole);
+
+                    }
+
+
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

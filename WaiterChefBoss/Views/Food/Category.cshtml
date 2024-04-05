@@ -4,6 +4,12 @@
     ViewData["Title"] = @Model.CategoryDetails.Name;
 }
 <h1>@Model.CategoryDetails.Name</h1>
+@if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
+{
+    <form asp-controller="Edit" asp-action="Category" asp-route-id="@Model.CategoryDetails.Id" method="get">
+        <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit Category" />
+    </form>
+}
 <div id="category-description">@Model.CategoryDetails.Description</div>
 
 @foreach (var product in @Model.Products)
@@ -19,6 +25,12 @@
     {
         <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
             <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+        </form>
+    }
+    @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
+    {
+        <form asp-controller="Edit" asp-action="Product" asp-route-id="@product.Id" method="get">
+            <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
         </form>
     }
 }
