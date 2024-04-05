@@ -1,6 +1,27 @@
-﻿@model UserViewModel
+﻿@model UserPanelViewModel
 
 @{
-    ViewData["Title"] = $"Welcome {Model.Name}";
+    ViewData["Title"] = $"Welcome to your Panel";
 }
 
+@*<select">
+    <option value="#">All Users</option>
+    @foreach (var u in Model.Users)
+    {
+
+        <option value="/food/category/@u.Id">@u.Email</option>
+
+    }
+</select>*@
+@foreach (var u in Model.Users)
+{
+
+    <div>@u.Id => @u.Email => @u.GetType.</div>
+
+}
+    <form asp-controller="Add" asp-action="Product" method="get">
+        <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Add Product" />
+    </form>
+<form asp-controller="Add" asp-action="Category" method="get">
+    <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Add Category" />
+</form>

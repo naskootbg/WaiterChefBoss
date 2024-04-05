@@ -6,32 +6,33 @@ using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Services
 {
-    public class EditService : IEditService
+    public class EditAddService : IEditAddService
     {
         private readonly ApplicationDbContext context;
         private readonly ICategoryService category;
 
-        public EditService(ApplicationDbContext _context, ICategoryService category)
+        public EditAddService(ApplicationDbContext _context, ICategoryService category)
         {
             context = _context;
             this.category = category;   
         }
-        public async Task AddCategory(CategoryViewModelService category)
+        public async Task<int> AddCategory(CategoryViewModelService category)
         {
-            var entity = new CategoryViewModelService
+            var entity = new Data.Models.Category()
             {
-                Id = category.Id,
+                
                 Name = category.Name,
                 Description = category.Description
             };
-            context.Add(entity);
+            await context.AddAsync(entity);
             await context.SaveChangesAsync();
+            int id = entity.Id;
+            return id;
         }
 
-        public async Task AddProduct(ProductFormViewModel product)
+        public async Task<int> AddProduct(ProductFormViewModel product)
         {
-            product.Categories = await category.AllCategories();
-            var entity = new ProductFormViewModel
+            var entity = new Data.Models.Product()
             {
                 Id = product.Id,
                 Name = product.Name,
@@ -45,8 +46,10 @@ namespace WaiterChefBoss.Services
                 Price = product.Price
 
             };
-            context.Add(entity);
+            await context.AddAsync(entity);
             await context.SaveChangesAsync();
+            int id = entity.Id;
+            return id;
         }
 
         public async Task DeleteCategory(int categoryId)

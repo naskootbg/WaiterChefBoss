@@ -25,24 +25,21 @@ namespace WaiterChefBoss.Controllers
             category = _category;
         }
         public IEnumerable<CategoryViewModelService> Categories { get; set; } = null!;
-        [Authorize]
+
+
+        [Authorize(Roles = Data.DataConstants.BossRole)]
         public async Task<IActionResult> Index()
         {
-           // int status = 0;
-            var user = await usermanager.FindByIdAsync(UserId());
-            var roles = await usermanager.GetRolesAsync(user);
-            if (roles.Contains(DataConstants.BossRole))
+            // int status = 0;
+            //  var user = await usermanager.FindByIdAsync(UserId());
+            var model = new UserPanelViewModel()
             {
-
-            }
-            var newUserViewModel = new UserViewModel
-            {
-                // Orders = await order.OrdersByStatus(status),
-                 Name = user.UserName
-
+                Users =  usermanager.Users.ToList()
             };
-            return View(newUserViewModel);
-             
+            return View(model);
+
+         
+ 
         }
         public async Task<IActionResult> DispayOrders(int status)
         {

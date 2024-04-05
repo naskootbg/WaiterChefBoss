@@ -9,8 +9,8 @@ namespace WaiterChefBoss.Controllers
     public class EditController : Controller
     {
         
-        private readonly IEditService editService;
-        public EditController(IEditService _editService)
+        private readonly IEditAddService editService;
+        public EditController(IEditAddService _editService)
         {
                 editService = _editService;
         }
@@ -42,6 +42,20 @@ namespace WaiterChefBoss.Controllers
             var model = await editService.EditCategory(category, id);
 
             return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+             await editService.DeleteCategory(id);
+
+            return RedirectToAction("Index", "UserPanel");
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            await editService.DeleteProduct(id);
+
+            return RedirectToAction("Index", "UserPanel");
         }
     }
 }

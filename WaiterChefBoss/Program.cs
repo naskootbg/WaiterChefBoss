@@ -34,7 +34,7 @@ builder.Services.AddControllersWithViews(
 
 //builder.Services.AddTransient<IBossService, BossService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
-builder.Services.AddTransient<IEditService, EditService>();
+builder.Services.AddTransient<IEditAddService, EditAddService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 

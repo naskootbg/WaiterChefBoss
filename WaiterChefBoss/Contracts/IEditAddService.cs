@@ -3,11 +3,11 @@ using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Contracts
 {
-    public interface IEditService
+    public interface IEditAddService
     {
-        Task AddProduct(ProductFormViewModel product);
+        Task<int> AddProduct(ProductFormViewModel product);
 
-        Task AddCategory(CategoryViewModelService category);
+        Task<int> AddCategory(CategoryViewModelService category);
 
         Task<ProductFormViewModel> EditProduct(ProductFormViewModel? product, int productId);
         Task<CategoryViewModelService> EditCategory(CategoryViewModelService? category, int categoryId);
