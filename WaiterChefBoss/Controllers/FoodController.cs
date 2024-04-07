@@ -38,7 +38,7 @@ namespace WaiterChefBoss.Controllers
 
             if (await product.ProductExists(id))
             {
-                var model = product.ProductById(id);
+                var model = await product.ProductById(id);
                 return View(model); 
             }
 

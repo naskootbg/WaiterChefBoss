@@ -1,30 +1,37 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Models;
+using WaiterChefBoss.Services;
+using static WaiterChefBoss.Data.DataConstants;
 
 namespace WaiterChefBoss.Controllers
 {
-    public class UserPanelController : Controller
+    public class AdminController : Controller
     {
         
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> usermanager;
         private readonly ICategoryService category;
         private readonly IOrderService order;
-        
+        private readonly IBossService admin;
 
-        public UserPanelController(IOrderService _order, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _usermanager, ICategoryService _category)
+        public AdminController(IOrderService _order,
+             RoleManager<IdentityRole> _roleManager,
+             UserManager<IdentityUser> _usermanager,
+             ICategoryService _category,
+             IBossService _admin)
         {
             roleManager = _roleManager;
             order = _order;
             usermanager = _usermanager;
             category = _category;
+            admin = _admin; 
         }
-        public IEnumerable<CategoryViewModelService> Categories { get; set; } = null!;
 
 
         [Authorize(Roles = Data.DataConstants.BossRole)]
@@ -32,9 +39,9 @@ namespace WaiterChefBoss.Controllers
         {
             // int status = 0;
             //  var user = await usermanager.FindByIdAsync(UserId());
-            var model = new UserPanelViewModel()
+            var model = new AdminViewModel()
             {
-                Users =  usermanager.Users.ToList()
+                Users =  await usermanager.Users.ToListAsync()
             };
             return View(model);
 
@@ -48,9 +55,14 @@ namespace WaiterChefBoss.Controllers
             return View(orders);
 
         }
-        private string UserId()
+        public async Task<IActionResult> AddToRole(string Id, string roleName)
         {
-            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            return View(await admin.AddToRole(Id, roleName));
         }
+        public async Task<IActionResult> RemoveRoles(string Id, string roleName)
+        {
+            return View(await admin.RemoveFromRole(Id, roleName));
+        }
+
     }
 }

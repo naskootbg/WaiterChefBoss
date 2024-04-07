@@ -11,7 +11,7 @@ namespace WaiterChefBoss.Contracts
         Task AddToCart(string userId, int productId);
         Task<int> BlankOrder(string userId);        
         Task<bool> IsBlankOrder(string userId);
-        Task<IEnumerable<ProductViewService>> ProductsInTheOrder(string userId);
+        Task<List<ProductViewService>> ProductsInTheOrder(string userId);
 
         Task<string> ProductName(int id);
     }

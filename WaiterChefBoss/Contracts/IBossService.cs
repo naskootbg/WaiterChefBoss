@@ -9,8 +9,6 @@ namespace WaiterChefBoss.Contracts
         /// When IdentityUsers.Count == 0 //First user will become a Boss - super admin
         /// </summary>
 
-        Task BecomeBoss();
-
         Task<string> RemoveFromRole(string userId, string roleName);
         Task<string> AddToRole(string userId, string roleName);
         Task CustomReport(DateTime start, int howManyDays);
@@ -25,17 +23,6 @@ namespace WaiterChefBoss.Contracts
 
         Task AllProducts();
 
-        Task RemoveProduct(int productId);
-
-        Task UpdateProduct(ProductViewService product, int productId);
-
-        Task AddProduct(ProductViewService product);
-
-        Task AddCategory(CategoryViewModelService category);
-
-        Task RemoveCategory(int categoryId);
-
-        Task UpdateCategory(CategoryViewModelService category, int categoryId);
 
         //Task Reviews();
 

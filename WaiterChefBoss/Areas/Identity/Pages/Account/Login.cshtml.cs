@@ -106,7 +106,7 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
         }
         
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = $"~/UserPanel")
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
              

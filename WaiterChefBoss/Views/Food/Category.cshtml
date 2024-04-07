@@ -14,23 +14,29 @@
 
 @foreach (var product in @Model.Products)
 {
-    <h2>@product.Name</h2>
+    <a asp-action="Product" asp-route-id="@product.Id"><h3>@product.Name</h3></a>
+    
     <p>@product.Description</p>
     <img class="img-thumbnail" src="@product.ImageUrl">
     <div>
         Category: <a asp-controller="Food" asp-action="Category" asp-route-id="@product.CategoryId">@product.CategoryName</a>
 
     </div>
-    @if (this.User.Identity!.IsAuthenticated)
-    {
-        <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
-            <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
-        </form>
-    }
-    @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
-    {
-        <form asp-controller="Edit" asp-action="Product" asp-route-id="@product.Id" method="get">
-            <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit Product" />
-        </form>
-    }
+    <div class="btn-group" role="group" aria-label="Basic example">
+        @if (this.User.Identity!.IsAuthenticated)
+        {
+            <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
+                <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+            </form>
+        }
+         
+
+
+        @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
+        {
+            <form asp-controller="Edit" asp-action="Product" asp-route-id="@product.Id" method="get">
+                <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
+            </form>
+        }
+    </div>
 }

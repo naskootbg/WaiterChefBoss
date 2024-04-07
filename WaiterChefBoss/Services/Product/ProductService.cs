@@ -26,15 +26,16 @@ namespace WaiterChefBoss.Services.Product
         }
         public async Task<ProductViewService> ProductById(int id)
         {
-            var model = new ProductViewService();
-            var p = await context.Products.FindAsync(id);
-            if (p != null)
-            {
+            var p = await context
+               .Products.Where(p => p.Id == id)
+               .Include(p => p.Category)
+               .AsNoTracking()
+               .FirstOrDefaultAsync();
 
-                model =  new ProductViewService()
+            return new ProductViewService()
                 {
                     Id = id,
-                    Calories = p.Calories,
+                    Calories = p!.Calories,
                     CategoryId = p.CategoryId,
                     Description = p.Description,
                     CategoryName = p.Category.Name,
@@ -43,11 +44,11 @@ namespace WaiterChefBoss.Services.Product
                     Price = p.Price,
                     Status = p.Status,
                     TimeCooking = p.TimeCooking,
-                    Weight = p.Weight                    
+                    Weight = p.Weight
                 };
-                
-            }
-            return model;
+
+            
+            
         }
         public async Task<IEnumerable<ProductViewService>> AllProductsPerCategory(int categoryId)
         {
@@ -144,7 +145,7 @@ namespace WaiterChefBoss.Services.Product
             await context.SaveChangesAsync();       
         }
 
-        public async Task<IEnumerable<ProductViewService>> ProductsInTheOrder(string userId)
+        public async Task<List<ProductViewService>> ProductsInTheOrder(string userId)
         { 
             var model = await context
                 .OrdersProducts
@@ -162,7 +163,7 @@ namespace WaiterChefBoss.Services.Product
                     ImageUrl = p.Product.ImageUrl,
                     TimeCooking = p.Product.TimeCooking,
                     CategoryName = p.Product.Category.Name,
-                    OrderId = p.OrderId
+                    OrderProductId = p.OrderId
 
                 })                
                 .ToListAsync();

@@ -4,18 +4,23 @@
     ViewData["Title"] = $"{@Model.Name} {nameof(WaiterChefBoss)}";
 }
 
-<h1>@Model.Name></h1>
-<p>@Model.Description</p>
+<h1>@Model.Name</h1>
+<partial name="_Product" />
 <img class="img-thumbnail" src="@Model.ImageUrl">
+<div class="btn-group" role="group" aria-label="Basic example">
 @if (this.User.Identity!.IsAuthenticated)
 {
     <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@Model.Id" method="post">
         <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
     </form>
 }
+    
+
+
 @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
 {
     <form asp-controller="Edit" asp-action="Product" asp-route-id="@Model.Id" method="get">
         <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
     </form>
 }
+</div>

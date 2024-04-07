@@ -22,15 +22,6 @@ namespace WaiterChefBoss.Services
             usermanager = _usermanager;
         }
 
-        public Task AddCategory(CategoryViewModelService category)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddProduct(ProductViewService product)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<string> AddToRole(string userId, string roleName)
         {
@@ -84,10 +75,7 @@ namespace WaiterChefBoss.Services
             throw new NotImplementedException();
         }
 
-        public Task BecomeBoss()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public Task ChefReport(int chefId)
         {
@@ -105,16 +93,6 @@ namespace WaiterChefBoss.Services
         }
 
         public Task OutOfStock()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveCategory(int categoryId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveProduct(int productId)
         {
             throw new NotImplementedException();
         }
@@ -145,25 +123,6 @@ namespace WaiterChefBoss.Services
             }
         }
 
-
-        public async Task UpdateCategory(CategoryViewModelService category, int categoryId)
-        {
-            var cat = await context.Categories.FindAsync(categoryId);
-            if (cat != null)
-            {
-                cat.Id = category.Id;
-                cat.Name = category.Name;
-                cat.Description = category.Description;
-                await context.SaveChangesAsync();
-            }
-            
-
-        }
-
-        public Task UpdateProduct(ProductViewService product, int productId)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task WaiterReport(int waiterId)
         {

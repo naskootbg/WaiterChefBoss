@@ -16,7 +16,7 @@ namespace WaiterChefBoss.Models
         public string Calories { get; set; } = string.Empty;
         public int CategoryId { get; set; }
 
-        public int OrderId { get; set; }
+        public int OrderProductId { get; set; }
 
         public string CategoryName { get; set; } = string.Empty;
 

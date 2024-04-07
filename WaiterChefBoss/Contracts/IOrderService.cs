@@ -31,15 +31,16 @@ namespace WaiterChefBoss.Contracts
         /// Status 4 for the CUSTOMER
         /// The BOSS can spy
         /// </summary>
-        Task<IEnumerable<OrderViewModel>> OrdersByStatus(int status);
-        Task<IEnumerable<OrderViewModel>> OrdersForBoss();
-        Task<IEnumerable<OrderViewModel>> OrdersForChef();
-        Task<IEnumerable<OrderViewModel>> OrdersForWaiter();
-        Task<IEnumerable<OrderViewModel>> OrdersForCustomer();
-        Task PlaceOrder(string userId, int table);
-        Task<OrderViewModel> FindOrderById(int orderId);
+        Task<IEnumerable<OrderFormViewModel>> OrdersByStatus(int status);
+        Task<IEnumerable<OrderFormViewModel>> OrdersForBoss();
+        Task<IEnumerable<OrderFormViewModel>> OrdersForChef();
+        Task<IEnumerable<OrderFormViewModel>> OrdersForWaiter();
+        Task<IEnumerable<OrderFormViewModel>> OrdersForCustomer();
+        Task<OrderFormViewModel> PlaceOrder(string userId, int table);
+        Task<OrderFormViewModel> FindOrderById(int orderId);
         Task<bool> OrderExists(int id);
 
-        Task ChangeStatusOfAllOrdersProducts(string userId, int orderId);
+        Task<List<ProductViewService>> ProductsFromOrderProductsToOrder(int orderId);
+        Task ChangeStatusOfAllOrdersProducts(string userId, int orderId, int statusBefore, int statusAfter);
     }
 }

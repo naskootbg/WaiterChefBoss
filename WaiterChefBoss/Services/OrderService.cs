@@ -15,60 +15,59 @@ namespace WaiterChefBoss.Services
         {
             context = _context;
         }
-        public async Task<IEnumerable<OrderViewModel>> OrdersByStatus(int status)
+        public async Task<IEnumerable<OrderFormViewModel>> OrdersByStatus(int status)
         {
 
-            return await context
+            var ordersByStatus = await context
                 .Orders
                 .AsNoTracking()
                 .Where(o => o.Status == status)
-                .Select(o => new OrderViewModel
+                .Select(o => new OrderFormViewModel
                 {
                     Id = o.Id,
                     Table = o.Table,
                     DateAdded = o.DateAdded,
                     Status = status,
-                    Total = o.Total,
-                }).ToListAsync();            
-
+                    Total = o.Total
+                })
+                .ToListAsync();
+            return ordersByStatus;
         }
 
-        public async Task<bool> ChangeOrderStatus(Order orderId, int status)
+        public async Task<bool> ChangeOrderStatus(Order order, int status)
         {
-            var order = await context.Orders.FindAsync(orderId);
+
             if (order == null)
             {
                 return false;
             }
-            var model = new OrderViewModel
-            { 
-                Status = status 
-            };
+
+            order.Status = status;             
             await context.SaveChangesAsync();
             return true;
         }
 
-        public Task<IEnumerable<OrderViewModel>> OrdersForBoss()
+        public Task<IEnumerable<OrderFormViewModel>> OrdersForBoss()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<OrderViewModel>> OrdersForChef()
+        public Task<IEnumerable<OrderFormViewModel>> OrdersForChef()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<OrderViewModel>> OrdersForCustomer()
+        public Task<IEnumerable<OrderFormViewModel>> OrdersForCustomer()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<OrderViewModel>> OrdersForWaiter()
+        public Task<IEnumerable<OrderFormViewModel>> OrdersForWaiter()
         {
             throw new NotImplementedException();
         }
 
-        public async Task PlaceOrder(string userId, int table)
+        public async Task<OrderFormViewModel> PlaceOrder(string userId, int table)
         {
 
 
@@ -98,18 +97,23 @@ namespace WaiterChefBoss.Services
             await context.AddAsync(model);
             await context.SaveChangesAsync();
             var id = model.Id;
-            await ChangeStatusOfAllOrdersProducts(userId,id);
+            await ChangeStatusOfAllOrdersProducts(userId,id,1,2);
+            var returnModel = new OrderFormViewModel()
+            {
+                Table = model.Table
+            };
+            return returnModel;
         }
 
-        public async Task ChangeStatusOfAllOrdersProducts(string userId, int orderId)
+        public async Task ChangeStatusOfAllOrdersProducts(string userId, int orderId, int statusBefore, int statusAfter)
         {
 
             var orderProductModel = await context
           .OrdersProducts
           .AsNoTracking()
-          .Where(o => o.UserId == userId && o.Status == 1)
+          .Where(o => o.UserId == userId && o.Status == statusBefore)
           .ToListAsync();
-            orderProductModel.ForEach(s => s.Status = 2);
+            orderProductModel.ForEach(s => s.Status = statusAfter);
             orderProductModel.ForEach(s => s.OrderId = orderId);
             context.UpdateRange(orderProductModel);
             await context.SaveChangesAsync();
@@ -117,10 +121,10 @@ namespace WaiterChefBoss.Services
         }
 
 
-        public async Task<OrderViewModel> FindOrderById(int orderId)
+        public async Task<OrderFormViewModel> FindOrderById(int orderId)
         {
-            OrderViewModel model = new();
-            var o = await context.Orders.FirstOrDefaultAsync(or => or.Id == orderId);
+            OrderFormViewModel model = new();
+            var o = await context.Orders.FindAsync(orderId);
             if (o != null)
             {
 
@@ -144,5 +148,33 @@ namespace WaiterChefBoss.Services
             return true;
         }
 
+        public async Task<List<ProductViewService>> ProductsFromOrderProductsToOrder(int orderId)
+        {
+            var model = await context
+               .OrdersProducts
+               .AsNoTracking()
+               .Include(x => x.Product)
+               .Where(o => o.OrderId == orderId && o.Status == 2)
+               .Select(p => new ProductViewService
+               {
+                   Id = p.Product.Id,
+                   Name = p.Product.Name,
+                   Description = p.Product.Description,
+                   Weight = p.Product.Weight,
+                   Calories = p.Product.Calories,
+                   Price = p.Product.Price,
+                   ImageUrl = p.Product.ImageUrl,
+                   TimeCooking = p.Product.TimeCooking,
+                   CategoryName = p.Product.Category.Name,
+                   OrderProductId = p.OrderId
+
+               })
+               .ToListAsync();
+
+
+            return model;
+        }
+
+         
     }
 }

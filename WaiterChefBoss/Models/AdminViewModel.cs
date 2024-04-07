@@ -3,10 +3,10 @@ using WaiterChefBoss.Data.Models;
 
 namespace WaiterChefBoss.Models
 {
-    public class UserPanelViewModel
+    public class AdminViewModel
     {
         public List<IdentityUser> Users = new List<IdentityUser>();    
-        public IEnumerable<Order> Orders { get; init; }  = new List<Order>(); 
+        public IEnumerable<OrderFormViewModel> Orders { get; init; }  = new List<OrderFormViewModel>(); 
 
 
         

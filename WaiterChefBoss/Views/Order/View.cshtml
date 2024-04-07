@@ -1,10 +1,9 @@
 ﻿@model OrderFormViewModel
 
 @{
-    ViewData["Title"] = "Cart";
+    ViewData["Title"] = $"Order {Model.Id}";
 }
-
-        @if (Model.Products.Count() > 0)
+@if (Model.Products.Count() > 0)
 {
 
 
@@ -31,25 +30,15 @@
             }
             <tr></tr>
             <tr>
-                <th>
-
-                </th>
+                <th>Table: @Model.Table</th>
                 <th>Total: @Math.Round(total,2) @Model.Products.FirstOrDefault()!.CurencySymbol</th>
             </tr>
         </tbody>
     </table>
-    <form asp-action="PlaceOrder" method="post">
 
-        <label asp-for="Table" class="form-label-add-edit">Table</label>
-        <input asp-for="Table" class="form-control" aria-required="true" value="0" />
-        <span asp-validation-for="Table" class="text-danger"></span>
+
+    @*<form asp-controller="Order" asp-action="PlaceOrder" asp-route-orderId="@Model.Products.FirstOrDefault()!.OrderProductId" asp-route-table="1" method="post">
         <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Send to the Waiter" />
-    </form>
-
-    
-}
-else
-{
-    <h1>No products added to cart</h1>
+    </form>*@
 }
 

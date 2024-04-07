@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Differencing;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Data;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WaiterChefBoss.Controllers
 {

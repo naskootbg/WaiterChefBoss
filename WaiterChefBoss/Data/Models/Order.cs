@@ -13,6 +13,7 @@ namespace WaiterChefBoss.Data.Models
         [Required]
         public int Status { get; set; }
         [Required]
+        [Range(1, Data.DataConstants.TablesInTheRestaurant)]
         public int Table { get; set; }
         [Required]
         public DateTime DateAdded { get; set; }     

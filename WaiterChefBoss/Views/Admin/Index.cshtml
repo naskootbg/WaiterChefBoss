@@ -1,4 +1,4 @@
-﻿@model UserPanelViewModel
+﻿@model AdminViewModel
 
 @{
     ViewData["Title"] = $"Welcome to your Panel";
@@ -16,7 +16,7 @@
 @foreach (var u in Model.Users)
 {
 
-    <div>@u.Id => @u.Email => @u.GetType.</div>
+    <div>@u.Id -> @u.Email</div>
 
 }
     <form asp-controller="Add" asp-action="Product" method="get">

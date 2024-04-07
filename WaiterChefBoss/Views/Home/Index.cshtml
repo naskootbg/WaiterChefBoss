@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
- 
+
 @*<select onchange="location = this.value;">
     <option value="#">All Products</option>
 @foreach (var category in Model.Categories)
@@ -22,24 +22,29 @@
         
             <div class="col">
                 <div class="card" style="width: 25rem;">
-                     <h3>@product.Name</h3> 
-                     
+                    <a asp-controller="Food" asp-action="Product" asp-route-id="@product.Id"><h3>@product.Name</h3></a>
+
                     <img class="img-thumbnail" src="@product.ImageUrl">
                     <p>@product.Description</p>
                     <div>Category: <a href="/food/category/@product.CategoryId">@product.CategoryName</a></div>
-        
-                    @if (this.User.Identity!.IsAuthenticated)
+
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        @if (this.User.Identity!.IsAuthenticated)
                         {
-                    <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
-                        <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
-                    </form>
+                            <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
+                                <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+                            </form>
                         }
-                    @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
-                    {
-                        <form asp-controller="Edit" asp-action="Product" asp-route-id="@product.Id" method="get">
-                            <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
-                        </form>
-                    }
+                        @*<partial name="_Product" />*@
+
+
+                        @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
+                        {
+                            <form asp-controller="Edit" asp-action="Product" asp-route-id="@product.Id" method="get">
+                                <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         

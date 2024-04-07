@@ -1,0 +1,28 @@
+﻿@model ProductViewService
+<!-- Button trigger modal -->
+ 
+<input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="button" value="Details" data-bs-toggle="modal" data-bs-target="#exampleModal" />
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@Model.Name</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <p>@Model.Description</p>
+                <p>Calories: @Model.Calories</p>
+                <p>Expected time for cooking: @Model.TimeCooking</p>
+                <p>Category: @Model.CategoryName</p>
+                <p>Price: @Model.Price @Model.CurencySymbol</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>

@@ -32,7 +32,7 @@ builder.Services.AddControllersWithViews(
         options.ModelBinderProviders.Insert(0, new DoubleModelBinderProvider());
     });
 
-//builder.Services.AddTransient<IBossService, BossService>();
+builder.Services.AddTransient<IBossService, BossService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IEditAddService, EditAddService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();

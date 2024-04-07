@@ -8,6 +8,6 @@
 
         public string Role { get; set; } = string.Empty;
 
-        public IEnumerable<OrderViewModel> Orders { get; init; } = new List<OrderViewModel>();
+        public IEnumerable<OrderFormViewModel> Orders { get; init; } = new List<OrderFormViewModel>();
     }
 }
