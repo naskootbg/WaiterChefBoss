@@ -84,8 +84,16 @@ namespace WaiterChefBoss.Controllers
 
            // return LocalRedirect("/");
         }
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int productId)
+        {
+            await product.RemoveFromCart(UserId(), productId);
+            TempData["message"] = TempRemoveFromCart(await product.ProductName(productId));
+            return RedirectToAction(nameof(Cart));
 
-       
+            // return LocalRedirect("/");
+        }
+
         private string UserId()
         {
             return  User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;

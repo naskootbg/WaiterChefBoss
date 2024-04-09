@@ -1,7 +1,5 @@
-﻿using System.Xml.Linq;
-using WaiterChefBoss.Contracts;
+﻿using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
-using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Services

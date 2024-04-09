@@ -1,0 +1,24 @@
+﻿@model AdminViewModel
+<form method="post">
+
+    <label asp-for="@Model.Users">Users</label>
+    <select asp-for="@Model.UserName">
+        @foreach (var item in @Model.Users)
+        {
+            <option value="@item.UserName">@item.UserName</option>
+
+        }
+    </select>
+    <label asp-for="@Model.RolesNames">Roles</label>
+    <select asp-for="@Model.RoleName">
+        @foreach (var item in @Model.RolesNames)
+        {
+            <option value="@item">@item</option>
+
+        }
+    </select>
+    <div class="btn-group">
+        <input asp-action="AddToRole" class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Add To Role" />
+        <input asp-action="RemoveFromRoles" class="btn btn-danger mb-2 w-100 p-3 fw-bold" type="submit" value="Remove From Roles" />
+    </div>
+</form>

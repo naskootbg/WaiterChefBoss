@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = $"{@Model.Name} {nameof(WaiterChefBoss)}";
 }
-
+<div class="col">
+    <div class="card" style="width: 25rem;">
 <h1>@Model.Name</h1>
 <partial name="_Product" />
 <img class="img-thumbnail" src="@Model.ImageUrl">
@@ -11,7 +12,7 @@
 @if (this.User.Identity!.IsAuthenticated)
 {
     <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@Model.Id" method="post">
-        <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+        <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Add To Cart" />
     </form>
 }
     
@@ -23,4 +24,7 @@
         <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
     </form>
 }
+</div>
+    </div>
+
 </div>

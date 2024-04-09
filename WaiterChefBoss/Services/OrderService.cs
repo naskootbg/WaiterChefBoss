@@ -15,23 +15,31 @@ namespace WaiterChefBoss.Services
         {
             context = _context;
         }
-        public async Task<IEnumerable<OrderFormViewModel>> OrdersByStatus(int status)
+        public async Task<IEnumerable<ProductViewService>> OrdersByStatus(int status)
         {
 
-            var ordersByStatus = await context
-                .Orders
-                .AsNoTracking()
-                .Where(o => o.Status == status)
-                .Select(o => new OrderFormViewModel
-                {
-                    Id = o.Id,
-                    Table = o.Table,
-                    DateAdded = o.DateAdded,
-                    Status = status,
-                    Total = o.Total
-                })
-                .ToListAsync();
-            return ordersByStatus;
+                            var model = await context
+               .OrdersProducts
+               .AsNoTracking()
+               .Include(x => x.Product)
+               .Where(o => o.Status == status)
+               .Select(p => new ProductViewService
+               {
+                   Id = p.Product.Id,
+                   Name = p.Product.Name,
+                   Description = p.Product.Description,
+                   Weight = p.Product.Weight,
+                   Calories = p.Product.Calories,
+                   Price = p.Product.Price,
+                   ImageUrl = p.Product.ImageUrl,
+                   TimeCooking = p.Product.TimeCooking,
+                   CategoryName = p.Product.Category.Name,
+                   OrderProductId = p.OrderId
+
+               })
+               .ToListAsync();
+
+            return model;
         }
 
         public async Task<bool> ChangeOrderStatus(Order order, int status)
@@ -46,25 +54,84 @@ namespace WaiterChefBoss.Services
             await context.SaveChangesAsync();
             return true;
         }
+ 
 
-        public Task<IEnumerable<OrderFormViewModel>> OrdersForBoss()
+        public async Task<IEnumerable<ProductViewService>> OrdersForChef()
         {
-            throw new NotImplementedException();
+            var model = await context
+               .OrdersProducts
+               .AsNoTracking()
+               .Include(x => x.Product)
+               .Where(o => o.Status == 4)
+               .Select(p => new ProductViewService
+               {
+                   Id = p.Product.Id,
+                   Name = p.Product.Name,
+                   Description = p.Product.Description,
+                   Weight = p.Product.Weight,
+                   Calories = p.Product.Calories,
+                   Price = p.Product.Price,
+                   ImageUrl = p.Product.ImageUrl,
+                   TimeCooking = p.Product.TimeCooking,
+                   CategoryName = p.Product.Category.Name,
+                   OrderProductId = p.OrderId
+
+               })
+               .ToListAsync();
+
+            return model;
         }
 
-        public Task<IEnumerable<OrderFormViewModel>> OrdersForChef()
+        public async Task<IEnumerable<ProductViewService>> OrdersForCustomer()
         {
-            throw new NotImplementedException();
+            var model = await context
+               .OrdersProducts
+               .AsNoTracking()
+               .Include(x => x.Product)
+               .Where(o => o.Status == 2)
+               .Select(p => new ProductViewService
+               {
+                   Id = p.Product.Id,
+                   Name = p.Product.Name,
+                   Description = p.Product.Description,
+                   Weight = p.Product.Weight,
+                   Calories = p.Product.Calories,
+                   Price = p.Product.Price,
+                   ImageUrl = p.Product.ImageUrl,
+                   TimeCooking = p.Product.TimeCooking,
+                   CategoryName = p.Product.Category.Name,
+                   OrderProductId = p.OrderId
+
+               })
+               .ToListAsync();
+            return model;
         }
 
-        public Task<IEnumerable<OrderFormViewModel>> OrdersForCustomer()
+        public async Task<IEnumerable<ProductViewService>> OrdersForWaiter()
         {
-            throw new NotImplementedException();
-        }
+                var model = await context
+               .OrdersProducts
+               .AsNoTracking()
+               .Include(x => x.Product)
+               .Where(o => o.Status == 3)
+               .Select(p => new ProductViewService
+               {
+                   Id = p.Product.Id,
+                   Name = p.Product.Name,
+                   Description = p.Product.Description,
+                   Weight = p.Product.Weight,
+                   Calories = p.Product.Calories,
+                   Price = p.Product.Price,
+                   ImageUrl = p.Product.ImageUrl,
+                   TimeCooking = p.Product.TimeCooking,
+                   CategoryName = p.Product.Category.Name,
+                   OrderProductId = p.OrderId
 
-        public Task<IEnumerable<OrderFormViewModel>> OrdersForWaiter()
-        {
-            throw new NotImplementedException();
+               })
+               .ToListAsync();
+
+
+            return model;
         }
 
         public async Task<OrderFormViewModel> PlaceOrder(string userId, int table)

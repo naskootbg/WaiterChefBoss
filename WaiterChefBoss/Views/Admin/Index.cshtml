@@ -4,24 +4,47 @@
     ViewData["Title"] = $"Welcome to your Panel";
 }
 
-@*<select">
-    <option value="#">All Users</option>
-    @foreach (var u in Model.Users)
+<div class="container text-center">
+    <div class="row">
+        <div class="col col-lg-2">
+            <nav class="nav flex-column">
+                <a class="nav-link bg-outline-success" id="EditFood" href="#" runat="server">Mange Food</a>
+                <a class="nav-link bg-outline-success" id="EditProduct" href="#" runat="server">Manage Users</a>
+                <a class="nav-link bg-outline-success" href="#" runat="server">Reports</a>
+            </nav>
+        </div>
+        <div class="col">
+            <div id="dvUserdetails" style="display:none">
+                <partial name="_Users" />
+            </div>
+            <div id="dvProductDetails" style="display:none">
+                <partial name="_Products" />
+            </div>
+            <div id="dvReports" style="display:none">
+                <partial name="_Products" />
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts
     {
 
-        <option value="/food/category/@u.Id">@u.Email</option>
+    <script>
 
-    }
-</select>*@
-@foreach (var u in Model.Users)
-{
+    $(document).ready(function () {
+            $('#EditFood').click(function () {
 
-    <div>@u.Id -> @u.Email</div>
+                $('#dvUserdetails').hide();
+                $('#dvProductDetails').show();
+        });
 
+            $('#EditProduct').click(function () {
+
+                $('#dvUserdetails').show();
+                $('#dvProductDetails').hide();
+            });
+    });
+
+    </script>
 }
-    <form asp-controller="Add" asp-action="Product" method="get">
-        <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Add Product" />
-    </form>
-<form asp-controller="Add" asp-action="Category" method="get">
-    <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Add Category" />
-</form>

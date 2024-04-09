@@ -9,6 +9,8 @@ namespace WaiterChefBoss.Contracts
         Task<bool> ProductExists(int id);
         Task<ProductViewService> ProductById(int id);        
         Task AddToCart(string userId, int productId);
+
+        Task RemoveFromCart(string userId, int productId);
         Task<int> BlankOrder(string userId);        
         Task<bool> IsBlankOrder(string userId);
         Task<List<ProductViewService>> ProductsInTheOrder(string userId);

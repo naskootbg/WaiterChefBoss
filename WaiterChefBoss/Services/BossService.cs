@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Win32;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
-using WaiterChefBoss.Data.Models;
-using WaiterChefBoss.Models;
 using static WaiterChefBoss.Data.DataConstants;
 namespace WaiterChefBoss.Services
 {
@@ -23,46 +18,26 @@ namespace WaiterChefBoss.Services
         }
 
 
-        public async Task<string> AddToRole(string userId, string roleName)
+        public async Task<string> AddToRole(string userName, string roleName)
         {
-            var user = await usermanager.FindByIdAsync(userId);
-            if (roleName == ChefRole || roleName == WaiterRole || roleName == BossRole)
-            {
-                if (await roleManager.RoleExistsAsync(roleName) == false)
-                {
-                    var role = new IdentityRole()
-                    {
-                        Name = roleName
-                    };
-
-                    await roleManager.CreateAsync(role);
-                    return $"Role {roleName} added successful!";
-                }
-
-            }
-            else
-            {
-                return $"Role {roleName} must be {ChefRole},{WaiterRole} or {BossRole} and can't be created";
-            }
-
-
+            var user = await usermanager.FindByNameAsync(userName);
 
             if (user != null)
             {
                 if (await usermanager.IsInRoleAsync(user,roleName) == false)
                 {
                     await usermanager.AddToRoleAsync(user, roleName);
-                    return $"The user {user.UserName} is now {roleName}!";
+                    return $"The user {userName} is now {roleName}!";
                 }
                 else
                 {
-                    return $"The user {user.UserName} is already {roleName}!";
+                    return $"The user {userName} is already {roleName}!";
 
                 }
             }
             else
             {
-                return $"User with {userId} do not exists!";
+                return $"User {userName} do not exists!";
             }
            
         }
@@ -97,26 +72,41 @@ namespace WaiterChefBoss.Services
             throw new NotImplementedException();
         }
 
-        public async Task<string> RemoveFromRole(string userId, string roleName)
+        public async Task<string> RemoveFromRole(string userName)
         {
-            var user = await usermanager.FindByIdAsync(userId);
-            string[] roles = {ChefRole, WaiterRole, BossRole };
+            var user = await usermanager.FindByNameAsync(userName);
+            IEnumerable<string> roles = new List<string>();
+            roles.Append(ChefRole) ; 
+            roles.Append(WaiterRole);
+            roles.Append(BossRole);
+
+            var rols = roleManager.Roles;
 
             if (user == null)
             {
-                return $"User with ID:{userId} do not exists!";
+                return $"User {user!.UserName} do not exists!";
                
             }
             else
             {
-                if (await usermanager.IsInRoleAsync(user, roleName) == false)
+                if (await usermanager.IsInRoleAsync(user, ChefRole))
                 {
-                    await usermanager.RemoveFromRolesAsync(user, roles);
-                    return $"The user {user.UserName} is now removed from the roles {string.Join(", ", roles)}!";
+                    await usermanager.RemoveFromRoleAsync(user, ChefRole);
+                    return $"The user {user.UserName} is no longer {ChefRole}!";
+                }
+                else if (await usermanager.IsInRoleAsync(user, BossRole))
+                {
+                    await usermanager.RemoveFromRoleAsync(user, BossRole);
+                    return $"The user {user.UserName} is no longer {BossRole}!";
+                }
+                else if(await usermanager.IsInRoleAsync(user, WaiterRole))
+                {
+                    await usermanager.RemoveFromRoleAsync(user, WaiterRole);
+                    return $"The user {user.UserName} is no longer {WaiterRole}!";
                 }
                 else
                 {
-                    return $"The user {user.UserName} is not {roleName}!";
+                    return $"The user {user.UserName} is not in role!";
 
                 }
 

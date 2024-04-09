@@ -28,20 +28,20 @@
                     <p>@product.Description</p>
                     <div>Category: <a href="/food/category/@product.CategoryId">@product.CategoryName</a></div>
 
-                    <div class="btn-group" role="group" aria-label="Basic example">
+                    <div class="btn-group" role="group" aria-label="Cart and Edit">
                         @if (this.User.Identity!.IsAuthenticated)
                         {
                             <form asp-controller="Order" asp-action="AddToCart" asp-route-productId="@product.Id" method="post">
-                                <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="AddToCart" />
+                                <input class="btn btn-dark mb-2  p-2 fw-bold" type="submit" value="Add To Cart @product.Price @product.CurencySymbol" />
                             </form>
                         }
-                        @*<partial name="_Product" />*@
+                         
 
 
                         @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
                         {
                             <form asp-controller="Edit" asp-action="Product" asp-route-id="@product.Id" method="get">
-                                <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
+                                <input class="btn btn-warning mb-2  p-2 fw-bold" type="submit" value="Edit" />
                             </form>
                         }
                     </div>

@@ -152,6 +152,7 @@ namespace WaiterChefBoss.Services.Product
                 .AsNoTracking()
                 .Include(x => x.Product)
                 .Where(o => o.UserId == userId && o.Status == 1)
+                .OrderByDescending(p=>p.Product.Name)
                 .Select(p => new ProductViewService
                 {
                     Id = p.Product.Id,
@@ -171,6 +172,22 @@ namespace WaiterChefBoss.Services.Product
 
             return model;
         }
-       
+
+        public async Task RemoveFromCart(string userId, int productId)
+        {
+            var productToRemove = await context
+                .OrdersProducts
+                .Where(p => p.UserId == userId && p.ProductId == productId && p.Status == 1)
+                .FirstOrDefaultAsync();
+            if (productToRemove != null)
+            {
+                context.OrdersProducts.Remove(productToRemove);
+
+                await context.SaveChangesAsync();
+            }
+
+             
+        }
+
     }
 }

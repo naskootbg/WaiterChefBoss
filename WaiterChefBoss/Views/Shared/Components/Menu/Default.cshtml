@@ -1,4 +1,4 @@
-﻿@model List<CategoryViewModelService>
+﻿@model MenuViewModel
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container-fluid">
@@ -7,7 +7,7 @@
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between m-4">
             <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -15,19 +15,54 @@
                
                     @if (Model != null)
                     {
-                        @foreach (var category in Model)
+                        @foreach (var category in Model.AllCategories)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="Category" asp-route-id="@category.Id">@category.Name</a>
                             </li>
                         }
                     }
-                
-                
-
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Cart">Cart</a>
+                <li class="nav-item bg-warning">
+                    <a class="nav-link text-dark position-relative" asp-controller="Order" asp-action="Cart">
+                        Cart
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            @Model?.CartProductsCount
+                            <span class="visually-hidden">products in the cart</span>
+                        </span>
+                    </a>
+                    @*<a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Cart">Cart - @Model?.CartProductsCount</a>*@
                 </li>
+                @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole))
+                {
+                    <li class="nav-item bg-success">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                    </li>
+                }
+                else if (this.User.Identity!.IsAuthenticated && (this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole) 
+                || this.User.IsInRole(WaiterChefBoss.Data.DataConstants.ChefRole)))
+                {
+                    <li class="nav-item bg-success">
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Chef" asp-action="Index">Chef Panel</a>
+                    </li>
+                }
+                else if (this.User.Identity!.IsAuthenticated && (this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole)
+                || this.User.IsInRole(WaiterChefBoss.Data.DataConstants.WaiterRole)))
+                {
+                    <li class="nav-item bg-success">
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Waiter" asp-action="Index">Waiter Panel</a>
+                    </li>
+                }
+                else if (this.User.Identity!.IsAuthenticated)
+                {
+                    <li class="nav-item bg-success">
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="MyOrders" asp-action="Index">My Orders</a>
+                    </li>
+                }
+                else
+                {
+                    
+                }
+
 
             </ul>
             <partial name="_LoginPartial" />

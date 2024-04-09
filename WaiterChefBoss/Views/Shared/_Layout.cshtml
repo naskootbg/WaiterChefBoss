@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WaiterChefBoss.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 </head>
 <body >
@@ -25,15 +29,11 @@
         <main role="main" class="pb-3">
             @if (TempData["message"] != null)
             {
-                <div calss="alert alert-success alert-dismissible fade show">
-                    @TempData["message"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert">
- 
-                    </button>
+                <div class="alert alert-success" role="alert">
+                    <b>@TempData["message"]</b>
+  
                 </div>
             }
-
-            @RenderBody()
             @if (TempData["message-danger"] != null)
             {
                 <div class="alert alert-danger" role="alert">
@@ -45,6 +45,8 @@
                 </div>
 
             }
+            @RenderBody()
+           
         </main>
     </div>
     
@@ -53,10 +55,8 @@
             &copy; @DateTime.Now.Year - WaiterChefBoss 
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
+
+@*    <script>
         $.ajax({
             url: '~/Home/Menu',
             contentType: 'application/html; charset=utf-8',
@@ -69,7 +69,6 @@
             .error(function (xhr, status) {
                 alert(status);
             });
-    </script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </script>*@
 </body>
 </html>

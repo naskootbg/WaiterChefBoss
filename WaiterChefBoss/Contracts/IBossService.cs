@@ -1,4 +1,5 @@
-﻿using WaiterChefBoss.Data.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Contracts
@@ -9,8 +10,8 @@ namespace WaiterChefBoss.Contracts
         /// When IdentityUsers.Count == 0 //First user will become a Boss - super admin
         /// </summary>
 
-        Task<string> RemoveFromRole(string userId, string roleName);
-        Task<string> AddToRole(string userId, string roleName);
+        Task<string> RemoveFromRole(string userName);
+        Task<string> AddToRole(string userName, string roleName);
         Task CustomReport(DateTime start, int howManyDays);
 
         Task ChefReport(int chefId);
