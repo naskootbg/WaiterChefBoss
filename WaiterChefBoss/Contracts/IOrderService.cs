@@ -32,8 +32,8 @@ namespace WaiterChefBoss.Contracts
         /// The BOSS can spy
         /// </summary>
         Task<IEnumerable<ProductViewService>> OrdersByStatus(int status);
-        Task<IEnumerable<ProductViewService>> OrdersForChef();
-        Task<IEnumerable<ProductViewService>> OrdersForWaiter();
+        Task<IEnumerable<OrderFormViewModel>> OrdersForChef();
+        Task<IEnumerable<OrderFormViewModel>> OrdersForWaiter();
         Task<IEnumerable<ProductViewService>> OrdersForCustomer();
         Task<OrderFormViewModel> PlaceOrder(string userId, int table);
         Task<OrderFormViewModel> FindOrderById(int orderId);
@@ -41,5 +41,7 @@ namespace WaiterChefBoss.Contracts
 
         Task<List<ProductViewService>> ProductsFromOrderProductsToOrder(int orderId);
         Task ChangeStatusOfAllOrdersProducts(string userId, int orderId, int statusBefore, int statusAfter);
+
+        Task BlankOrder(string userId);
     }
 }

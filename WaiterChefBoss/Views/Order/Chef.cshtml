@@ -1,0 +1,17 @@
+﻿@model IEnumerable<OrderFormViewModel>
+@{
+    ViewData["Title"] = "Orders for Chef";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@foreach(var order in Model)
+{
+    <h2>@order.Id</h2>
+    foreach(var product in order.Products)
+    {
+        <p>@product.Name</p>
+        <p>@product.Description</p>
+    }
+
+}

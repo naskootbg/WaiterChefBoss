@@ -19,7 +19,7 @@ namespace WaiterChefBoss.Component
  
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            List<ProductViewService> prod = new List<ProductViewService>();
+            List<ProductViewService> prod = new();
             if (User.Identity?.Name != null)
             {
                 prod = await productService.ProductsInTheOrder(UserId()!);
@@ -29,7 +29,7 @@ namespace WaiterChefBoss.Component
             var model = new MenuViewModel()
             {
                 AllCategories = categories,
-                CartProductsCount = prod.Count()
+                CartProductsCount = prod.Count
             };
 
             return View(model);

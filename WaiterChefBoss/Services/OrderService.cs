@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
@@ -56,13 +57,23 @@ namespace WaiterChefBoss.Services
         }
  
 
-        public async Task<IEnumerable<ProductViewService>> OrdersForChef()
+        public async Task<IEnumerable<OrderFormViewModel>> OrdersForChef()
         {
-            var model = await context
+            List<OrderFormViewModel> ordersForChef = new();
+            var orders = await context
+                .Orders
+                .AsNoTracking()
+                .Where(o => o.Status == 1)
+                .ToListAsync();
+
+            foreach (var order in orders)
+            {
+                var productModel = await context
                .OrdersProducts
                .AsNoTracking()
                .Include(x => x.Product)
-               .Where(o => o.Status == 4)
+               .Include(x => x.Order)
+               .Where(o => o.Order.Status == 1 && o.OrderId == order.Id)
                .Select(p => new ProductViewService
                {
                    Id = p.Product.Id,
@@ -78,8 +89,22 @@ namespace WaiterChefBoss.Services
 
                })
                .ToListAsync();
+                var model = new OrderFormViewModel
+                {
+                    Id = order.Id,
+                    DateAdded = order.DateAdded,
+                    Table = order.Table,
+                    Products = productModel,
+                    Status = order.Status,
+                    Total = order.Total,
+                    UserId = order.UserId
+                };
+                ordersForChef.Add(model);
+            }
 
-            return model;
+
+
+            return ordersForChef;
         }
 
         public async Task<IEnumerable<ProductViewService>> OrdersForCustomer()
@@ -107,13 +132,23 @@ namespace WaiterChefBoss.Services
             return model;
         }
 
-        public async Task<IEnumerable<ProductViewService>> OrdersForWaiter()
+        public async Task<IEnumerable<OrderFormViewModel>> OrdersForWaiter()
         {
-                var model = await context
+            List<OrderFormViewModel> ordersForChef = new();
+            var orders = await context
+                .Orders
+                .AsNoTracking()
+                .Where(o => o.Status == 1)
+                .ToListAsync();
+
+            foreach (var order in orders)
+            {
+                var productModel = await context
                .OrdersProducts
                .AsNoTracking()
                .Include(x => x.Product)
-               .Where(o => o.Status == 3)
+               .Include(x => x.Order)
+               .Where(o => o.Order.Status == 2 && o.OrderId == order.Id)
                .Select(p => new ProductViewService
                {
                    Id = p.Product.Id,
@@ -129,9 +164,22 @@ namespace WaiterChefBoss.Services
 
                })
                .ToListAsync();
+                var model = new OrderFormViewModel
+                {
+                    Id = order.Id,
+                    DateAdded = order.DateAdded,
+                    Table = order.Table,
+                    Products = productModel,
+                    Status = order.Status,
+                    Total = order.Total,
+                    UserId = order.UserId
+                };
+                ordersForChef.Add(model);
+            }
 
 
-            return model;
+
+            return ordersForChef;
         }
 
         public async Task<OrderFormViewModel> PlaceOrder(string userId, int table)
@@ -241,7 +289,21 @@ namespace WaiterChefBoss.Services
 
             return model;
         }
+        public async Task BlankOrder(string userId)
+        {
+            var model = new Order
+            {
+                Status = 0,
+                UserId = userId,
+                DateAdded = DateTime.Now,
+                Table = 1,
+                Total = 0
+            };
 
-         
+            await context.AddAsync(model);
+            await context.SaveChangesAsync();
+
+        }
+
     }
 }

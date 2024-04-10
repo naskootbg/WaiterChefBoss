@@ -10,7 +10,7 @@ namespace WaiterChefBoss.Controllers
     {
         private readonly IProductService product;
         private readonly ICategoryService category;
-        public FoodController(IProductService _product,ApplicationDbContext _data, ICategoryService _category)
+        public FoodController(IProductService _product, ICategoryService _category)
         {
             category = _category;
             product = _product;

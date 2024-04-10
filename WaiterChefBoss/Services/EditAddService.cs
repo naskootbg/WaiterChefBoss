@@ -131,10 +131,9 @@ namespace WaiterChefBoss.Services
                         CategoryId = ep.CategoryId,
                         TimeCooking = ep.TimeCooking,
                         Weight = ep.Weight,
-                        Price = ep.Price
-
+                        Price = ep.Price,
+                        Categories = await category.AllCategories()
                     };
-                    entity.Categories = await category.AllCategories();
                     return entity;
                 }
                 else
@@ -161,10 +160,9 @@ namespace WaiterChefBoss.Services
                         CategoryId = product.CategoryId,
                         TimeCooking = product.TimeCooking,
                         Weight = product.Weight,
-                        Price = product.Price
-
+                        Price = product.Price,
+                        Categories = await category.AllCategories()
                     };
-                    entity.Categories = await category.AllCategories();
                     return entity;
                 }
             }

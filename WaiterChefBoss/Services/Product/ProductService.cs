@@ -109,27 +109,8 @@ namespace WaiterChefBoss.Services.Product
             return true;
         }
 
-        public async Task<int> BlankOrder(string userId)
-        {
-            var order = new Order()
-            {
-                UserId = userId,
-                Status = 0
-            };
-            await context.AddAsync(order);
-            await context.SaveChangesAsync();
-            return order.Id;
+ 
 
-        }
-
-        public async Task<bool> IsBlankOrder(string userId)
-        {
-            if (await context.Orders.FirstOrDefaultAsync(o => o.User.Id == userId && o.Status == 0) != null )
-            {
-                return false;
-            }
-            return true;
-        }
         public async Task AddToCart(string userId, int productId)
         {
              
@@ -137,7 +118,8 @@ namespace WaiterChefBoss.Services.Product
             {
                 ProductId = productId,
                 UserId = userId,
-                Status = 1
+                Status = 1,
+                OrderId = 1
                 
             };
            

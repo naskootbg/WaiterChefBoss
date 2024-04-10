@@ -7,12 +7,10 @@ namespace WaiterChefBoss.Services
     public class BossService : IBossService
     {
         public readonly ApplicationDbContext context;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> usermanager;
 
-        public BossService(ApplicationDbContext _context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _usermanager)
+        public BossService(ApplicationDbContext _context, UserManager<IdentityUser> _usermanager)
         {
-            roleManager = _roleManager;
             context = _context;
             usermanager = _usermanager;
         }
@@ -75,12 +73,6 @@ namespace WaiterChefBoss.Services
         public async Task<string> RemoveFromRole(string userName)
         {
             var user = await usermanager.FindByNameAsync(userName);
-            IEnumerable<string> roles = new List<string>();
-            roles.Append(ChefRole) ; 
-            roles.Append(WaiterRole);
-            roles.Append(BossRole);
-
-            var rols = roleManager.Roles;
 
             if (user == null)
             {

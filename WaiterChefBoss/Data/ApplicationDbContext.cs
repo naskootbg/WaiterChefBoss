@@ -12,12 +12,11 @@ namespace WaiterChefBoss.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder
-            //    .Entity<OrderProducts>()
-            //    .HasOne(o => o.Order)
-            //    .WithMany(o => o.Products)
-            //    .OnDelete(DeleteBehavior.Cascade);
-             
+            builder
+                .Entity<Order>()
+                .HasMany(o => o.Products)
+                .WithOne(o => o.Order)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                .Entity<Category>()

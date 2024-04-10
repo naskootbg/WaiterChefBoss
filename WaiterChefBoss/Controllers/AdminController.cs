@@ -4,14 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Data;
 using WaiterChefBoss.Models;
-using WaiterChefBoss.Services;
 using static WaiterChefBoss.Data.DataConstants;
 
 namespace WaiterChefBoss.Controllers
 {
-    [Authorize(Roles = Data.DataConstants.BossRole)]
+    [Authorize(Roles = BossRole)]
     public class AdminController : Controller
     {
 
@@ -38,6 +36,11 @@ namespace WaiterChefBoss.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (!order.OrderExists(1).Result)
+            {
+                await order.BlankOrder(UserId());
+
+            }
 
             var model = new AdminViewModel()
             {
@@ -93,6 +96,10 @@ namespace WaiterChefBoss.Controllers
         public PartialViewResult Products()
         {
             return PartialView("_Products");
+        }
+        private string UserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
         }
     }
 }

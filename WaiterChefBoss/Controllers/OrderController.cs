@@ -8,10 +8,12 @@ using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
 using static WaiterChefBoss.Data.TempMessages;
+using static WaiterChefBoss.Data.DataConstants;
 
 namespace WaiterChefBoss.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = $"{BossRole}, {ChefRole}, {WaiterRole}")]
+
     public class OrderController : Controller
     {
         private readonly IOrderService order;
@@ -37,6 +39,8 @@ namespace WaiterChefBoss.Controllers
                     Total = orderForModel.Total,
                     UserId = orderForModel.UserId
                 };
+               
+
                 return View(model);
             }
             else
@@ -93,6 +97,9 @@ namespace WaiterChefBoss.Controllers
 
             // return LocalRedirect("/");
         }
+        [Authorize(Roles = $"{BossRole}, {ChefRole}")]
+        public async Task<IActionResult> Chef() => View(await order.OrdersForChef());
+ 
 
         private string UserId()
         {

@@ -134,7 +134,7 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
                     
                     var rolesUserlist = await _userManager.GetUsersInRoleAsync(BossRole);
-                    if (rolesUserlist.Count() < 1)
+                    if (rolesUserlist.Count < 1)
                     {
                         if (await _roleManager.RoleExistsAsync(BossRole) == false)
                         {
@@ -153,7 +153,7 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
                         }
                         _logger.LogInformation("Admin created!");
 
-                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, BossRole);
+                        await _userManager.AddToRoleAsync(user, BossRole);
 
                     }
 

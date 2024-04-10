@@ -38,24 +38,22 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
                     </li>
                 }
-                else if (this.User.Identity!.IsAuthenticated && (this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole) 
-                || this.User.IsInRole(WaiterChefBoss.Data.DataConstants.ChefRole)))
+                else if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.ChefRole))
                 {
                     <li class="nav-item bg-success">
-                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Chef" asp-action="Index">Chef Panel</a>
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Order" asp-action="Chef">Chef Panel</a>
                     </li>
                 }
-                else if (this.User.Identity!.IsAuthenticated && (this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BossRole)
-                || this.User.IsInRole(WaiterChefBoss.Data.DataConstants.WaiterRole)))
+                else if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.WaiterRole))
                 {
                     <li class="nav-item bg-success">
-                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Waiter" asp-action="Index">Waiter Panel</a>
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Order" asp-action="Index">Waiter Panel</a>
                     </li>
                 }
                 else if (this.User.Identity!.IsAuthenticated)
                 {
                     <li class="nav-item bg-success">
-                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="MyOrders" asp-action="Index">My Orders</a>
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Order" asp-action="View">My Orders</a>
                     </li>
                 }
                 else

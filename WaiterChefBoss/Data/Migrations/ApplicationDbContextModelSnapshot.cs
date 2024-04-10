@@ -504,10 +504,10 @@ namespace WaiterChefBoss.Data.Migrations
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.OrderProducts", b =>
                 {
-                    b.HasOne("WaiterChefBoss.Data.Models.Order", null)
+                    b.HasOne("WaiterChefBoss.Data.Models.Order", "Order")
                         .WithMany("Products")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WaiterChefBoss.Data.Models.Product", "Product")
@@ -521,6 +521,8 @@ namespace WaiterChefBoss.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
 

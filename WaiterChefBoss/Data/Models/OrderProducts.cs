@@ -19,6 +19,7 @@ namespace WaiterChefBoss.Data.Models
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
         public int OrderId { get; set; }
- 
+        [ForeignKey(nameof(OrderId))]
+        public Order Order { get; set; } = null!;
     }
 }
