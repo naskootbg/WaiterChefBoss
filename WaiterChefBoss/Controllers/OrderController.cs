@@ -1,36 +1,33 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using System.Drawing;
 using System.Security.Claims;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
-using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
-using static WaiterChefBoss.Data.TempMessages;
 using static WaiterChefBoss.Data.DataConstants;
+using static WaiterChefBoss.Data.TempMessages;
 
 namespace WaiterChefBoss.Controllers
 {
-    [Authorize(Roles = $"{BossRole}, {ChefRole}, {WaiterRole}")]
+    [Authorize]
 
     public class OrderController : Controller
     {
-        private readonly IOrderService order;
-        private readonly IProductService product;
-        
-        public OrderController(IOrderService _order, IProductService _product ) 
+        private readonly IOrderService orderService;
+        private readonly IProductService productService;
+        private readonly ICategoryService categoryService;
+        public OrderController(IOrderService _orderService, IProductService _productService, ICategoryService _categoryService)
         {
-            order = _order;
-            product = _product;
-             
+            orderService = _orderService;
+            productService = _productService;
+            categoryService = _categoryService;
         }
         public async Task<IActionResult> View(int id)
         {
-            if (await order.OrderExists(id))
+            if (await orderService.OrderExists(id))
             {
-                var products = await order.ProductsFromOrderProductsToOrder(id);
-                var orderForModel = await order.FindOrderById(id);
+                var products = await orderService.ProductsFromOrderProductsToOrder(id);
+                var orderForModel = await orderService.FindOrderById(id);
                 var model = new OrderFormViewModel()
                 {
                     DateAdded = orderForModel.DateAdded,
@@ -39,7 +36,7 @@ namespace WaiterChefBoss.Controllers
                     Total = orderForModel.Total,
                     UserId = orderForModel.UserId
                 };
-               
+
 
                 return View(model);
             }
@@ -60,19 +57,18 @@ namespace WaiterChefBoss.Controllers
             }
             else
             {
-                var userId = UserId();
-                var placedOrder = await order.PlaceOrder(userId, table);
+                await orderService.PlaceOrder(UserId(), table);
                 TempData["message"] = TempSendOrderToWaiter();
 
                 return RedirectToAction("Index", "Home");
             }
-            
+
         }
         [HttpGet]
         public async Task<IActionResult> Cart()
         {
 
-            var products = await product.ProductsInTheOrder(UserId());
+            var products = await productService.ProductsInTheOrder(UserId());
             var model = new OrderFormViewModel()
             {
                 Products = products
@@ -81,25 +77,38 @@ namespace WaiterChefBoss.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId)
-        {            
-            await product.AddToCart(UserId(), productId);
-            TempData["message"] = TempAddToCart(await product.ProductName(productId));
-            return RedirectToAction(nameof(Cart));
-
-           // return LocalRedirect("/");
-        }
-        [HttpPost]
-        public async Task<IActionResult> RemoveFromCart(int productId)
         {
-            await product.RemoveFromCart(UserId(), productId);
-            TempData["message"] = TempRemoveFromCart(await product.ProductName(productId));
+            await productService.AddToCart(UserId(), productId);
+            TempData["message"] = TempAddToCart(await productService.ProductName(productId));
             return RedirectToAction(nameof(Cart));
 
             // return LocalRedirect("/");
         }
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int productId)
+        {
+            await productService.RemoveFromCart(UserId(), productId);
+            TempData["message"] = TempRemoveFromCart(await productService.ProductName(productId));
+            return RedirectToAction(nameof(Cart));
+
+            // return LocalRedirect("/");
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendToWaiter(int id, string roleName) 
+        {
+            await orderService.SendToWaiter(id);
+            return RedirectToAction(roleName);
+
+        }
+
         [Authorize(Roles = $"{BossRole}, {ChefRole}")]
-        public async Task<IActionResult> Chef() => View(await order.OrdersForChef());
- 
+        public async Task<IActionResult> Chef() => View(await orderService.OrdersForWorker(ChefRole));
+
+        [Authorize(Roles = $"{BossRole}, {WaiterRole}")]
+        public async Task<IActionResult> Waiter() => View(await orderService.OrdersForWorker(WaiterRole));
+
+        [Authorize(Roles = $"{BossRole}, {BarmanRole}")]
+        public async Task<IActionResult> Barman() => View(await orderService.OrdersForWorker(BarmanRole));
 
         private string UserId()
         {

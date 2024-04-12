@@ -24,6 +24,6 @@ namespace WaiterChefBoss.Data.Models
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
 
-        public IEnumerable<OrderProducts> Products { get; set; } = new List<OrderProducts>();
+        public IEnumerable<OrderProducts> OrderProducts { get; set; } = new List<OrderProducts>();
     }
 }

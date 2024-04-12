@@ -20,7 +20,8 @@ namespace WaiterChefBoss.Services
             {
                 
                 Name = category.Name,
-                Description = category.Description
+                Description = category.Description,
+                Status = 1
             };
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
@@ -83,7 +84,8 @@ namespace WaiterChefBoss.Services
                     {
                         Id = entity.Id,
                         Name = entity.Name,
-                        Description = entity.Description
+                        Description = entity.Description,
+                        Status = entity.Status
                     };
                     return model;
                 }
@@ -92,12 +94,14 @@ namespace WaiterChefBoss.Services
                     entity.Id = category.Id;
                     entity.Name = category.Name;
                     entity.Description = category.Description;
+                    entity.Status = category.Status;
                     await context.SaveChangesAsync();
                     var cat = new CategoryViewModelService
                     {
                         Id = category.Id,
                         Name = category.Name,
-                        Description = category.Description
+                        Description = category.Description,
+                        Status = category.Status
                     };
                     return cat;
                 }

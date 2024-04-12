@@ -33,7 +33,7 @@ namespace WaiterChefBoss.Controllers
             
             
             await addService.AddProduct(product);
-            return RedirectToAction("Index", "UserPanel");
+            return RedirectToAction("Index", "Home");
             //return RedirectToAction("Product" , "Food", new { id = id });
         }
         [HttpGet]

@@ -27,7 +27,7 @@ namespace WaiterChefBoss.Controllers
         {
             var model = await editService.EditProduct(product, id);
 
-            return View(model);
+            return RedirectToAction("Product", "Food", new { id = id });
         }
         [HttpGet]
         public async Task<IActionResult> Category(int id)
@@ -41,21 +41,21 @@ namespace WaiterChefBoss.Controllers
         {
             var model = await editService.EditCategory(category, id);
 
-            return View(model);
+            return RedirectToAction("Category", "Food", new { id = id });
         }
         [HttpPost]
         public async Task<IActionResult> DeleteCategory(int id)
         {
              await editService.DeleteCategory(id);
 
-            return RedirectToAction("Index", "UserPanel");
+            return RedirectToAction("Index", "Home");
         }
         [HttpPost]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             await editService.DeleteProduct(id);
 
-            return RedirectToAction("Index", "UserPanel");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

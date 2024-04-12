@@ -47,7 +47,13 @@
                 else if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.WaiterRole))
                 {
                     <li class="nav-item bg-success">
-                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Order" asp-action="Index">Waiter Panel</a>
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Order" asp-action="Waiter">Waiter Panel</a>
+                    </li>
+                }
+                else if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.BarmanRole))
+                {
+                    <li class="nav-item bg-success">
+                        <a class="nav-link text-dark bg-info" asp-area="" asp-controller="Order" asp-action="Barman">Barman Panel</a>
                     </li>
                 }
                 else if (this.User.Identity!.IsAuthenticated)

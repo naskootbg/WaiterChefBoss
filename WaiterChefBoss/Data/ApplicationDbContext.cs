@@ -10,11 +10,15 @@ namespace WaiterChefBoss.Data
             : base(options)
         {
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.EnableSensitiveDataLogging();
+        //}
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
                 .Entity<Order>()
-                .HasMany(o => o.Products)
+                .HasMany(o => o.OrderProducts)
                 .WithOne(o => o.Order)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -23,22 +27,26 @@ namespace WaiterChefBoss.Data
                .HasData(new Category()
                {
                    Id = 1,
-                   Name = "Fast Food"
+                   Name = "Fast Food",
+                   Status = 1
                },
                new Category()
                {
                    Id = 2,
-                   Name = "Dinner"
+                   Name = "Dinner",
+                   Status = 1
                },
                new Category()
                {
                    Id = 3,
-                   Name = "Hot Drinks"
+                   Name = "Hot Drinks",
+                   Status = 1
                },
                new Category()
                {
                    Id = 4,
-                   Name = "Alchohol"
+                   Name = "Alchohol",
+                   Status = 3
                });
 
                builder

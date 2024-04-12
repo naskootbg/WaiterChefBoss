@@ -53,13 +53,7 @@ namespace WaiterChefBoss.Controllers
 
 
         }
-        public async Task<IActionResult> DispayOrders(int status)
-        {
-            var orders = await order.OrdersByStatus(status);
 
-            return View(orders);
-
-        }
         [HttpPost]
         public async Task<IActionResult> AddToRole(string userName, string roleName)
         {

@@ -118,7 +118,7 @@ namespace WaiterChefBoss.Services.Product
             {
                 ProductId = productId,
                 UserId = userId,
-                Status = 1,
+                Status = 0,
                 OrderId = 1
                 
             };
@@ -133,7 +133,7 @@ namespace WaiterChefBoss.Services.Product
                 .OrdersProducts
                 .AsNoTracking()
                 .Include(x => x.Product)
-                .Where(o => o.UserId == userId && o.Status == 1)
+                .Where(o => o.UserId == userId && o.Status == 0)
                 .OrderByDescending(p=>p.Product.Name)
                 .Select(p => new ProductViewService
                 {
@@ -159,7 +159,7 @@ namespace WaiterChefBoss.Services.Product
         {
             var productToRemove = await context
                 .OrdersProducts
-                .Where(p => p.UserId == userId && p.ProductId == productId && p.Status == 1)
+                .Where(p => p.UserId == userId && p.ProductId == productId && p.Status == 0)
                 .FirstOrDefaultAsync();
             if (productToRemove != null)
             {

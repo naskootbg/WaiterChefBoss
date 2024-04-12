@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WaiterChefBoss.Data;
 
 #nullable disable
 
-namespace WaiterChefBoss.Data.Migrations
+namespace WaiterChefBoss.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240412125141_WBCB")]
+    partial class WBCB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,6 +244,9 @@ namespace WaiterChefBoss.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -251,25 +256,29 @@ namespace WaiterChefBoss.Data.Migrations
                         {
                             Id = 1,
                             Description = "",
-                            Name = "Fast Food"
+                            Name = "Fast Food",
+                            Status = 1
                         },
                         new
                         {
                             Id = 2,
                             Description = "",
-                            Name = "Dinner"
+                            Name = "Dinner",
+                            Status = 1
                         },
                         new
                         {
                             Id = 3,
                             Description = "",
-                            Name = "Hot Drinks"
+                            Name = "Hot Drinks",
+                            Status = 1
                         },
                         new
                         {
                             Id = 4,
                             Description = "",
-                            Name = "Alchohol"
+                            Name = "Alchohol",
+                            Status = 1
                         });
                 });
 

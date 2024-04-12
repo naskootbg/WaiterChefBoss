@@ -11,6 +11,7 @@ namespace WaiterChefBoss.Data
         public const string ChefRole = "Chef";
         public const string WaiterRole = "Waiter";
         public const string BossRole = "Boss";
+        public const string BarmanRole = "Barman";
         public const int TablesInTheRestaurant = 10;
 
     }

@@ -9,11 +9,11 @@ using WaiterChefBoss.Data;
 
 #nullable disable
 
-namespace WaiterChefBoss.Data.Migrations
+namespace WaiterChefBoss.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240410080032_WBC")]
-    partial class WBC
+    [Migration("20240412130854_WBCB3")]
+    partial class WBCB3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -244,6 +244,9 @@ namespace WaiterChefBoss.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -253,25 +256,29 @@ namespace WaiterChefBoss.Data.Migrations
                         {
                             Id = 1,
                             Description = "",
-                            Name = "Fast Food"
+                            Name = "Fast Food",
+                            Status = 1
                         },
                         new
                         {
                             Id = 2,
                             Description = "",
-                            Name = "Dinner"
+                            Name = "Dinner",
+                            Status = 1
                         },
                         new
                         {
                             Id = 3,
                             Description = "",
-                            Name = "Hot Drinks"
+                            Name = "Hot Drinks",
+                            Status = 1
                         },
                         new
                         {
                             Id = 4,
                             Description = "",
-                            Name = "Alchohol"
+                            Name = "Alchohol",
+                            Status = 3
                         });
                 });
 
@@ -507,7 +514,7 @@ namespace WaiterChefBoss.Data.Migrations
             modelBuilder.Entity("WaiterChefBoss.Data.Models.OrderProducts", b =>
                 {
                     b.HasOne("WaiterChefBoss.Data.Models.Order", "Order")
-                        .WithMany("Products")
+                        .WithMany("OrderProducts")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -544,7 +551,7 @@ namespace WaiterChefBoss.Data.Migrations
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

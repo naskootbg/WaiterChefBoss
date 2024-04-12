@@ -1,18 +1,17 @@
 ﻿@model IEnumerable<OrderFormViewModel>
 @{
-    ViewData["Title"] = "Orders for Chef";
+    ViewData["Title"] = "Orders for Barman";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-@foreach(var order in Model)
+@foreach (var order in Model)
 {
     <h2>@order.Id</h2>
-    foreach(var product in order.Products)
+    foreach (var product in order.Products)
     {
         <p>@product.Name</p>
         <p>@product.Description</p>
-        
     }
     @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.ChefRole))
     {
@@ -27,6 +26,4 @@
         </form>
 
     }
-
-
 }

@@ -8,7 +8,19 @@
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
-
+<div class="row">
+    <h5>Statuses</h5>
+    <div class="col bg-danger">
+        Status 0 - hide category from menu
+    </div>
+    <div class="col bg-success">
+        Status 1 - category active
+    </div>
+    <div class="col bg-info">
+        Status 3 - category for Barman
+    </div>
+</div>
+<hr />
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form asp-action="Category" method="post">
@@ -22,7 +34,11 @@
                 <textarea asp-for="@Model.Description" class="form-control" aria-required="true" rows="5"></textarea>
                 <span asp-validation-for="@Model.Description" class="text-danger"></span>
             </div>
-           
+            <div class="mb-3">
+                <label asp-for="@Model.Status" class="form-label-add-edit">Status</label>
+                <input asp-for="@Model.Status" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Status" class="text-danger"></span>
+            </div>
             <div class="mb-3">
                 <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Add" />
             </div>

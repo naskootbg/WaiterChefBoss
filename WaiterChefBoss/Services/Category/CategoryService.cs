@@ -15,6 +15,32 @@ namespace WaiterChefBoss.Services.Category
             context = _context;
         }
 
+        public async Task<List<CategoryViewModelService>> AllActiveCategories()
+        {
+            return await context
+                .Categories
+                .Where(c => c.Status == 1 || c.Status == 3)
+                .Select(c => new CategoryViewModelService
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description
+                })
+                .ToListAsync();
+        }
+        public async Task<List<CategoryViewModelService>> BarmanCategories()
+        {
+            return await context
+                .Categories
+                .Where(c => c.Status == 2)
+                .Select(c => new CategoryViewModelService
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description
+                })
+                .ToListAsync();
+        }
         public async Task<List<CategoryViewModelService>> AllCategories()
         {
             return await context
@@ -24,9 +50,9 @@ namespace WaiterChefBoss.Services.Category
                     Id = c.Id,
                     Name = c.Name,
                     Description = c.Description
-                }).ToListAsync();
+                })
+                .ToListAsync();
         }
-
         public async Task<CategoryViewModelService> CategoryDetails(int id)
         {
             var model = new CategoryViewModelService();

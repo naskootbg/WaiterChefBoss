@@ -1,46 +1,37 @@
-﻿using WaiterChefBoss.Data.Models;
-using WaiterChefBoss.Models;
+﻿using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Contracts
 {
     public interface IOrderService
     {
         /// <summary>
-        /// ---- WAITER ---
-        /// Accept order (status 2) and send to the chef
-        /// Cancel order (status 0)
-        /// Deliver order (status 4)
-        /// ---------------
-        /// ---- CHEF -----
-        /// Marking orders as cooked (status 3) and sending in waiter's quenue for delivery
-        /// ---------------
-        /// ---- CUSTOMER -
-        /// Cancel order (status 0)
-        /// ---------------
-        /// ---- BOSS -----
-        /// Order completed (status 5)
-        /// ---------------
+        /// OrderProducts status 0 => cart
+        /// OrderProducts status 1 => chef
+        /// OrderProducts status 2 => barman
+        /// 
+        /// Order status 0 => order canceled and the first temp order
+        /// Order status 1 => orders for chef
+        /// Order status 2 => orders for barman
+        /// Order status 3 => orders for waiter
+        /// Order status 4 => orders delivered
+        /// Order status 5 => orders paid and completed
+        /// 
+        /// 
+        /// 
+        /// The boss can see all orders with all statuses
+        /// 
         /// </summary>
-        Task<bool> ChangeOrderStatus(Order order, int status);
-
-        /// <summary>
-        /// Status 0 for the BOSS only
-        /// Status 1 for placed order - for WAITER and BOSS roles
-        /// Status 2 - for CHEF and BOSS roles
-        /// Status 3 - for WAITER and BOSS roles
-        /// Status 4 for the CUSTOMER
-        /// The BOSS can spy
-        /// </summary>
-        Task<IEnumerable<ProductViewService>> OrdersByStatus(int status);
-        Task<IEnumerable<OrderFormViewModel>> OrdersForChef();
-        Task<IEnumerable<OrderFormViewModel>> OrdersForWaiter();
-        Task<IEnumerable<ProductViewService>> OrdersForCustomer();
-        Task<OrderFormViewModel> PlaceOrder(string userId, int table);
+        /// <param name="status"></param>
+        /// <returns></returns>
+        Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName);
+        Task PlaceOrder(string userId, int table);
         Task<OrderFormViewModel> FindOrderById(int orderId);
         Task<bool> OrderExists(int id);
 
+        Task SendToWaiter(int orderId);
+
         Task<List<ProductViewService>> ProductsFromOrderProductsToOrder(int orderId);
-        Task ChangeStatusOfAllOrdersProducts(string userId, int orderId, int statusBefore, int statusAfter);
+        Task ChangeStatusOfAllOrdersProducts(string userId, int orderId);
 
         Task BlankOrder(string userId);
     }

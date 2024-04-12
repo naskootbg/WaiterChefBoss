@@ -25,7 +25,7 @@ namespace WaiterChefBoss.Component
                 prod = await productService.ProductsInTheOrder(UserId()!);
 
             }
-            var categories = await categoryService.AllCategories();
+            var categories = await categoryService.AllActiveCategories();
             var model = new MenuViewModel()
             {
                 AllCategories = categories,

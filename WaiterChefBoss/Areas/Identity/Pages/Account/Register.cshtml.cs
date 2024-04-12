@@ -151,6 +151,11 @@ namespace WaiterChefBoss.Areas.Identity.Pages.Account
                             var role = new IdentityRole { Name = WaiterRole };
                             await _roleManager.CreateAsync(role);
                         }
+                        if (await _roleManager.RoleExistsAsync(BarmanRole) == false)
+                        {
+                            var role = new IdentityRole { Name = BarmanRole };
+                            await _roleManager.CreateAsync(role);
+                        }
                         _logger.LogInformation("Admin created!");
 
                         await _userManager.AddToRoleAsync(user, BossRole);

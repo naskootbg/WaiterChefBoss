@@ -12,7 +12,9 @@ namespace WaiterChefBoss.Data.Models
         [Required]
         [StringLength(MaxDescriptionLenght, MinimumLength = MinDescriptionLenght)]
         public string Description { get; set; } = string.Empty;
+        public int Status { get; set; }
 
-      //  public IEnumerable<Product> Products { get; init; } = new List<Product>();
+
+        //  public IEnumerable<Product> Products { get; init; } = new List<Product>();
     }
 }
