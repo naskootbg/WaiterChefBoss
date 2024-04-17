@@ -5,28 +5,23 @@
 
 <h1>@ViewData["Title"]</h1>
 
-@foreach(var order in Model)
+@foreach (var order in Model)
 {
-    <h2>@order.Id</h2>
-    foreach(var product in order.Products)
-    {
-        <p>@product.Name</p>
-        <p>@product.Description</p>
-        
-    }
-    @if (this.User.Identity!.IsAuthenticated && this.User.IsInRole(WaiterChefBoss.Data.DataConstants.ChefRole))
-    {
-        <form asp-action="SendToWaiter" asp-route-id="@order.Id" asp-route-roleName="@WaiterChefBoss.Data.DataConstants.ChefRole" method="post">
-            <input type="submit" class="btn-info" value="Sent to Waiter">
-        </form>
-    }
-    else
-    {
-        <form asp-action="SendToWaiter" asp-route-id="@order.Id" asp-route-roleName="@WaiterChefBoss.Data.DataConstants.BarmanRole" method="post">
-            <input type="submit" class="btn-info" value="Sent to Waiter">
-        </form>
-
-    }
+    <div class="card border-dark border-5 text-center">
+        <div class="card-header">
+            Order: @order.Id for table @order.Table
+        </div>
+        <div class="card-body">
+            @foreach (var product in order.Products)
+            {
+                <p class="col">@product.Name</p>
+                <p class="col">@product.Description</p>
+            }
 
 
+            <form asp-action="SendToWaiter" asp-route-id="@order.Id" asp-route-roleName="@WaiterChefBoss.Data.DataConstants.ChefRole" method="post">
+                <input type="submit" class="btn-success" value="Sent to Waiter">
+            </form>
+        </div>
+    </div>
 }

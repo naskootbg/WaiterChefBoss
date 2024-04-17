@@ -51,4 +51,18 @@
 }
     </div>
 </div>
- 
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        
+        <li class="page-item"><a class="page-link" href="/">First</a></li>
+@for (int i = Model.CurrentPage; i <= Model.TotalPages; i++)
+        {
+            
+            <li class="page-item"><a class="page-link" href="/page=@i">@i</a></li>
+
+
+        }
+        <li class="page-item"><a class="page-link" href="/page=@Model.TotalPages">Last</a></li>
+
+    </ul>
+</nav>

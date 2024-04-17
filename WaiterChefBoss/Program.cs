@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WaiterChefBoss;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.ModelBinders;
@@ -44,8 +45,7 @@ builder.Services.AddAuthentication()
         options.AppId = "650052678393469";
         options.AppSecret = "fa35d015b2bab31696852c23cd8b752f";
     });
-
-
+ 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,8 +58,17 @@ else
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}
+} 
 
+// Use the custom logging middleware
+app.UseMiddleware<RequestLoggingMiddleware>();
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

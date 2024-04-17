@@ -10,18 +10,22 @@
             <nav class="nav flex-column">
                 <a class="nav-link bg-outline-success" id="EditFood" href="#" runat="server">Mange Food</a>
                 <a class="nav-link bg-outline-success" id="EditProduct" href="#" runat="server">Manage Users</a>
-                <a class="nav-link bg-outline-success" href="#" runat="server">Reports</a>
+                <a class="nav-link bg-outline-success" href="#" runat="server">Orders Active Right Now</a>
+                <a class="nav-link bg-outline-success" id="liveOrders" href="#" runat="server">Reports</a>
             </nav>
         </div>
         <div class="col">
             <div id="dvUserdetails" style="display:none">
                 <partial name="_Users" />
             </div>
+            <div id="Orders" style="display:none">
+            
+            </div>
             <div id="dvProductDetails" style="display:none">
                 <partial name="_Products" />
             </div>
             <div id="dvReports" style="display:none">
-                <partial name="_Products" />
+                
             </div>
 
         </div>
@@ -45,6 +49,31 @@
                 $('#dvProductDetails').hide();
             });
     });
+
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $('#liveOrders').click(function () {
+                $('#Orders').Show();
+                $.ajax({
+                    url: '~/Orders/Chef',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+                })
+                    .success(function (result) {
+                        $('#Orders').html(result);
+                    })
+                    .error(function (xhr, status) {
+                        alert(status);
+                    });
+                $('#dvUserdetails').hide();
+                $('#dvProductDetails').hide();
+            });
+
+             
+        });
 
     </script>
 }

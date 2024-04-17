@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
+using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
 using WaiterChefBoss.Services.Category;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WaiterChefBoss.Controllers
 {
@@ -22,13 +24,26 @@ namespace WaiterChefBoss.Controllers
         }
 
         
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int pageSize = DataConstants.NumberProductsHomePage, [FromQuery] string filter = "")
         {
+            var products = await product.AllProducts();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                products = products.Where(p => p.Name.Contains(filter) || p.Description.Contains(filter));
+            }
+            var totalCount = products.Count();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            products = products.Skip((page - 1) * pageSize).Take(pageSize);
+
 
             var newModel = new HomeViewModel
             {
-
-                Products = await product.AllProducts()
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = page,
+                PageSize = pageSize,
+                Products = products.ToList()
 
             };
             return View(newModel);

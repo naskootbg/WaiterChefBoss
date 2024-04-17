@@ -23,6 +23,7 @@ namespace WaiterChefBoss.Contracts
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
+        
         Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName);
         Task PlaceOrder(string userId, int table);
         Task<OrderFormViewModel> FindOrderById(int orderId);
@@ -32,7 +33,8 @@ namespace WaiterChefBoss.Contracts
 
         Task<List<ProductViewService>> ProductsFromOrderProductsToOrder(int orderId);
         Task ChangeStatusOfAllOrdersProducts(string userId, int orderId);
-
+        Task MarkAsDelivered(int id);
+        Task MarkAsPaid(int id);
         Task BlankOrder(string userId);
     }
 }

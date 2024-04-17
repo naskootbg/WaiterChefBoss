@@ -34,38 +34,55 @@ namespace WaiterChefBoss.Services
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
-
-
+ 
         public async Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName)
         {
+            List<OrderFormViewModel> ordersList = new();
             int status = 0;
+            List<Order> orders = new();
+
             if (roleName == ChefRole)
             {
                 status = 1;
+                orders = await context
+                .Orders
+                .AsNoTracking()
+                .Where(o => o.Status == status)
+                .OrderBy(o => o.Table)
+                .ToListAsync();
             }
             else if(roleName == BarmanRole)
             {
                 status = 2;
+                orders = await context
+                .Orders
+                .AsNoTracking()
+                .Where(o => o.Status == status)
+                .OrderBy(o => o.Table)
+                .ToListAsync();
             }
             else if (roleName == WaiterRole)
             {
                 status = 3;
-            }
-            List<OrderFormViewModel> ordersForChef = new();
-            var orders = await context
+                orders = await context
                 .Orders
                 .AsNoTracking()
-                .Where(o => o.Status == status)
+                .Where(o => o.Status == status || o.Status == 4)
+                .OrderBy(o => o.Table)
+                .ThenBy(o => o.Status)
                 .ToListAsync();
+            }
+            
+               
 
             foreach (var order in orders)
             {
                 var productModel = await context
                .OrdersProducts
                .AsNoTracking()
-               .Include(x => x.Product)
+               .Include(pr => pr.Product)
                .Include(x => x.Order)
-               .Where(o => o.Status == status && o.OrderId == order.Id)
+               .Where(o => (o.Status == 2 || o.Status == 1) && o.OrderId == order.Id)
                .Select(p => new ProductViewService
                {
                    Id = p.Product.Id,
@@ -91,12 +108,12 @@ namespace WaiterChefBoss.Services
                     Total = order.Total,
                     UserId = order.UserId
                 };
-                ordersForChef.Add(model);
+                ordersList.Add(model);
             }
 
 
 
-            return ordersForChef;
+            return ordersList;
         }
 
         
@@ -269,5 +286,21 @@ namespace WaiterChefBoss.Services
             context.Update(order);
             await context.SaveChangesAsync();
         }
+        public async Task MarkAsDelivered(int id)
+        {
+            var order = await context.Orders.FindAsync(id);
+            order!.Status = 4;
+            context.Update(order);
+            await context.SaveChangesAsync();
+        }
+        public async Task MarkAsPaid(int id)
+        {
+            var order = await context.Orders.FindAsync(id);
+            order!.Status = 5;
+            context.Update(order);
+            await context.SaveChangesAsync();
+        }
+
+
     }
 }

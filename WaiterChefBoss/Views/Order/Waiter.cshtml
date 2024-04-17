@@ -7,11 +7,35 @@
 
 @foreach (var order in Model)
 {
-    <h2>@order.Id</h2>
-    foreach (var product in order.Products)
-    {
-        <p>@product.Name</p>
-        <p>@product.Description</p>
-    }
+    var style = "border-dark border-5 text-center";
 
+    @if (order.Status==4)
+    {
+        style = "border-success border-5 text-center";
+    }
+    <div class="card  @style">
+        <div class="card-header">
+            Order: @order.Id
+            <h3>Table @order.Table</h3>
+        </div>
+        <div class="card-body">
+            @foreach (var product in order.Products)
+            {
+                <p>@product.Name: @product.Price @product.CurencySymbol</p>
+            }
+            <p>Total: @Math.Round(order.Total,2) @order.Products.FirstOrDefault()?.CurencySymbol </p>
+            @if (order.Status == 3)
+            {
+                <form asp-action="MarkAsDelivered" asp-route-id="@order.Id" method="post">
+                    <input type="submit" class="btn-dark" value="Mark as Delivered">
+                </form>
+            }
+            else if (order.Status == 4)
+            {
+                <form asp-action="MarkAsPaid" asp-route-id="@order.Id" method="post">
+                    <input type="submit" class="btn-success" value="Mark as Completed">
+                </form>
+            }
+        </div>
+    </div>
 }

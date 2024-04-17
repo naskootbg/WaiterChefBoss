@@ -109,7 +109,18 @@ namespace WaiterChefBoss.Controllers
 
         [Authorize(Roles = $"{BossRole}, {BarmanRole}")]
         public async Task<IActionResult> Barman() => View(await orderService.OrdersForWorker(BarmanRole));
-
+        [Authorize(Roles = WaiterRole)]
+        public async Task<IActionResult> MarkAsDelivered(int id) 
+        {
+            await orderService.MarkAsDelivered(id);
+            return RedirectToAction(WaiterRole);
+        }
+        [Authorize(Roles = WaiterRole)]
+        public async Task<IActionResult> MarkAsPaid(int id)
+        {
+            await orderService.MarkAsPaid(id);
+            return RedirectToAction(WaiterRole);
+        }
         private string UserId()
         {
             return  User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
