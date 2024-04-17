@@ -16,19 +16,34 @@ namespace WaiterChefBoss.Controllers
             product = _product;
             
         }
-        public async Task<IActionResult> Category(int id)
+        public async Task<IActionResult> Category(int id, [FromQuery] int page = 1
+            , [FromQuery] int pageSize = DataConstants.NumberProductsCategoryPage, [FromQuery] string filter = "")
         {
              
             if (await category.CategoryExists(id))
             {
+                var products = await product.AllProductsPerCategory(id);
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    products = products.Where(p => p.Name.Contains(filter) || p.Description.Contains(filter));
+                }
+                var totalCount = products.Count();
+                var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+                products = products.Skip((page - 1) * pageSize).Take(pageSize);
+
+
                 return View(new CategoryViewModel
                 {
-                    
+                    TotalCount = totalCount,
+                    TotalPages = totalPages,
+                    CurrentPage = page,
+                    PageSize = pageSize,
                     CategoryDetails = await category.CategoryDetails(id),
-                    Products = await product.AllProductsPerCategory(id)
+                    Products = products.ToList()
 
 
-                }); ;
+                }); 
             }
             
             return RedirectToAction("Index","Home");

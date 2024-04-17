@@ -47,3 +47,18 @@
         }
     </div>
 </div>
+<nav aria-label="Category navigation">
+    <ul class="pagination">
+
+        <li class="page-item"><a class="page-link" href="/Food/Category">First</a></li>
+        @for (int i = Model.CurrentPage; i <= Model.TotalPages; i++)
+        {
+
+            <li class="page-item"><a class="page-link" href="/Food/Category/@Model.CategoryDetails.Id/?page=@i">@i</a></li>
+
+
+        }
+        <li class="page-item"><a class="page-link" href="/Food/Category/@Model.CategoryDetails.Id/?page=@Model.TotalPages">Last</a></li>
+
+    </ul>
+</nav>

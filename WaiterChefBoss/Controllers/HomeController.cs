@@ -24,7 +24,9 @@ namespace WaiterChefBoss.Controllers
         }
 
         
-        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int pageSize = DataConstants.NumberProductsHomePage, [FromQuery] string filter = "")
+        public async Task<IActionResult> Index([FromQuery] int page = 1
+            , [FromQuery] int pageSize = DataConstants.NumberProductsHomePage
+            , [FromQuery] string filter = "")
         {
             var products = await product.AllProducts();
             if (!string.IsNullOrEmpty(filter))

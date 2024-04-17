@@ -54,7 +54,7 @@ namespace WaiterChefBoss.Services.Product
         {
             
              
-            return await context
+            var model= await context
                 .Products.Where(p => p.CategoryId == categoryId)
                 .Include(p => p.Category)
                 .AsNoTracking()
@@ -74,6 +74,7 @@ namespace WaiterChefBoss.Services.Product
                     
                 })
                 .ToListAsync();
+            return model.AsQueryable();
         }
 
         public async Task<IEnumerable<ProductViewService>> AllProducts()
