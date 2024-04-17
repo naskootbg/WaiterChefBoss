@@ -50,6 +50,31 @@ namespace WaiterChefBoss.Services.Product
             
             
         }
+         public async Task<IEnumerable<ProductViewService>> ProductSearch()
+        {
+
+
+            var model = await context
+                .Products
+                .AsNoTracking()
+                .Select(p => new ProductViewService
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Weight = p.Weight,
+                    Calories = p.Calories,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    Status = p.Status,
+                    TimeCooking = p.TimeCooking,
+                    CategoryName = p.Category.Name,
+                    CategoryId = p.CategoryId
+
+                })
+                .ToListAsync();
+            return model.AsQueryable();
+        }
         public async Task<IEnumerable<ProductViewService>> AllProductsPerCategory(int categoryId)
         {
             

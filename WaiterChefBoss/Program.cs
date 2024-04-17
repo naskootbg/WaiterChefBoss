@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WaiterChefBoss;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.ModelBinders;
@@ -63,12 +62,6 @@ else
 // Use the custom logging middleware
 app.UseMiddleware<RequestLoggingMiddleware>();
 
-app.UseRouting();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

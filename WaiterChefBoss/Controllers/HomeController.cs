@@ -50,10 +50,21 @@ namespace WaiterChefBoss.Controllers
             };
             return View(newModel);
         }
-
-        public IActionResult Privacy()
+        [HttpGet]
+        public async Task<IActionResult> Search([FromQuery] string query)
         {
-            return View();
+            var products = await product.ProductSearch();
+            if (!string.IsNullOrEmpty(query))
+            {
+                products = products.Where(p => p.Name.Contains(query) || p.Description.Contains(query));
+            }
+
+            var model = new SearchViewModel()
+            {
+                Products = products.ToList(),
+                Search = query
+            };
+            return View(model);
         }
         //public async Task<IEnumerable<CategoryViewModelService>> AllCategories() {
         //   return await category.AllCategories();

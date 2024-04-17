@@ -66,9 +66,14 @@
                 {
                     
                 }
-
+                 
+                     
 
             </ul>
+            <form class="d-flex" role="search" asp-controller="Home" asp-action="Search" method="get">
+                <input class="form-control me-2" name="Query" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
             <partial name="_LoginPartial" />
         </div>
     </div>

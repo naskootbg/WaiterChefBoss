@@ -1,4 +1,4 @@
-﻿namespace WaiterChefBoss
+﻿namespace WaiterChefBoss.Data
 {
     public class RequestLoggingMiddleware
     {
