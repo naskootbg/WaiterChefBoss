@@ -1,7 +1,9 @@
 ﻿using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
+using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Services.Category
@@ -9,15 +11,20 @@ namespace WaiterChefBoss.Services.Category
     public class CategoryService : ICategoryService
     {
         public readonly ApplicationDbContext context;
+        private readonly IMemoryCache cache;
 
-        public CategoryService(ApplicationDbContext _context)
+        public CategoryService(ApplicationDbContext _context, IMemoryCache _cache)
         {
             context = _context;
+            cache = _cache;
         }
 
         public async Task<List<CategoryViewModelService>> AllActiveCategories()
         {
-            return await context
+            var categories = cache.Get<List<CategoryViewModelService>>(DataConstants.CategoryMemoryCacheKey);
+            if (categories == null)
+            {
+                categories= await context
                 .Categories
                 .Where(c => c.Status == 1 || c.Status == 3)
                 .Select(c => new CategoryViewModelService
@@ -27,6 +34,12 @@ namespace WaiterChefBoss.Services.Category
                     Description = c.Description
                 })
                 .ToListAsync();
+            }
+            var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromDays(365));
+
+            cache.Set(DataConstants.ProductMemoryCacheKey, categories, cacheOptions);
+            return categories;
         }
         public async Task<List<CategoryViewModelService>> BarmanCategories()
         {

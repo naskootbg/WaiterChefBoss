@@ -1,4 +1,5 @@
-﻿using WaiterChefBoss.Contracts;
+﻿using Microsoft.Extensions.Caching.Memory;
+using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Models;
 
@@ -8,11 +9,13 @@ namespace WaiterChefBoss.Services
     {
         private readonly ApplicationDbContext context;
         private readonly ICategoryService category;
+        private readonly IMemoryCache cache;
 
-        public EditAddService(ApplicationDbContext _context, ICategoryService category)
+        public EditAddService(ApplicationDbContext _context, ICategoryService category, IMemoryCache _cache)
         {
             context = _context;
-            this.category = category;   
+            this.category = category;  
+            cache = _cache;
         }
         public async Task<int> AddCategory(CategoryViewModelService category)
         {
@@ -26,6 +29,9 @@ namespace WaiterChefBoss.Services
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
             int id = entity.Id;
+            cache.Remove(DataConstants.ProductMemoryCacheKey);
+            cache.Remove(DataConstants.CategoryMemoryCacheKey);
+
             return id;
         }
 
@@ -48,6 +54,7 @@ namespace WaiterChefBoss.Services
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
             int id = entity.Id;
+            cache.Remove(DataConstants.ProductMemoryCacheKey);
             return id;
         }
 
@@ -60,6 +67,8 @@ namespace WaiterChefBoss.Services
 
                 await context.SaveChangesAsync();
             }
+            cache.Remove(DataConstants.ProductMemoryCacheKey);
+            cache.Remove(DataConstants.CategoryMemoryCacheKey);
         }
 
         public async Task DeleteProduct(int productId)
@@ -71,6 +80,8 @@ namespace WaiterChefBoss.Services
 
                 await context.SaveChangesAsync();
             }
+            cache.Remove(DataConstants.ProductMemoryCacheKey);
+
         }
 
         public async Task<CategoryViewModelService> EditCategory(CategoryViewModelService? category, int categoryId)
@@ -113,12 +124,15 @@ namespace WaiterChefBoss.Services
             {
                 return new CategoryViewModelService { Name = "No Such Category" };
             }
+            cache.Remove(DataConstants.CategoryMemoryCacheKey);
+
         }
 
-       
+
 
         public async Task<ProductFormViewModel> EditProduct(ProductFormViewModel? product, int productId)
         {
+            cache.Remove(DataConstants.ProductMemoryCacheKey);
             var ep = await context.Products.FindAsync(productId);
             if (ep != null)
             {
@@ -174,6 +188,7 @@ namespace WaiterChefBoss.Services
             {
                 return new ProductFormViewModel { Name = "No Such Product" };
             }
+
             
 
         }

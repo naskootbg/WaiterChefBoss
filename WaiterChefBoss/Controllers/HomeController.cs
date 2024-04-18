@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
@@ -16,10 +17,9 @@ namespace WaiterChefBoss.Controllers
     {
 
         private readonly IProductService product;
-
+        
         public HomeController(IProductService _product)
         {
-
             product = _product;
         }
 
@@ -28,17 +28,20 @@ namespace WaiterChefBoss.Controllers
             , [FromQuery] int pageSize = DataConstants.NumberProductsHomePage
             , [FromQuery] string filter = "")
         {
-            var products = await product.AllProducts();
-            if (!string.IsNullOrEmpty(filter))
-            {
-                products = products.Where(p => p.Name.Contains(filter) || p.Description.Contains(filter));
-            }
-            var totalCount = products.Count();
+            
+             
+                var products = await product.AllProducts();
+                var totalCount = products.Count();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-            products = products.Skip((page - 1) * pageSize).Take(pageSize);
+            if (!string.IsNullOrEmpty(filter))
+                {
+                    products = products.Where(p => p.Name.Contains(filter) || p.Description.Contains(filter));
+                }
+                
 
-
+                products = products.Skip((page - 1) * pageSize).Take(pageSize);
+                
             var newModel = new HomeViewModel
             {
                 TotalCount = totalCount,
@@ -48,6 +51,7 @@ namespace WaiterChefBoss.Controllers
                 Products = products.ToList()
 
             };
+
             return View(newModel);
         }
         [HttpGet]

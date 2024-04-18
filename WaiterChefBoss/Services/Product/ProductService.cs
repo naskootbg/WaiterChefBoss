@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
@@ -9,9 +10,10 @@ namespace WaiterChefBoss.Services.Product
     public class ProductService : IProductService
     {
         private readonly ApplicationDbContext context;
-
-        public ProductService(ApplicationDbContext _context)
+        private readonly IMemoryCache cache;
+        public ProductService(ApplicationDbContext _context, IMemoryCache _cache)
         {
+            cache = _cache;
             context = _context;
         }
         public async Task<string> ProductName(int id)
@@ -52,59 +54,69 @@ namespace WaiterChefBoss.Services.Product
         }
          public async Task<IEnumerable<ProductViewService>> ProductSearch()
         {
+             
+                var products = await context
+               .Products
+               .AsNoTracking()
+               .Select(p => new ProductViewService
+               {
+                   Id = p.Id,
+                   Name = p.Name,
+                   Description = p.Description,
+                   Weight = p.Weight,
+                   Calories = p.Calories,
+                   Price = p.Price,
+                   ImageUrl = p.ImageUrl,
+                   Status = p.Status,
+                   TimeCooking = p.TimeCooking,
+                   CategoryName = p.Category.Name,
+                   CategoryId = p.CategoryId
 
-
-            var model = await context
-                .Products
-                .AsNoTracking()
-                .Select(p => new ProductViewService
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Weight = p.Weight,
-                    Calories = p.Calories,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl,
-                    Status = p.Status,
-                    TimeCooking = p.TimeCooking,
-                    CategoryName = p.Category.Name,
-                    CategoryId = p.CategoryId
-
-                })
-                .ToListAsync();
-            return model.AsQueryable();
+               })
+               .ToListAsync();
+          
+            return products.AsQueryable();
         }
         public async Task<IEnumerable<ProductViewService>> AllProductsPerCategory(int categoryId)
         {
-            
-             
-            var model= await context
-                .Products.Where(p => p.CategoryId == categoryId)
-                .Include(p => p.Category)
-                .AsNoTracking()
-                .Select(p => new ProductViewService
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Weight = p.Weight,
-                    Calories = p.Calories,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl,
-                    Status = p.Status,
-                    TimeCooking = p.TimeCooking,
-                    CategoryName = p.Category.Name,
-                    CategoryId = categoryId,
-                    
-                })
-                .ToListAsync();
-            return model.AsQueryable();
+
+            //var products = cache.Get<IEnumerable<ProductViewService>>(DataConstants.ProductMemoryCacheKey);
+            //if (products == null)
+            //{
+                var products = await context
+                                .Products.Where(p => p.CategoryId == categoryId)
+                                .Include(p => p.Category)
+                                .AsNoTracking()
+                                .Select(p => new ProductViewService
+                                {
+                                    Id = p.Id,
+                                    Name = p.Name,
+                                    Description = p.Description,
+                                    Weight = p.Weight,
+                                    Calories = p.Calories,
+                                    Price = p.Price,
+                                    ImageUrl = p.ImageUrl,
+                                    Status = p.Status,
+                                    TimeCooking = p.TimeCooking,
+                                    CategoryName = p.Category.Name,
+                                    CategoryId = categoryId,
+
+                                })
+                                .ToListAsync();
+            //}
+            //var cacheOptions = new MemoryCacheEntryOptions()
+            //        .SetAbsoluteExpiration(TimeSpan.FromSeconds(200));
+
+            //cache.Set(DataConstants.ProductMemoryCacheKey, products, cacheOptions);
+            return products.AsQueryable();
         }
 
         public async Task<IEnumerable<ProductViewService>> AllProducts()
         {
-            var model = await context
+            var products = cache.Get<IEnumerable<ProductViewService>>(DataConstants.ProductMemoryCacheKey);
+            if(products == null)
+            {
+                products = await context
              .Products
              .Include(p => p.Category)
              .AsNoTracking()
@@ -123,7 +135,16 @@ namespace WaiterChefBoss.Services.Product
                  CategoryId = p.CategoryId
              })
              .ToListAsync();
-            return model.AsQueryable();
+
+            }
+            var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(200));
+
+            cache.Set(DataConstants.ProductMemoryCacheKey, products, cacheOptions);
+
+
+
+            return products.AsQueryable();
         }
 
         public async Task<bool> ProductExists(int id)

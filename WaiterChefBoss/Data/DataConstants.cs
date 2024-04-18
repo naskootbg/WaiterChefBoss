@@ -16,6 +16,8 @@ namespace WaiterChefBoss.Data
         public const int NumberProductsHomePage = 2;
         public const int NumberProductsCategoryPage = 2;
 
+        public const string ProductMemoryCacheKey = "ProductMemoryCacheKey";
+        public const string CategoryMemoryCacheKey = "CategoryMemoryCacheKey";
 
     }
 }

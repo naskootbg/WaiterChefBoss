@@ -37,7 +37,8 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IEditAddService, EditAddService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
-
+builder.Services.AddResponseCaching();
+builder.Services.AddMemoryCache();
 builder.Services.AddAuthentication()
     .AddFacebook(options =>
     {
@@ -61,6 +62,8 @@ else
 
 // Use the custom logging middleware
 app.UseMiddleware<RequestLoggingMiddleware>();
+
+app.UseResponseCaching();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
