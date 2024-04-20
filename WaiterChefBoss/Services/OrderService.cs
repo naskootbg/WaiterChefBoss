@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
@@ -35,7 +36,7 @@ namespace WaiterChefBoss.Services
         /// <param name="status"></param>
         /// <returns></returns>
  
-        public async Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName)
+        public async Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName, string userId = "")
         {
             List<OrderFormViewModel> ordersList = new();
             int status = 0;
@@ -49,6 +50,7 @@ namespace WaiterChefBoss.Services
                 .AsNoTracking()
                 .Where(o => o.Status == status)
                 .OrderBy(o => o.Table)
+                .ThenBy(o => o.DateAdded)
                 .ToListAsync();
             }
             else if(roleName == BarmanRole)
@@ -59,6 +61,7 @@ namespace WaiterChefBoss.Services
                 .AsNoTracking()
                 .Where(o => o.Status == status)
                 .OrderBy(o => o.Table)
+                .ThenBy(o => o.DateAdded)
                 .ToListAsync();
             }
             else if (roleName == WaiterRole)
@@ -70,9 +73,34 @@ namespace WaiterChefBoss.Services
                 .Where(o => o.Status == status || o.Status == 4)
                 .OrderBy(o => o.Table)
                 .ThenBy(o => o.Status)
+                .ThenBy(o => o.DateAdded)
                 .ToListAsync();
             }
-            
+            else
+            {
+                if (userId.Length > 3)
+                { 
+                    orders = await context
+                    .Orders
+                    .AsNoTracking()
+                    .Where(o => o.Status != 0 && o.UserId == userId)
+                    .OrderBy(o => o.Status)
+                    .ThenByDescending(o => o.DateAdded)
+                    .ToListAsync();
+                }
+                else
+                {
+
+                    orders = await context
+                    .Orders
+                    .AsNoTracking()
+                    .Where(o => o.Status == 5 && o.UserId == userId)
+                    .OrderBy(o => o.DateAdded)
+                    .ToListAsync();
+                }
+                
+
+            }
                
 
             foreach (var order in orders)
@@ -98,6 +126,9 @@ namespace WaiterChefBoss.Services
 
                })
                .ToListAsync();
+                
+
+                
                 var model = new OrderFormViewModel
                 {
                     Id = order.Id,
@@ -209,7 +240,27 @@ namespace WaiterChefBoss.Services
              
         }
 
+        public async Task<List<OrderFormViewModel>> FindOrdersByUserId(string userId)
+        {
 
+            var orders = await context.Orders
+                .AsNoTracking()
+                .Where(or => or.UserId == userId && or.Status == 5)
+                .Select(o => new OrderFormViewModel()
+                {
+                    Id = o.Id,
+                    DateAdded = o.DateAdded,
+                    Status = o.Status,
+                    Table = o.Table,
+                    Total = o.Total
+                })
+        .ToListAsync();
+             
+                
+            
+
+            return orders;
+        }
         public async Task<OrderFormViewModel> FindOrderById(int orderId)
         {
             OrderFormViewModel model = new();

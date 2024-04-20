@@ -1,21 +1,47 @@
 ﻿@model IEnumerable<OrderFormViewModel>
 
 @{
-    ViewData["Title"] = $"My Orders History - Total {Model.Count()}";
+    ViewData["Title"] = $"My Orders History";
 }
 @if (Model.Count() > 0)
 {
     <h1>@ViewData["Title"]</h1>
     @foreach (var order in Model)
     {
-
-
+        var style = "";
+        var role = "";
+        var hTwoStyle = "";
+        if (order.Status == 1)
+        {
+            style = "table-success";
+             role = "Chef Cooking";
+            hTwoStyle = "bg-info";
+        }
+        if (order.Status == 2)
+        {
+            style = "table-success";
+            role = "Barman working on";
+            hTwoStyle = "bg-info";
+        }
+        if (order.Status == 3)
+        {
+            style = "table-success";
+            role = "Waiter comming with";
+            hTwoStyle = "bg-success";
+        }
+        if (order.Status == 4)
+        {
+            hTwoStyle = "bg-warning";
+            style = "table-warning";
+            role = "Delivered and not paid";
+        }
+        <h2 class="@hTwoStyle">@role Order ID: @order.Id from @order.DateAdded</h2>
         @if (order.Products.Count() > 0)
         {
 
 
 
-            <table class="table table-striped grid-table">
+            <table class="table @style table-striped grid-table">
                 <thead>
                     <tr>
                         <th>Product</th>

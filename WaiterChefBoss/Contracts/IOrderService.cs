@@ -24,9 +24,10 @@ namespace WaiterChefBoss.Contracts
         /// <param name="status"></param>
         /// <returns></returns>
         
-        Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName);
+        Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName, string userId);
         Task PlaceOrder(string userId, int table);
         Task<OrderFormViewModel> FindOrderById(int orderId);
+        Task<List<OrderFormViewModel>> FindOrdersByUserId(string userId);
         Task<bool> OrderExists(int id);
 
         Task SendToWaiter(int orderId);

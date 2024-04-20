@@ -22,23 +22,14 @@ namespace WaiterChefBoss.Controllers
             productService = _productService;
             categoryService = _categoryService;
         }
-        public async Task<IActionResult> View(int id)
+        public async Task<IActionResult> MyOrders()
         {
-            if (await orderService.OrderExists(id))
+            var orders = await orderService.OrdersForWorker("", UserId());
+            if (orders !=null)
             {
-                var products = await orderService.ProductsFromOrderProductsToOrder(id);
-                var orderForModel = await orderService.FindOrderById(id);
-                var model = new OrderFormViewModel()
-                {
-                    DateAdded = orderForModel.DateAdded,
-                    Products = products,
-                    Table = orderForModel.Table,
-                    Total = orderForModel.Total,
-                    UserId = orderForModel.UserId
-                };
+      
 
-
-                return View(model);
+                return View(orders);
             }
             else
             {
@@ -105,20 +96,20 @@ namespace WaiterChefBoss.Controllers
         {
             var model = new WorkerViewModel()
             {
-                OrdersBar = await orderService.OrdersForWorker(BarmanRole),
-                OrdersChef = await orderService.OrdersForWorker(ChefRole),
-                OrdersWaiter = await orderService.OrdersForWorker(BarmanRole)
+                OrdersBar = await orderService.OrdersForWorker(BarmanRole,""),
+                OrdersChef = await orderService.OrdersForWorker(ChefRole, ""),
+                OrdersWaiter = await orderService.OrdersForWorker(BarmanRole, "")
             };
             return PartialView("_Orders", model);
         }
         [Authorize(Roles = $"{BossRole}, {ChefRole}")]
-        public async Task<IActionResult> Chef() => View(await orderService.OrdersForWorker(ChefRole));
+        public async Task<IActionResult> Chef() => View(await orderService.OrdersForWorker(ChefRole, ""));
 
         [Authorize(Roles = $"{BossRole}, {WaiterRole}")]
-        public async Task<IActionResult> Waiter() => View(await orderService.OrdersForWorker(WaiterRole));
+        public async Task<IActionResult> Waiter() => View(await orderService.OrdersForWorker(WaiterRole, ""));
 
         [Authorize(Roles = $"{BossRole}, {BarmanRole}")]
-        public async Task<IActionResult> Barman() => View(await orderService.OrdersForWorker(BarmanRole));
+        public async Task<IActionResult> Barman() => View(await orderService.OrdersForWorker(BarmanRole, ""));
         [Authorize(Roles = WaiterRole)]
         public async Task<IActionResult> MarkAsDelivered(int id) 
         {
