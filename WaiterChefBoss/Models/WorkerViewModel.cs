@@ -1,13 +1,13 @@
 ﻿namespace WaiterChefBoss.Models
 {
     public class WorkerViewModel
-    {
-        public string Id { get; set; } = string.Empty;
+    { 
+        public IEnumerable<OrderFormViewModel> OrdersChef { get; init; } = new List<OrderFormViewModel>();
 
-        public string Name { get; set; } = string.Empty;
 
-        public string Role { get; set; } = string.Empty;
+        public IEnumerable<OrderFormViewModel> OrdersBar { get; init; } = new List<OrderFormViewModel>();
 
-        public IEnumerable<OrderFormViewModel> Orders { get; init; } = new List<OrderFormViewModel>();
+
+        public IEnumerable<OrderFormViewModel> OrdersWaiter { get; init; } = new List<OrderFormViewModel>();
     }
 }

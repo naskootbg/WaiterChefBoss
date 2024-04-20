@@ -113,10 +113,10 @@ namespace WaiterChefBoss.Services.Product
 
         public async Task<IEnumerable<ProductViewService>> AllProducts()
         {
-            var products = cache.Get<IEnumerable<ProductViewService>>(DataConstants.ProductMemoryCacheKey);
-            if(products == null)
-            {
-                products = await context
+            //var products = cache.Get<IEnumerable<ProductViewService>>(DataConstants.ProductMemoryCacheKey);
+            //if(products == null)
+            //{
+              var  products = await context
              .Products
              .Include(p => p.Category)
              .AsNoTracking()
@@ -136,11 +136,11 @@ namespace WaiterChefBoss.Services.Product
              })
              .ToListAsync();
 
-            }
-            var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(200));
+            //}
+            //var cacheOptions = new MemoryCacheEntryOptions()
+            //        .SetAbsoluteExpiration(TimeSpan.FromSeconds(200));
 
-            cache.Set(DataConstants.ProductMemoryCacheKey, products, cacheOptions);
+            //cache.Set(DataConstants.ProductMemoryCacheKey, products, cacheOptions);
 
 
 

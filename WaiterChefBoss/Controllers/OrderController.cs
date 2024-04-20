@@ -100,7 +100,17 @@ namespace WaiterChefBoss.Controllers
             return RedirectToAction(roleName);
 
         }
-
+        [Authorize(Roles = $"{BossRole}")]
+        public async Task<PartialViewResult> OrdersFromAll()
+        {
+            var model = new WorkerViewModel()
+            {
+                OrdersBar = await orderService.OrdersForWorker(BarmanRole),
+                OrdersChef = await orderService.OrdersForWorker(ChefRole),
+                OrdersWaiter = await orderService.OrdersForWorker(BarmanRole)
+            };
+            return PartialView("_Orders", model);
+        }
         [Authorize(Roles = $"{BossRole}, {ChefRole}")]
         public async Task<IActionResult> Chef() => View(await orderService.OrdersForWorker(ChefRole));
 

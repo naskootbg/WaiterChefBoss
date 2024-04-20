@@ -1,0 +1,63 @@
+﻿@model WorkerViewModel
+ 
+<h1>Orders for Waiter</h1>
+
+@foreach (var order in Model.OrdersWaiter)
+{
+    var style = "border-dark border-5 text-center";
+    var text = "";
+    @if (order.Status == 4)
+    {
+        text = "- Delivered";
+        style = "border-success border-5 text-center";
+    }
+    <div class="card  @style">
+        <div class="card-header">
+            Order: @order.Id @text
+            <h3>Table @order.Table</h3>
+        </div>
+        <div class="card-body">
+            @foreach (var product in order.Products)
+            {
+                <p>@product.Name: @product.Price @product.CurencySymbol</p>
+            }
+            <p>Total: @Math.Round(order.Total,2) @order.Products.FirstOrDefault()?.CurencySymbol </p>
+        </div>
+    </div>
+}
+<h1>Orders for Barman</h1>
+
+@foreach (var order in Model.OrdersBar)
+{
+    <div class="card border-dark border-5 text-center">
+        <div class="card-header">
+            Order: @order.Id for table @order.Table
+        </div>
+        <div class="card-body">
+            @foreach (var product in order.Products)
+            {
+                <p class="col">@product.Name</p>
+                <p class="col">@product.Description</p>
+            }
+ 
+        </div>
+    </div>
+}
+<h1>Orders For Chef</h1>
+
+@foreach (var order in Model.OrdersChef)
+{
+    <div class="card border-dark border-5 text-center">
+        <div class="card-header">
+            Order: @order.Id for table @order.Table
+        </div>
+        <div class="card-body">
+            @foreach (var product in order.Products)
+            {
+                <p class="col">@product.Name</p>
+                <p class="col">@product.Description</p>
+            }
+ 
+        </div>
+    </div>
+}
