@@ -37,16 +37,18 @@ namespace WaiterChefBoss.Controllers
             //return RedirectToAction("Product" , "Food", new { id = id });
         }
         [HttpGet]
-        public Task<IActionResult> Category()
+        public async Task<IActionResult> Category()
         {           
-            return Task.FromResult<IActionResult>(View());
+            return await Task.FromResult<IActionResult>(View());
         }
         [HttpPost]
         public async Task<IActionResult> Category(CategoryViewModelService category)
         {
-            int id= await addService.AddCategory(category);
+            int id = await addService.AddCategory(category);
             return RedirectToAction("Category", "Food", new { id = id });
 
         }
+
+    
     }
 }

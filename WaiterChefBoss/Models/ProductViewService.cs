@@ -21,5 +21,9 @@ namespace WaiterChefBoss.Models
         public string CategoryName { get; set; } = string.Empty;
 
         public string CurencySymbol = CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
+
+        public double AverageStars { get; set; }
+
+        public int TotalReviews { get; set; }
     }
 }

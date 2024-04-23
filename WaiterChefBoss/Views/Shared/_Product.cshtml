@@ -11,7 +11,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                @if (@Model.TotalReviews > 0)
+                {
+                    <p>Rating @Model.AverageStars from @Model.TotalReviews <a href="/review/product/@Model.Id">reviews</a> </p>
 
+                }
+                else
+                {
+                    <p>No reviews yet<a href="/review/add/@Model.Id">be the first and write one</a> </p>
+
+                }
                 <p>@Model.Description</p>
                 <p>Calories: @Model.Calories</p>
                 <p>Expected time for cooking: @Model.TimeCooking min</p>

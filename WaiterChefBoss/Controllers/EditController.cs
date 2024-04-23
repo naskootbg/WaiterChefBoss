@@ -27,7 +27,7 @@ namespace WaiterChefBoss.Controllers
         {
             var model = await editService.EditProduct(product, id);
 
-            return RedirectToAction("Product", "Food", new { id = id });
+            return RedirectToAction("Product", "Food", new { id });
         }
         [HttpGet]
         public async Task<IActionResult> Category(int id)
@@ -41,7 +41,7 @@ namespace WaiterChefBoss.Controllers
         {
             var model = await editService.EditCategory(category, id);
 
-            return RedirectToAction("Category", "Food", new { id = id });
+            return RedirectToAction("Category", "Food", new { id });
         }
         [HttpPost]
         public async Task<IActionResult> DeleteCategory(int id)

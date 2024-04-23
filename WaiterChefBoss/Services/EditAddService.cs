@@ -124,7 +124,7 @@ namespace WaiterChefBoss.Services
             {
                 return new CategoryViewModelService { Name = "No Such Category" };
             }
-            cache.Remove(DataConstants.CategoryMemoryCacheKey);
+           // cache.Remove(DataConstants.CategoryMemoryCacheKey);
 
         }
 

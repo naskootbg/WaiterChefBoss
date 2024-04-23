@@ -111,6 +111,9 @@ namespace WaiterChefBoss.Data
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<OrderProducts> OrdersProducts { get; set; } = null!;
+        public DbSet<CookingProducts> CookingProducts { get; set; } = null!;
+        public DbSet<Review> Reviews { get; set; } = null!;
+
 
     }
 }

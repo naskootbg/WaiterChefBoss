@@ -10,11 +10,14 @@ namespace WaiterChefBoss.Services.Product
     public class ProductService : IProductService
     {
         private readonly ApplicationDbContext context;
+        private readonly IReviewService reviewService;
+
         private readonly IMemoryCache cache;
-        public ProductService(ApplicationDbContext _context, IMemoryCache _cache)
+        public ProductService(ApplicationDbContext _context, IMemoryCache _cache, IReviewService _reviewService)
         {
             cache = _cache;
             context = _context;
+            reviewService = _reviewService;
         }
         public async Task<string> ProductName(int id)
         {
@@ -33,21 +36,28 @@ namespace WaiterChefBoss.Services.Product
                .Include(p => p.Category)
                .AsNoTracking()
                .FirstOrDefaultAsync();
-
+            double average = 0.00;
+            var total = await reviewService.ProductReviewsCount(id);
+            if (total > 0)
+            {
+                average = await reviewService.AverageScore(id);
+            }
             return new ProductViewService()
-                {
-                    Id = id,
-                    Calories = p!.Calories,
-                    CategoryId = p.CategoryId,
-                    Description = p.Description,
-                    CategoryName = p.Category.Name,
-                    ImageUrl = p.ImageUrl,
-                    Name = p.Name,
-                    Price = p.Price,
-                    Status = p.Status,
-                    TimeCooking = p.TimeCooking,
-                    Weight = p.Weight
-                };
+            {
+                Id = id,
+                Calories = p!.Calories,
+                CategoryId = p.CategoryId,
+                Description = p.Description,
+                CategoryName = p.Category.Name,
+                ImageUrl = p.ImageUrl,
+                Name = p.Name,
+                Price = p.Price,
+                Status = p.Status,
+                TimeCooking = p.TimeCooking,
+                Weight = p.Weight,
+                AverageStars = average,
+                TotalReviews = total
+            };
 
             
             
@@ -71,6 +81,7 @@ namespace WaiterChefBoss.Services.Product
                    TimeCooking = p.TimeCooking,
                    CategoryName = p.Category.Name,
                    CategoryId = p.CategoryId
+                  
 
                })
                .ToListAsync();
@@ -100,7 +111,7 @@ namespace WaiterChefBoss.Services.Product
                                     TimeCooking = p.TimeCooking,
                                     CategoryName = p.Category.Name,
                                     CategoryId = categoryId,
-
+                                    
                                 })
                                 .ToListAsync();
             //}
@@ -132,7 +143,8 @@ namespace WaiterChefBoss.Services.Product
                  Status = p.Status,
                  TimeCooking = p.TimeCooking,
                  CategoryName = p.Category.Name,
-                 CategoryId = p.CategoryId
+                 CategoryId = p.CategoryId,
+                  
              })
              .ToListAsync();
 

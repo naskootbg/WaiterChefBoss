@@ -6,6 +6,7 @@ using WaiterChefBoss.ModelBinders;
 using WaiterChefBoss.Services;
 using WaiterChefBoss.Services.Category;
 using WaiterChefBoss.Services.Product;
+using WaiterChefBoss.Services.Review;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,8 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IEditAddService, EditAddService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IReviewService, ReviewService>();
+ 
 builder.Services.AddResponseCaching();
 builder.Services.AddMemoryCache();
 builder.Services.AddAuthentication()

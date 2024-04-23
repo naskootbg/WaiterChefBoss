@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ReviewViewModel>
+
+@{
+    ViewBag.Title = $"My reviews";
+
+}
+<h1>@ViewBag.Title</h1>
+<div class="col">
+@foreach (var review in @Model)
+{
+<div class="row">
+    <h3>For @review.ProductName</h3>
+    <p>My rating: @review.Stars</p>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <form asp-action="Edit" asp-route-id="@review.Id" method="get">
+                    <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
+                </form>
+                <form asp-action="Show" asp-route-id="@review.Id" method="post">
+                    <input class="btn btn-info mb-2 w-100 p-3 fw-bold" type="submit" value="View" />
+                </form>
+                <form asp-controller="Food" asp-action="Product" asp-route-id="@review.ProductId" method="post">
+                    <input class="btn btn-dark mb-2 w-100 p-3 fw-bold" type="submit" value="View Product" />
+                </form>
+
+            </div>
+</div>
+     
+}
+</div>

@@ -60,7 +60,7 @@ namespace WaiterChefBoss.Controllers
             var products = await product.ProductSearch();
             if (!string.IsNullOrEmpty(query))
             {
-                products = products.Where(p => p.Name.Contains(query) || p.Description.Contains(query));
+                products = products.Where(p => p.Name.Contains(query) || p.Description.Contains(query) || p.CategoryName.Contains(query));
             }
 
             var model = new SearchViewModel()
@@ -70,9 +70,7 @@ namespace WaiterChefBoss.Controllers
             };
             return View(model);
         }
-        //public async Task<IEnumerable<CategoryViewModelService>> AllCategories() {
-        //   return await category.AllCategories();
-        //}
+   
          
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

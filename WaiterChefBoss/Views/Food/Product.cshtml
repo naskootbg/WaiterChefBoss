@@ -7,6 +7,13 @@
     <div class="card" style="width: 25rem;">
 <h1>@Model.Name</h1>
 <partial name="_Product" />
+        <form asp-controller="Review" asp-action="Add" asp-route-id="@Model.Id" method="get">
+            <div class="mb-3" style="display: none">
+                
+                <input asp-for="@Model.Name" class="form-control" aria-required="true" />
+             </div>
+            <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" value="Write Review" type="Submit">
+        </form>
 <img class="img-thumbnail" src="@Model.ImageUrl">
 <div class="btn-group" role="group" aria-label="Basic example">
 @if (this.User.Identity!.IsAuthenticated)

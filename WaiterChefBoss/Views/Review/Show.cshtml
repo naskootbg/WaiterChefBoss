@@ -1,0 +1,17 @@
+﻿@model ReviewViewModel
+
+@{
+    ViewBag.Title = $"Review for {Model.Title}";
+
+}
+<h1>@Model.Title</h1>
+<div class="mb-3">
+    <p>Stars: @Model.Stars</p>
+    <p>Description: @Model.Description</p>
+</div>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="get">
+    <input class="btn btn-warning mb-2 w-100 p-3 fw-bold"  value="Edit" type="Submit">
+</form>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="get">
+    <input class="btn btn-danger mb-2 w-100 p-3 fw-bold" value="Delete" type="Submit">
+</form>
