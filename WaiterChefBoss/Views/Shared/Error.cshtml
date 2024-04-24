@@ -4,7 +4,7 @@
 }
 
 <h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h2 class="text-danger">An error @Context.Response.StatusCode occurred while processing your request.</h2>
 
 @if (Model.ShowRequestId)
 {
@@ -12,8 +12,18 @@
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
     </p>
 }
+@if (@Context.Response.StatusCode == 404)
+{
+    <img src="https://images.squarespace-cdn.com/content/62b201e44c6b053d7de1621c/1655858827997-NFV7E58U2SVYL5LVWJK7/images.png?content-type=image%2Fpng" />
 
-<h3>Development Mode</h3>
+}
+@if (@Context.Response.StatusCode == 500)
+{
+    <h1>Something wrong happen. The boss is informed!</h1>
+    <img src="https://i.pik.bg/news/260/660_7cc0961ca129977385035e9135e6bb64.jpg" />
+
+}
+@*<h3>Development Mode</h3>
 <p>
     Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
 </p>
@@ -23,3 +33,4 @@
     For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
     and restarting the app.
 </p>
+*@

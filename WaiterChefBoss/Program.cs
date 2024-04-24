@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
+using WaiterChefBoss.Data.Middleware;
 using WaiterChefBoss.ModelBinders;
 using WaiterChefBoss.Services;
 using WaiterChefBoss.Services.Category;
@@ -60,11 +62,15 @@ else
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseStatusCodePagesWithReExecute("/Home/Error", "?code={0}");
+
     app.UseHsts();
-} 
+}
 
 // Use the custom logging middleware
 app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseExceptionHandler("/Home/Error");
+app.UseStatusCodePagesWithReExecute("/Home/Error", "?code={0}");
 
 app.UseResponseCaching();
 
