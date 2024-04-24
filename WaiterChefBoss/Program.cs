@@ -60,15 +60,11 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseStatusCodePagesWithReExecute("/Home/Error", "?code={0}");
-
     app.UseHsts();
 }
 
-// Use the custom logging middleware
-app.UseMiddleware<RequestLoggingMiddleware>();
+
+
 app.UseExceptionHandler("/Home/Error");
 app.UseStatusCodePagesWithReExecute("/Home/Error", "?code={0}");
 
@@ -77,10 +73,32 @@ app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
+// Use the custom logging middleware
+app.UseMiddleware<RequestLoggingMiddleware>();
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute
+//    (
+//        name: "Areas",
+//        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+//    );
+//    endpoints.MapDefaultControllerRoute();
+//    endpoints.MapRazorPages();
+//});
+
+
 
 app.MapDefaultControllerRoute();
 app.MapRazorPages();

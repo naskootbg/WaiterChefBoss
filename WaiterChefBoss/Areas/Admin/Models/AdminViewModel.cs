@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using WaiterChefBoss.Data.Models;
 
-namespace WaiterChefBoss.Models
+namespace WaiterChefBoss.Areas.Admin.Models
 {
     public class AdminViewModel
     {
@@ -17,7 +17,7 @@ namespace WaiterChefBoss.Models
         //public IEnumerable<OrderFormViewModel> Orders { get; init; }  = new List<OrderFormViewModel>(); 
 
         //public int OrderStatus { get; set; }
-        
+
 
     }
 }

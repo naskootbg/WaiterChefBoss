@@ -98,7 +98,7 @@ namespace WaiterChefBoss.Controllers
             {
                 OrdersBar = await orderService.OrdersForWorker(BarmanRole,""),
                 OrdersChef = await orderService.OrdersForWorker(ChefRole, ""),
-                OrdersWaiter = await orderService.OrdersForWorker(BarmanRole, "")
+                OrdersWaiter = await orderService.OrdersForWorker(WaiterRole, "")
             };
             return PartialView("_Orders", model);
         }

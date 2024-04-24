@@ -2,13 +2,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using System.Security.Claims;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Models;
+using WaiterChefBoss.Areas.Admin.Models;
 using static WaiterChefBoss.Data.DataConstants;
 
-namespace WaiterChefBoss.Controllers
+namespace WaiterChefBoss.Areas.Admin.Controllers
 {
+    [Area(Data.Constants.AreaName)]
     [Authorize(Roles = BossRole)]
     public class AdminController : Controller
     {
@@ -16,7 +18,7 @@ namespace WaiterChefBoss.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> usermanager;
         private readonly ICategoryService category;
- 
+
         private readonly IBossService admin;
 
         public AdminController(RoleManager<IdentityRole> _roleManager,
@@ -33,7 +35,7 @@ namespace WaiterChefBoss.Controllers
 
 
         public async Task<IActionResult> Index()
-        { 
+        {
             var model = new AdminViewModel()
             {
                 Users = await usermanager.Users.ToListAsync(),

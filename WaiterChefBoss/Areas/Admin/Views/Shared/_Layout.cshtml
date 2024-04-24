@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WaiterChefBoss</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WaiterChefBoss.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</head>
+<body >
+    <header>
+
+        
+        @await Component.InvokeAsync("Menu")
+        
+
+
+
+    </header>
+      
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @if (TempData["message"] != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    <b>@TempData["message"]</b>
+  
+                </div>
+            }
+            @if (TempData["message-danger"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <h2>
+                        @TempData["message-danger"]
+
+                    </h2>
+
+                </div>
+
+            }
+            @RenderBody()
+           
+        </main>
+    </div>
+    
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - WaiterChefBoss 
+        </div>
+    </footer>
+
+@*    <script>
+        $.ajax({
+            url: '~/Home/Menu',
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+        })
+            .success(function (result) {
+                $('#menu').html(result);
+            })
+            .error(function (xhr, status) {
+                alert(status);
+            });
+    </script>*@
+</body>
+</html>
