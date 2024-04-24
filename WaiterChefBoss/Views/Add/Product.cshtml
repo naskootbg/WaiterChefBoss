@@ -32,6 +32,7 @@
                 <input asp-for="@Model.Calories" class="form-control" aria-required="true" />
                 <span asp-validation-for="@Model.Calories" class="text-danger"></span>
             </div>
+ 
             <div class="mb-3">
                 <label asp-for="@Model.Price" class="form-label-add-edit">Price</label>
                 <input asp-for="@Model.Price" class="form-control" value="@Model.Price.ToString().Replace(",",".")" />                                   

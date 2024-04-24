@@ -36,6 +36,7 @@ namespace WaiterChefBoss.Contracts
         Task ChangeStatusOfAllOrdersProducts(string userId, int orderId);
         Task MarkAsDelivered(int id);
         Task MarkAsPaid(int id);
-        Task BlankOrder(string userId);
+
+        Task<int> DiscountPercent(int total);
     }
 }

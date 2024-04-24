@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WaiterChefBoss.Migrations
 {
-    public partial class BCW : Migration
+    public partial class WBC : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,12 +55,26 @@ namespace WaiterChefBoss.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Discounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    Percent = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Discounts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,7 +213,7 @@ namespace WaiterChefBoss.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     TimeCooking = table.Column<int>(type: "int", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
@@ -215,26 +229,6 @@ namespace WaiterChefBoss.Migrations
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CookingProducts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CookingProducts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CookingProducts_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -281,7 +275,7 @@ namespace WaiterChefBoss.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Stars = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -303,6 +297,11 @@ namespace WaiterChefBoss.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "22e40406-8a9d-2d82-912c-5d6a640ee696", 0, "c4736b7b-4dcf-be6b-8b03-e299b4836146", "dump@dump.dump", true, false, null, "DUMP@DUMP.DUMP", "DUMP@DUMP.DUMP", "AQAAAAEAACcQAAAAEIB/N9AG5QrJ4XU3szWuwqgqG7qQ8CMr9dzz3f9F1lB84j0CxarXMAvnA6i0Exj/7Q==", null, false, "I5MOLV6IDX2DRGZMNIQ6KEUQKW3QIG3A", false, "dump@dump.dump" });
+
+            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Description", "Name", "Status" },
                 values: new object[,]
@@ -314,14 +313,41 @@ namespace WaiterChefBoss.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Discounts",
+                columns: new[] { "Id", "Percent", "Total" },
+                values: new object[,]
+                {
+                    { 1, 5, 100.0 },
+                    { 2, 6, 200.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "DateAdded", "Status", "Table", "Total", "UserId" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, 1, 0.0, "22e40406-8a9d-2d82-912c-5d6a640ee696" });
+
+            migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "Calories", "CategoryId", "Description", "ImageUrl", "Name", "Price", "Status", "TimeCooking", "Weight" },
                 values: new object[,]
                 {
-                    { 1, "555 cal", 1, "Pizza with meal and chease", "https://thumbs.dreamstime.com/z/pepperoni-pizza-thinly-sliced-popular-topping-american-style-pizzerias-30402134.jpg", "Pizza", 25.969999999999999, 1, 10, 0.5 },
-                    { 2, "551 cal", 2, "Shkembe chorba with shkembe and a lot garlic and vinegar", "https://thumbs.dreamstime.com/b/soup-3843446.jpg", "Shkembe chorba", 2.9700000000000002, 1, 15, 0.5 },
+                    { 1, "555 cal", 1, "Refrigerated Pillsburytm Classic Crust Pizza Crust\r\nLean Ground Beef\r\nBell Pepper (thin strips, yellow, red and green)\r\nOnion (thinly sliced)\r\nGarlic-Pepper Blend\r\nPizza Sauce\r\nItalian Cheese Blend (shredded)", "https://thumbs.dreamstime.com/z/pepperoni-pizza-thinly-sliced-popular-topping-american-style-pizzerias-30402134.jpg", "Pizza", 25.969999999999999, 1, 10, 0.5 },
+                    { 2, "551 cal", 2, "Kg. tripe (veal)\r\nMilk\r\nsweet paprika\r\nCayenne pepper\r\nSalt to taste\r\ngarlic\r\nVinegar\r\nOil\r\nbutter", "https://thumbs.dreamstime.com/b/soup-3843446.jpg", "Shkembe chorba", 2.9700000000000002, 1, 15, 0.5 },
                     { 3, "44 cal", 3, "Hot coffee with very special taste of coffee", "https://thumbs.dreamstime.com/b/coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-113807195.jpg", "Coffee", 2.0, 1, 5, 0.050000000000000003 },
                     { 4, "5555 cal", 4, "Cold natural beer, but maybe alchohol", "https://thumbs.dreamstime.com/b/beer-959519.jpg", "Beer", 5.9699999999999998, 1, 1, 0.5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Reviews",
+                columns: new[] { "Id", "Description", "ProductId", "Stars", "Title", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "Comes slowly", 1, 4, "Good Pizza", "22e40406-8a9d-2d82-912c-5d6a640ee696" },
+                    { 2, "Will Recommend", 1, 5, "Excelent Pizza", "22e40406-8a9d-2d82-912c-5d6a640ee696" },
+                    { 3, "Will buy again", 1, 5, "Great Pizza", "22e40406-8a9d-2d82-912c-5d6a640ee696" },
+                    { 4, "Going home", 4, 1, "Where my beer is", "22e40406-8a9d-2d82-912c-5d6a640ee696" },
+                    { 5, "I love shkembe, but too hot", 2, 3, "Hot", "22e40406-8a9d-2d82-912c-5d6a640ee696" },
+                    { 6, "I love shkembe, but too cold", 2, 4, "Cold", "22e40406-8a9d-2d82-912c-5d6a640ee696" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -362,11 +388,6 @@ namespace WaiterChefBoss.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CookingProducts_ProductId",
-                table: "CookingProducts",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
@@ -422,7 +443,7 @@ namespace WaiterChefBoss.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CookingProducts");
+                name: "Discounts");
 
             migrationBuilder.DropTable(
                 name: "OrdersProducts");

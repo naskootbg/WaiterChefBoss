@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Models;
@@ -10,12 +11,13 @@ namespace WaiterChefBoss.Services
         private readonly ApplicationDbContext context;
         private readonly ICategoryService category;
         private readonly IMemoryCache cache;
-
-        public EditAddService(ApplicationDbContext _context, ICategoryService category, IMemoryCache _cache)
+        private readonly IProductService productService;
+        public EditAddService(ApplicationDbContext _context, ICategoryService category, IMemoryCache _cache, IProductService _productService)
         {
             context = _context;
             this.category = category;  
             cache = _cache;
+            productService = _productService;
         }
         public async Task<int> AddCategory(CategoryViewModelService category)
         {
@@ -37,6 +39,9 @@ namespace WaiterChefBoss.Services
 
         public async Task<int> AddProduct(ProductFormViewModel product)
         {
+             
+
+
             var entity = new Data.Models.Product()
             {
                 Id = product.Id,
@@ -48,9 +53,13 @@ namespace WaiterChefBoss.Services
                 CategoryId = product.CategoryId,
                 TimeCooking = product.TimeCooking,
                 Weight = product.Weight,
-                Price = product.Price
+                Price = product.Price,
+                
+                 
 
             };
+
+             
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
             int id = entity.Id;
@@ -128,7 +137,7 @@ namespace WaiterChefBoss.Services
 
         }
 
-
+       
 
         public async Task<ProductFormViewModel> EditProduct(ProductFormViewModel? product, int productId)
         {
@@ -151,6 +160,7 @@ namespace WaiterChefBoss.Services
                         Weight = ep.Weight,
                         Price = ep.Price,
                         Categories = await category.AllCategories()
+
                     };
                     return entity;
                 }
@@ -166,6 +176,7 @@ namespace WaiterChefBoss.Services
                     ep.TimeCooking = product.TimeCooking;
                     ep.Weight = product.Weight;
                     ep.Price = product.Price;
+                     
                     await context.SaveChangesAsync();
                     var entity = new ProductFormViewModel
                     {

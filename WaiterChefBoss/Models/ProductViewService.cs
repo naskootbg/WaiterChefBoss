@@ -25,5 +25,7 @@ namespace WaiterChefBoss.Models
         public double AverageStars { get; set; }
 
         public int TotalReviews { get; set; }
+
+
     }
 }

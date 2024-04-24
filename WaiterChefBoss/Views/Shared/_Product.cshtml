@@ -18,14 +18,16 @@
                 }
                 else
                 {
-                    <p>No reviews yet<a href="/review/add/@Model.Id">be the first and write one</a> </p>
+                    <p>No reviews yet <a href="/review/add/@Model.Id">be the first and write one</a> </p>
 
                 }
                 <p>@Model.Description</p>
                 <p>Calories: @Model.Calories</p>
                 <p>Expected time for cooking: @Model.TimeCooking min</p>
+                
                 <p>Category: @Model.CategoryName</p>
                 <p>Price: @Model.Price @Model.CurencySymbol</p>
+                
 
             </div>
             <div class="modal-footer">

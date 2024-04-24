@@ -31,10 +31,10 @@ namespace WaiterChefBoss.Data.Models
         public string ImageUrl { get; set; } = string.Empty;
         [StringLength(20, MinimumLength = 0)]
         public string Calories { get; set; } = string.Empty;
-
         public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; } = null!;
+        
         
 
     }

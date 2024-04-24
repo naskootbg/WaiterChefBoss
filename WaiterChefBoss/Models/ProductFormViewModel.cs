@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WaiterChefBoss.Data.Models;
 using static WaiterChefBoss.Data.DataConstants;
 
 
@@ -33,7 +34,7 @@ namespace WaiterChefBoss.Models
         public string Calories { get; set; } = string.Empty;
         [Required]
         public int CategoryId { get; set; }
-
         public List<CategoryViewModelService> Categories { get; set; } = new List<CategoryViewModelService>();
+
     }
 }

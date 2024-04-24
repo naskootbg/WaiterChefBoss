@@ -97,6 +97,7 @@ namespace WaiterChefBoss.Services.Product
                 var products = await context
                                 .Products.Where(p => p.CategoryId == categoryId)
                                 .Include(p => p.Category)
+                                
                                 .AsNoTracking()
                                 .Select(p => new ProductViewService
                                 {
@@ -111,6 +112,7 @@ namespace WaiterChefBoss.Services.Product
                                     TimeCooking = p.TimeCooking,
                                     CategoryName = p.Category.Name,
                                     CategoryId = categoryId,
+                                    
                                     
                                 })
                                 .ToListAsync();
@@ -230,6 +232,7 @@ namespace WaiterChefBoss.Services.Product
 
              
         }
+       
 
     }
 }

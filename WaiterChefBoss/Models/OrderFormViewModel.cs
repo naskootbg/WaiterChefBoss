@@ -15,6 +15,6 @@ namespace WaiterChefBoss.Models
         public double Total { get; set; }
         public string UserId { get; set; } = string.Empty;
 
-
+        public Discount Discounts { get; set; } = null!;
     }
 }

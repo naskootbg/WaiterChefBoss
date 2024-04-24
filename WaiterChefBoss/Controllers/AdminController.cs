@@ -16,17 +16,15 @@ namespace WaiterChefBoss.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> usermanager;
         private readonly ICategoryService category;
-        private readonly IOrderService order;
+ 
         private readonly IBossService admin;
 
-        public AdminController(IOrderService _order,
-             RoleManager<IdentityRole> _roleManager,
+        public AdminController(RoleManager<IdentityRole> _roleManager,
              UserManager<IdentityUser> _usermanager,
              ICategoryService _category,
              IBossService _admin)
         {
             roleManager = _roleManager;
-            order = _order;
             usermanager = _usermanager;
             category = _category;
             admin = _admin;
@@ -35,13 +33,7 @@ namespace WaiterChefBoss.Controllers
 
 
         public async Task<IActionResult> Index()
-        {
-            if (!order.OrderExists(1).Result)
-            {
-                await order.BlankOrder(UserId());
-
-            }
-
+        { 
             var model = new AdminViewModel()
             {
                 Users = await usermanager.Users.ToListAsync(),

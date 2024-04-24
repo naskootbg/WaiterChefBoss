@@ -14,5 +14,6 @@ namespace WaiterChefBoss.Contracts
 
         Task DeleteProduct(int productId);
         Task DeleteCategory(int categoryId);
+         
     }
 }

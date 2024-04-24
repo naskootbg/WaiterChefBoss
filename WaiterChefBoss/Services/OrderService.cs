@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
@@ -177,7 +178,10 @@ namespace WaiterChefBoss.Services
             {
                 totalChef += orderProduct.Product.Price;
             }
-
+            var orderTotal = totalBarman + totalChef;
+            int percent = await DiscountPercent((int)Math.Round(orderTotal));
+            totalBarman = totalBarman - totalBarman * percent / 100;
+            totalChef = totalChef - totalChef * percent / 100;
             if (orderProductsBarMan.Count > 0)
             {
                  model = new Order
@@ -186,7 +190,7 @@ namespace WaiterChefBoss.Services
                     UserId = userId,
                     DateAdded = dateAdded,
                     Table = table,
-                    Total = totalBarman,
+                    Total = Math.Round(totalBarman,2),
                     
                 };
                 await context.AddAsync(model);
@@ -200,7 +204,7 @@ namespace WaiterChefBoss.Services
                     UserId = userId,
                     DateAdded = dateAdded,
                     Table = table,
-                    Total = totalChef
+                    Total = Math.Round(totalChef, 2)
                 };
                 await context.AddAsync(model);
 
@@ -314,21 +318,7 @@ namespace WaiterChefBoss.Services
 
             return model;
         }
-        public async Task BlankOrder(string userId)
-        {
-            var model = new Order
-            {
-                Status = 0,
-                UserId = userId,
-                DateAdded = DateTime.Now,
-                Table = 1,
-                Total = 0
-            };
-
-            await context.AddAsync(model);
-            await context.SaveChangesAsync();
-
-        }
+ 
 
         public async Task SendToWaiter(int id)
         {
@@ -352,6 +342,23 @@ namespace WaiterChefBoss.Services
             await context.SaveChangesAsync();
         }
 
-
+        public async Task<int> DiscountPercent(int total)
+        {
+            var discount = await context.Discounts
+                .AsNoTracking()
+                .Where(d => d.Total <= total)
+                .OrderByDescending(d => d.Total)
+                .FirstOrDefaultAsync();
+                
+            
+            if (discount != null)
+            { 
+                return discount.Percent;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }
