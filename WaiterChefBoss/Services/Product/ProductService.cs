@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
@@ -10,14 +11,14 @@ namespace WaiterChefBoss.Services.Product
     public class ProductService : IProductService
     {
         private readonly ApplicationDbContext context;
-        private readonly IReviewService reviewService;
+        //private readonly IReviewService reviewService;
 
-        private readonly IMemoryCache cache;
-        public ProductService(ApplicationDbContext _context, IMemoryCache _cache, IReviewService _reviewService)
+        //private readonly IMemoryCache cache;
+        public ProductService(ApplicationDbContext _context)
         {
-            cache = _cache;
+            
             context = _context;
-            reviewService = _reviewService;
+            
         }
         public async Task<string> ProductName(int id)
         {
@@ -37,10 +38,20 @@ namespace WaiterChefBoss.Services.Product
                .AsNoTracking()
                .FirstOrDefaultAsync();
             double average = 0.00;
-            var total = await reviewService.ProductReviewsCount(id);
+            var reviews = await context.Reviews
+               .AsNoTracking()
+               .Where(r => r.ProductId == id)
+               .ToListAsync();
+            int total = reviews.Count;
             if (total > 0)
-            {
-                average = await reviewService.AverageScore(id);
+            { 
+                int sum = 0;
+                foreach (var item in reviews)
+                {
+                    sum += item.Stars;
+                }
+
+                average = Math.Round(sum / (double)total, 2);
             }
             return new ProductViewService()
             {

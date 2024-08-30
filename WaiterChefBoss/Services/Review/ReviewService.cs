@@ -32,7 +32,8 @@ namespace WaiterChefBoss.Services.Review
                     Description = r.Description,
                     Stars = r.Stars,
                     ProductId = r.ProductId,
-                    ProductName = r.Product.Name
+                    ProductName = r.Product.Name,
+                    UserId = r.UserId
                 })
                 .ToListAsync();
              
@@ -106,7 +107,8 @@ namespace WaiterChefBoss.Services.Review
                     Title = r.Title,
                     Description = r.Description,
                     Stars = r.Stars,
-                    ProductId = r.ProductId                   
+                    ProductId = r.ProductId,
+                    UserId = r.UserId
                 })
                 .ToListAsync();
             return model;

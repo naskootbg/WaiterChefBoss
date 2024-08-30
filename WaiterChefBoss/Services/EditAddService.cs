@@ -31,8 +31,8 @@ namespace WaiterChefBoss.Services
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
             int id = entity.Id;
-            cache.Remove(DataConstants.ProductMemoryCacheKey);
-            cache.Remove(DataConstants.CategoryMemoryCacheKey);
+           // cache.Remove(DataConstants.ProductMemoryCacheKey);
+        //    cache.Remove(DataConstants.CategoryMemoryCacheKey);
 
             return id;
         }
@@ -63,7 +63,7 @@ namespace WaiterChefBoss.Services
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
             int id = entity.Id;
-            cache.Remove(DataConstants.ProductMemoryCacheKey);
+           // cache.Remove(DataConstants.ProductMemoryCacheKey);
             return id;
         }
 
@@ -76,8 +76,8 @@ namespace WaiterChefBoss.Services
 
                 await context.SaveChangesAsync();
             }
-            cache.Remove(DataConstants.ProductMemoryCacheKey);
-            cache.Remove(DataConstants.CategoryMemoryCacheKey);
+           // cache.Remove(DataConstants.ProductMemoryCacheKey);
+         //   cache.Remove(DataConstants.CategoryMemoryCacheKey);
         }
 
         public async Task DeleteProduct(int productId)
@@ -89,7 +89,7 @@ namespace WaiterChefBoss.Services
 
                 await context.SaveChangesAsync();
             }
-            cache.Remove(DataConstants.ProductMemoryCacheKey);
+           // cache.Remove(DataConstants.ProductMemoryCacheKey);
 
         }
 
@@ -141,7 +141,7 @@ namespace WaiterChefBoss.Services
 
         public async Task<ProductFormViewModel> EditProduct(ProductFormViewModel? product, int productId)
         {
-            cache.Remove(DataConstants.ProductMemoryCacheKey);
+       //     cache.Remove(DataConstants.ProductMemoryCacheKey);
             var ep = await context.Products.FindAsync(productId);
             if (ep != null)
             {
