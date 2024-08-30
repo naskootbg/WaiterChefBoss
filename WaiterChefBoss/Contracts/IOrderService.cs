@@ -23,7 +23,7 @@ namespace WaiterChefBoss.Contracts
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
-        
+
         Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName, string userId);
         Task PlaceOrder(string userId, int table);
         Task<OrderFormViewModel> FindOrderById(int orderId);

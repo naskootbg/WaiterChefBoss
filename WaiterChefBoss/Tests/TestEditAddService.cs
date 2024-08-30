@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using WaiterChefBoss.Data;
-using WaiterChefBoss.Services;
-using WaiterChefBoss.Models;
 using WaiterChefBoss.Contracts;
-using WaiterChefBoss.Services.Product;
+using WaiterChefBoss.Data;
 using WaiterChefBoss.Data.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
+using WaiterChefBoss.Models;
+using WaiterChefBoss.Services;
 using WaiterChefBoss.Services.Category;
+using WaiterChefBoss.Services.Product;
 
 namespace WaiterChefBoss.Tests
 {
@@ -76,9 +74,9 @@ namespace WaiterChefBoss.Tests
             [Test]
             public void AddCategoryTest()
             {
-                ICategoryService catService = new CategoryService(this.context,null);
+                ICategoryService catService = new CategoryService(this.context, null);
                 IProductService prodcatService = new ProductService(this.context);
-                IEditAddService service = new EditAddService(this.context,catService,null,prodcatService);
+                IEditAddService service = new EditAddService(this.context, catService, null, prodcatService);
 
 
                 CategoryViewModelService cat = new() { Id = 3, Name = "Category 3 name", Description = "Categorydescription 3", Status = 1 };
@@ -110,7 +108,7 @@ namespace WaiterChefBoss.Tests
                 IEditAddService service = new EditAddService(this.context, catService, null, prodcatService);
                 CategoryViewModelService cat = new() { Id = 3, Name = "Category 3 name edited", Description = "Categorydescription 3", Status = 1 };
 
-                var result = service.EditCategory(cat,3).Result;
+                var result = service.EditCategory(cat, 3).Result;
                 Assert.That(result.Name == "Category 3 name edited");
 
             }
@@ -121,13 +119,13 @@ namespace WaiterChefBoss.Tests
                 IProductService prodcatService = new ProductService(this.context);
                 IEditAddService service = new EditAddService(this.context, catService, null, prodcatService);
 
-                  service.DeleteCategory(1);
+                service.DeleteCategory(1);
                 Assert.That(catService.CategoryExists(1).Result == false);
                 Assert.That(catService.AllCategories().Result.Count() == 2);
             }
             [Test]
 
-           
+
             public void AddProductTest()
             {
                 ICategoryService catService = new CategoryService(this.context, null);
@@ -146,7 +144,7 @@ namespace WaiterChefBoss.Tests
                 ICategoryService catService = new CategoryService(this.context, null);
                 IProductService prodcatService = new ProductService(this.context);
                 IEditAddService service = new EditAddService(this.context, catService, null, prodcatService);
-                var result = service.EditProduct(null,3).Result;
+                var result = service.EditProduct(null, 3).Result;
                 Assert.That(result.Id == 3);
             }
             [Test]
@@ -157,7 +155,7 @@ namespace WaiterChefBoss.Tests
                 IProductService prodcatService = new ProductService(this.context);
                 IEditAddService service = new EditAddService(this.context, catService, null, prodcatService);
                 var prod = new ProductFormViewModel() { Id = 4, Name = "test 4 name edited", Description = "description 4", Status = 1, CategoryId = 2, TimeCooking = 0, Weight = 0, Price = 3.00 };
-                var result = service.EditProduct(prod,4).Result;
+                var result = service.EditProduct(prod, 4).Result;
                 Assert.That(result.Name == "test 4 name edited");
             }
 

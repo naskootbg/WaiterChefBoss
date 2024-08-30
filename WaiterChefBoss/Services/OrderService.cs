@@ -16,27 +16,8 @@ namespace WaiterChefBoss.Services
         public OrderService(ApplicationDbContext _context)
         {
             context = _context;
-        }
-        /// <summary>
-        /// OrderProducts status 0 => cart
-        /// OrderProducts status 1 => chef
-        /// OrderProducts status 2 => barman
-        /// 
-        /// Order status 0 => order canceled and the first temp order
-        /// Order status 1 => orders for chef
-        /// Order status 2 => orders for barman
-        /// Order status 3 => orders for waiter
-        /// Order status 4 => orders delivered
-        /// Order status 5 => orders paid and completed
-        /// 
-        /// 
-        /// 
-        /// The boss can see all orders with all statuses
-        /// 
-        /// </summary>
-        /// <param name="status"></param>
-        /// <returns></returns>
- 
+        }       
+
         public async Task<IEnumerable<OrderFormViewModel>> OrdersForWorker(string roleName, string userId = "")
         {
             List<OrderFormViewModel> ordersList = new();
@@ -54,7 +35,7 @@ namespace WaiterChefBoss.Services
                 .ThenBy(o => o.DateAdded)
                 .ToListAsync();
             }
-            else if(roleName == BarmanRole)
+            else if (roleName == BarmanRole)
             {
                 status = 2;
                 orders = await context
@@ -80,7 +61,7 @@ namespace WaiterChefBoss.Services
             else
             {
                 if (userId.Length > 3)
-                { 
+                {
                     orders = await context
                     .Orders
                     .AsNoTracking()
@@ -99,10 +80,10 @@ namespace WaiterChefBoss.Services
                     .OrderBy(o => o.DateAdded)
                     .ToListAsync();
                 }
-                
+
 
             }
-               
+
 
             foreach (var order in orders)
             {
@@ -127,9 +108,9 @@ namespace WaiterChefBoss.Services
 
                })
                .ToListAsync();
-                
 
-                
+
+
                 var model = new OrderFormViewModel
                 {
                     Id = order.Id,
@@ -148,7 +129,7 @@ namespace WaiterChefBoss.Services
             return ordersList;
         }
 
-        
+
         public async Task PlaceOrder(string userId, int table)
         {
 
@@ -160,8 +141,8 @@ namespace WaiterChefBoss.Services
             var orderProductsChef = await context
                 .OrdersProducts
                 .AsNoTracking()
-                .Include(x =>x.Product)
-                .Where(op => op.UserId == userId && op.Status ==  0 && op.Product.Category.Status == 1)
+                .Include(x => x.Product)
+                .Where(op => op.UserId == userId && op.Status == 0 && op.Product.Category.Status == 1)
                 .ToListAsync();
             var orderProductsBarMan = await context
                 .OrdersProducts
@@ -184,21 +165,21 @@ namespace WaiterChefBoss.Services
             totalChef = totalChef - totalChef * percent / 100;
             if (orderProductsBarMan.Count > 0)
             {
-                 model = new Order
+                model = new Order
                 {
                     Status = 2,
                     UserId = userId,
                     DateAdded = dateAdded,
                     Table = table,
-                    Total = Math.Round(totalBarman,2),
-                    
+                    Total = Math.Round(totalBarman, 2),
+
                 };
                 await context.AddAsync(model);
 
             }
             if (orderProductsChef.Count > 0)
             {
-                 model = new Order
+                model = new Order
                 {
                     Status = 1,
                     UserId = userId,
@@ -209,13 +190,13 @@ namespace WaiterChefBoss.Services
                 await context.AddAsync(model);
 
             }
-           
+
 
             await context.AddAsync(model);
             await context.SaveChangesAsync();
             var id = model.Id;
-            await ChangeStatusOfAllOrdersProducts(userId,id);
-  
+            await ChangeStatusOfAllOrdersProducts(userId, id);
+
         }
 
         public async Task ChangeStatusOfAllOrdersProducts(string userId, int orderId)
@@ -241,7 +222,7 @@ namespace WaiterChefBoss.Services
             context.UpdateRange(orderProductModelBar);
             context.UpdateRange(orderProductModelChef);
             await context.SaveChangesAsync();
-             
+
         }
 
         public async Task<List<OrderFormViewModel>> FindOrdersByUserId(string userId)
@@ -259,9 +240,9 @@ namespace WaiterChefBoss.Services
                     Total = o.Total
                 })
         .ToListAsync();
-             
-                
-            
+
+
+
 
             return orders;
         }
@@ -277,9 +258,9 @@ namespace WaiterChefBoss.Services
                 model.Status = o.Status;
                 model.Table = o.Table;
                 model.Total = o.Total;
-                 
+
             }
-             
+
             return model;
         }
         public async Task<bool> OrderExists(int id)
@@ -318,7 +299,7 @@ namespace WaiterChefBoss.Services
 
             return model;
         }
- 
+
 
         public async Task SendToWaiter(int id)
         {
@@ -349,10 +330,10 @@ namespace WaiterChefBoss.Services
                 .Where(d => d.Total <= total)
                 .OrderByDescending(d => d.Total)
                 .FirstOrDefaultAsync();
-                
-            
+
+
             if (discount != null)
-            { 
+            {
                 return discount.Percent;
             }
             else
