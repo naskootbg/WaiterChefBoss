@@ -242,6 +242,43 @@ namespace WaiterChefBoss.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.CategoriesProducts", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CategoriesProducts");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductId = 1,
+                            CategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 2,
+                            CategoryId = 2
+                        },
+                        new
+                        {
+                            ProductId = 3,
+                            CategoryId = 3
+                        },
+                        new
+                        {
+                            ProductId = 4,
+                            CategoryId = 4
+                        });
+                });
+
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -381,6 +418,9 @@ namespace WaiterChefBoss.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -395,6 +435,8 @@ namespace WaiterChefBoss.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OrderId");
 
@@ -417,9 +459,6 @@ namespace WaiterChefBoss.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -450,8 +489,6 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Products");
 
                     b.HasData(
@@ -459,7 +496,6 @@ namespace WaiterChefBoss.Migrations
                         {
                             Id = 1,
                             Calories = "555 cal",
-                            CategoryId = 1,
                             Description = "Refrigerated Pillsburytm Classic Crust Pizza Crust\r\nLean Ground Beef\r\nBell Pepper (thin strips, yellow, red and green)\r\nOnion (thinly sliced)\r\nGarlic-Pepper Blend\r\nPizza Sauce\r\nItalian Cheese Blend (shredded)",
                             ImageUrl = "https://thumbs.dreamstime.com/z/pepperoni-pizza-thinly-sliced-popular-topping-american-style-pizzerias-30402134.jpg",
                             Name = "Pizza",
@@ -472,7 +508,6 @@ namespace WaiterChefBoss.Migrations
                         {
                             Id = 2,
                             Calories = "551 cal",
-                            CategoryId = 2,
                             Description = "Kg. tripe (veal)\r\nMilk\r\nsweet paprika\r\nCayenne pepper\r\nSalt to taste\r\ngarlic\r\nVinegar\r\nOil\r\nbutter",
                             ImageUrl = "https://thumbs.dreamstime.com/b/soup-3843446.jpg",
                             Name = "Shkembe chorba",
@@ -485,7 +520,6 @@ namespace WaiterChefBoss.Migrations
                         {
                             Id = 3,
                             Calories = "44 cal",
-                            CategoryId = 3,
                             Description = "Hot coffee with very special taste of coffee",
                             ImageUrl = "https://thumbs.dreamstime.com/b/coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-113807195.jpg",
                             Name = "Coffee",
@@ -498,7 +532,6 @@ namespace WaiterChefBoss.Migrations
                         {
                             Id = 4,
                             Calories = "5555 cal",
-                            CategoryId = 4,
                             Description = "Cold natural beer, but maybe alchohol",
                             ImageUrl = "https://thumbs.dreamstime.com/b/beer-959519.jpg",
                             Name = "Beer",
@@ -653,6 +686,25 @@ namespace WaiterChefBoss.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.CategoriesProducts", b =>
+                {
+                    b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WaiterChefBoss.Data.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
@@ -666,6 +718,12 @@ namespace WaiterChefBoss.Migrations
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.OrderProducts", b =>
                 {
+                    b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WaiterChefBoss.Data.Models.Order", "Order")
                         .WithMany("OrderProducts")
                         .HasForeignKey("OrderId")
@@ -684,22 +742,13 @@ namespace WaiterChefBoss.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Order");
 
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WaiterChefBoss.Data.Models.Product", b =>
-                {
-                    b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Review", b =>

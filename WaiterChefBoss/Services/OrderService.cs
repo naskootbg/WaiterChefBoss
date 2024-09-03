@@ -103,7 +103,6 @@ namespace WaiterChefBoss.Services
                    Price = p.Product.Price,
                    ImageUrl = p.Product.ImageUrl,
                    TimeCooking = p.Product.TimeCooking,
-                   CategoryName = p.Product.Category.Name,
                    OrderProductId = p.OrderId
 
                })
@@ -142,13 +141,13 @@ namespace WaiterChefBoss.Services
                 .OrdersProducts
                 .AsNoTracking()
                 .Include(x => x.Product)
-                .Where(op => op.UserId == userId && op.Status == 0 && op.Product.Category.Status == 1)
+                .Where(op => op.UserId == userId && op.Status == 0 && op.Category.Status == 1)
                 .ToListAsync();
             var orderProductsBarMan = await context
                 .OrdersProducts
                 .AsNoTracking()
                 .Include(x => x.Product)
-                .Where(op => op.UserId == userId && op.Status == 0 && op.Product.Category.Status == 3)
+                .Where(op => op.UserId == userId && op.Status == 0 && op.Category.Status == 3)
                 .ToListAsync();
 
             foreach (var orderProduct in orderProductsBarMan)
@@ -205,14 +204,14 @@ namespace WaiterChefBoss.Services
             var orderProductModelBar = await context
           .OrdersProducts
           .AsNoTracking()
-          .Where(o => o.UserId == userId && o.Status == 0 && o.Product.Category.Status == 3)
+          .Where(o => o.UserId == userId && o.Status == 0 && o.Category.Status == 3)
           .AsNoTracking()
           .ToListAsync();
 
             var orderProductModelChef = await context
           .OrdersProducts
           .AsNoTracking()
-          .Where(o => o.UserId == userId && o.Status == 0 && o.Product.Category.Status == 1)
+          .Where(o => o.UserId == userId && o.Status == 0 && o.Category.Status == 1)
           .AsNoTracking()
           .ToListAsync();
             orderProductModelBar.ForEach(s => s.Status = 2);
@@ -290,7 +289,7 @@ namespace WaiterChefBoss.Services
                    Price = p.Product.Price,
                    ImageUrl = p.Product.ImageUrl,
                    TimeCooking = p.Product.TimeCooking,
-                   CategoryName = p.Product.Category.Name,
+                   CategoryName = p.Category.Name,
                    OrderProductId = p.OrderId
 
                })

@@ -31,9 +31,9 @@ namespace WaiterChefBoss.Tests
             };
             this.products = new List<Product>()
             {
-            new Product(){ Id = 1, Name = "test 1 name", Description = "description 1", Status = 1, CategoryId = 1, TimeCooking =0, Weight= 0, Price = 1.00},
-            new Product(){ Id = 2, Name = "test 2 name", Description = "description 2", Status = 1, CategoryId = 1, TimeCooking =0, Weight= 0, Price = 2.00 },
-            new Product(){ Id = 3, Name = "test 3 name", Description = "description 3", Status = 1, CategoryId = 2, TimeCooking =0, Weight= 0, Price = 3.00 }
+            new Product(){ Id = 1, Name = "test 1 name", Description = "description 1", Status = 1, TimeCooking =0, Weight= 0, Price = 1.00},
+            new Product(){ Id = 2, Name = "test 2 name", Description = "description 2", Status = 1, TimeCooking =0, Weight= 0, Price = 2.00 },
+            new Product(){ Id = 3, Name = "test 3 name", Description = "description 3", Status = 1, TimeCooking =0, Weight= 0, Price = 3.00 }
 
             };
             this.reviews = new List<Review>()

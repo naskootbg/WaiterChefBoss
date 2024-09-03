@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using WaiterChefBoss.Data.Models;
 
 namespace WaiterChefBoss.Data
@@ -17,8 +18,9 @@ namespace WaiterChefBoss.Data
         //}
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<CategoriesProducts>().HasKey(pc => new { pc.ProductId, pc.CategoryId });
             const string USER_ID = "22e40406-8a9d-2d82-912c-5d6a640ee696";
-             
+
 
 
             // Add a user to be added to the admin role
@@ -34,7 +36,7 @@ namespace WaiterChefBoss.Data
                 SecurityStamp = "I5MOLV6IDX2DRGZMNIQ6KEUQKW3QIG3A",
                 ConcurrencyStamp = "c4736b7b-4dcf-be6b-8b03-e299b4836146"
             });
-             
+
             builder
                 .Entity<Order>()
                 .HasMany(o => o.OrderProducts)
@@ -51,14 +53,14 @@ namespace WaiterChefBoss.Data
                    DateAdded = DateTime.MinValue,
                    Table = 1,
                    Total = 0
-               } 
+               }
                );
             builder
                .Entity<Discount>()
                .HasData(new Discount()
                {
                    Id = 1,
-                   Percent = 5,                  
+                   Percent = 5,
                    Total = 100.00
                },
                 new Discount()
@@ -94,7 +96,7 @@ namespace WaiterChefBoss.Data
                    Name = "Alchohol",
                    Status = 3
                });
-    
+
             builder
                .Entity<Review>()
                .HasData(new Review()
@@ -149,7 +151,7 @@ namespace WaiterChefBoss.Data
                    Stars = 4,
                    ProductId = 2,
                    UserId = USER_ID
-               }) ;
+               });
 
             builder
        .Entity<Product>()
@@ -158,15 +160,14 @@ namespace WaiterChefBoss.Data
            Id = 1,
            Name = "Pizza",
            Description = "Refrigerated Pillsburytm Classic Crust Pizza Crust\r\nLean Ground Beef\r\nBell Pepper (thin strips, yellow, red and green)\r\nOnion (thinly sliced)\r\nGarlic-Pepper Blend\r\nPizza Sauce\r\nItalian Cheese Blend (shredded)",
-           CategoryId = 1,
            Status = 1,
            TimeCooking = 10,
            Weight = 0.5,
            ImageUrl = "https://thumbs.dreamstime.com/z/pepperoni-pizza-thinly-sliced-popular-topping-american-style-pizzerias-30402134.jpg",
            Price = 25.97,
-           Calories= "555 cal",
-           
-       
+           Calories = "555 cal",
+
+
        },
        new Product()
        {
@@ -174,44 +175,66 @@ namespace WaiterChefBoss.Data
            Name = "Shkembe chorba",
            Description = "Kg. tripe (veal)\r\nMilk\r\nsweet paprika\r\nCayenne pepper\r\nSalt to taste\r\ngarlic\r\nVinegar\r\nOil\r\nbutter"
 ,
-           CategoryId = 2,
            Status = 1,
            TimeCooking = 15,
            Weight = 0.5,
            ImageUrl = "https://thumbs.dreamstime.com/b/soup-3843446.jpg",
            Price = 2.97,
            Calories = "551 cal",
-          
+
        },
        new Product()
        {
            Id = 3,
            Name = "Coffee",
            Description = "Hot coffee with very special taste of coffee",
-           CategoryId = 3,
            Status = 1,
            TimeCooking = 5,
            Weight = 0.05,
            ImageUrl = "https://thumbs.dreamstime.com/b/coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-coffee-concept-fried-coffee-beans-porcelain-white-coffee-cup-113807195.jpg",
            Price = 2,
            Calories = "44 cal",
-           
+
        },
        new Product()
        {
            Id = 4,
            Name = "Beer",
            Description = "Cold natural beer, but maybe alchohol",
-           CategoryId = 4,
            Status = 1,
            TimeCooking = 1,
            Weight = 0.5,
            ImageUrl = "https://thumbs.dreamstime.com/b/beer-959519.jpg",
            Price = 5.97,
            Calories = "5555 cal",
-           
-       });
 
+       });
+            builder
+      .Entity<CategoriesProducts>()
+      .HasData(
+                new CategoriesProducts()
+                {
+                    CategoryId = 1,
+                    ProductId = 1
+                },
+                new CategoriesProducts()
+                {
+                    CategoryId = 2,
+                    ProductId = 2
+                },
+                new CategoriesProducts()
+                {
+                    CategoryId = 3,
+                    ProductId = 3
+                },
+                new CategoriesProducts()
+                {
+                    CategoryId = 4,
+                    ProductId = 4
+                }
+
+
+                );
             base.OnModelCreating(builder);
         }
         public DbSet<Category> Categories { get; set; } = null!;
@@ -220,6 +243,7 @@ namespace WaiterChefBoss.Data
         public DbSet<OrderProducts> OrdersProducts { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Discount> Discounts { get; set; } = null!;
+        public DbSet<CategoriesProducts> CategoriesProducts { get; set; } = null!;
 
 
     }

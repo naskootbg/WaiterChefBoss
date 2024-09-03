@@ -50,7 +50,6 @@ namespace WaiterChefBoss.Services
                 ImageUrl = product.ImageUrl,
                 Status = product.Status,
                 Calories = product.Calories,
-                CategoryId = product.CategoryId,
                 TimeCooking = product.TimeCooking,
                 Weight = product.Weight,
                 Price = product.Price,
@@ -155,7 +154,6 @@ namespace WaiterChefBoss.Services
                         ImageUrl = ep.ImageUrl,
                         Status = ep.Status,
                         Calories = ep.Calories,
-                        CategoryId = ep.CategoryId,
                         TimeCooking = ep.TimeCooking,
                         Weight = ep.Weight,
                         Price = ep.Price,
@@ -172,7 +170,6 @@ namespace WaiterChefBoss.Services
                     ep.ImageUrl = product.ImageUrl;
                     ep.Status = product.Status;
                     ep.Calories = product.Calories;
-                    ep.CategoryId = product.CategoryId;
                     ep.TimeCooking = product.TimeCooking;
                     ep.Weight = product.Weight;
                     ep.Price = product.Price;

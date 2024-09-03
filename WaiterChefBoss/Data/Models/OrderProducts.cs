@@ -13,6 +13,10 @@ namespace WaiterChefBoss.Data.Models
         public int ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; } = null!;
+        [Required]
+        public int CategoryId { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public Category Category { get; set; } = null!;
 
         [Required]
         public string UserId { get; set; } = null!;
