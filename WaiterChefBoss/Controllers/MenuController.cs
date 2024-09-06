@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using WaiterChefBoss.Data;
 
@@ -19,17 +20,21 @@ namespace WaiterChefBoss.Controllers
         [HttpGet]
         public JsonResult BuildMenu()
         {
-            var activeCategories = context.Categories
-                .Where(c => c.Status != 0).Select(c => c.Id).ToArray();
+            var jsonData = context.Categories
+                .Where(c => c.Status != 0)
+                .Select(cat => new
+                {
+                    categoryName = cat.Name,
+                    products = cat.Products.Select(p => new
+                    {
+                        title = p.Product.Name,
+                        image = p.Product.ImageUrl,
+                        description = p.Product.Description,
+                        id = p.CategoryId
+                    }).ToArray()
+                }).ToArray();
 
 
-            var jsonData = new
-            {
-                Name = "Pranaya",
-                ID = activeCategories,
-               // DateOfBirth = new DateTime(1988, 02, 29)
-            };
-            // Returning a JsonResult object with the jsonData as the content to be serialized to JSON
             return new JsonResult(jsonData);
         }
     }

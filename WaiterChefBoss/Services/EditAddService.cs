@@ -43,26 +43,33 @@ namespace WaiterChefBoss.Services
 
 
             var entity = new Data.Models.Product()
-            {
-                Id = product.Id,
+            {                
                 Name = product.Name,
                 Description = product.Description,
                 ImageUrl = product.ImageUrl,
-                Status = product.Status,
+                Status = 1,
                 Calories = product.Calories,
                 TimeCooking = product.TimeCooking,
                 Weight = product.Weight,
                 Price = product.Price,
-                
-                 
+   
 
             };
-
-             
+        
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
+
             int id = entity.Id;
-           // cache.Remove(DataConstants.ProductMemoryCacheKey);
+
+            var catProd = new Data.Models.CategoriesProducts
+            {
+                CategoryId = product.CategoryId,
+                ProductId = id
+            };
+            await context.AddAsync(catProd);
+            await context.SaveChangesAsync();
+
+            // cache.Remove(DataConstants.ProductMemoryCacheKey);
             return id;
         }
 
@@ -141,39 +148,40 @@ namespace WaiterChefBoss.Services
         public async Task<ProductFormViewModel> EditProduct(ProductFormViewModel? product, int productId)
         {
        //     cache.Remove(DataConstants.ProductMemoryCacheKey);
-            var ep = await context.Products.FindAsync(productId);
+            var ep = await context.CategoriesProducts.Where(p => p.ProductId == productId).FirstOrDefaultAsync();
             if (ep != null)
             {
                 if (product == null)
                 {
                     var entity = new ProductFormViewModel
                     {
-                        Id = ep.Id,
-                        Name = ep.Name,
-                        Description = ep.Description,
-                        ImageUrl = ep.ImageUrl,
-                        Status = ep.Status,
-                        Calories = ep.Calories,
-                        TimeCooking = ep.TimeCooking,
-                        Weight = ep.Weight,
-                        Price = ep.Price,
-                        Categories = await category.AllCategories()
+                        Id = ep.Product.Id,
+                        Name = ep.Product.Name,
+                        Description = ep.Product.Description,
+                        ImageUrl = ep.Product.ImageUrl,
+                        Status = ep.Product.Status,
+                        Calories = ep.Product.Calories,
+                        TimeCooking = ep.Product.TimeCooking,
+                        Weight = ep.Product.Weight,
+                        Price = ep.Product.Price,
+                        Categories = await category.AllCategories(),
+                        CategoryId = ep.CategoryId
 
                     };
                     return entity;
                 }
                 else
                 {
-                    ep.Id = product.Id;
-                    ep.Name = product.Name;
-                    ep.Description = product.Description;
-                    ep.ImageUrl = product.ImageUrl;
-                    ep.Status = product.Status;
-                    ep.Calories = product.Calories;
-                    ep.TimeCooking = product.TimeCooking;
-                    ep.Weight = product.Weight;
-                    ep.Price = product.Price;
-                     
+                    ep.Product.Id = product.Id;
+                    ep.Product.Name = product.Name;
+                    ep.Product.Description = product.Description;
+                    ep.Product.ImageUrl = product.ImageUrl;
+                    ep.Product.Status = product.Status;
+                    ep.Product.Calories = product.Calories;
+                    ep.Product.TimeCooking = product.TimeCooking;
+                    ep.Product.Weight = product.Weight;
+                    ep.Product.Price = product.Price;
+                    ep.CategoryId = product.CategoryId;
                     await context.SaveChangesAsync();
                     var entity = new ProductFormViewModel
                     {

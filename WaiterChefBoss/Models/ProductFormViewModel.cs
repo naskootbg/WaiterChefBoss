@@ -34,6 +34,7 @@ namespace WaiterChefBoss.Models
         public string Calories { get; set; } = string.Empty;
         [Required]
         public int CategoryId { get; set; }
+        
         public List<CategoryViewModelService> Categories { get; set; } = new List<CategoryViewModelService>();
 
     }

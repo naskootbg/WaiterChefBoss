@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WaiterChefBoss.Migrations
 {
-    public partial class WBC : Migration
+    public partial class WCB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

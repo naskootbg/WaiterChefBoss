@@ -15,6 +15,6 @@ namespace WaiterChefBoss.Data.Models
         public int Status { get; set; }
 
 
-        //  public IEnumerable<Product> Products { get; init; } = new List<Product>();
+        public IEnumerable<CategoriesProducts> Products { get; private set; } = new List<CategoriesProducts>();
     }
 }

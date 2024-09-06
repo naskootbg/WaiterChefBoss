@@ -12,8 +12,8 @@ using WaiterChefBoss.Data;
 namespace WaiterChefBoss.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240903135400_WBC")]
-    partial class WBC
+    [Migration("20240906125634_WCB")]
+    partial class WCB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -691,7 +691,7 @@ namespace WaiterChefBoss.Migrations
             modelBuilder.Entity("WaiterChefBoss.Data.Models.CategoriesProducts", b =>
                 {
                     b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -770,6 +770,11 @@ namespace WaiterChefBoss.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>

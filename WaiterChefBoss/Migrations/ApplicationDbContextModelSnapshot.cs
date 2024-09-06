@@ -689,7 +689,7 @@ namespace WaiterChefBoss.Migrations
             modelBuilder.Entity("WaiterChefBoss.Data.Models.CategoriesProducts", b =>
                 {
                     b.HasOne("WaiterChefBoss.Data.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -768,6 +768,11 @@ namespace WaiterChefBoss.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WaiterChefBoss.Data.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Order", b =>
