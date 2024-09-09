@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using WaiterChefBoss.Contracts;
 using WaiterChefBoss.Data;
+using WaiterChefBoss.Data.Models;
 using WaiterChefBoss.Models;
 
 namespace WaiterChefBoss.Services
@@ -15,7 +16,7 @@ namespace WaiterChefBoss.Services
         public EditAddService(ApplicationDbContext _context, ICategoryService category, IMemoryCache _cache, IProductService _productService)
         {
             context = _context;
-            this.category = category;  
+            this.category = category;
             cache = _cache;
             productService = _productService;
         }
@@ -23,7 +24,7 @@ namespace WaiterChefBoss.Services
         {
             var entity = new Data.Models.Category()
             {
-                
+
                 Name = category.Name,
                 Description = category.Description,
                 Status = 1
@@ -31,19 +32,18 @@ namespace WaiterChefBoss.Services
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
             int id = entity.Id;
-           // cache.Remove(DataConstants.ProductMemoryCacheKey);
-        //    cache.Remove(DataConstants.CategoryMemoryCacheKey);
+
 
             return id;
         }
 
         public async Task<int> AddProduct(ProductFormViewModel product)
         {
-             
+
 
 
             var entity = new Data.Models.Product()
-            {                
+            {
                 Name = product.Name,
                 Description = product.Description,
                 ImageUrl = product.ImageUrl,
@@ -52,10 +52,10 @@ namespace WaiterChefBoss.Services
                 TimeCooking = product.TimeCooking,
                 Weight = product.Weight,
                 Price = product.Price,
-   
+
 
             };
-        
+
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
 
@@ -69,7 +69,6 @@ namespace WaiterChefBoss.Services
             await context.AddAsync(catProd);
             await context.SaveChangesAsync();
 
-            // cache.Remove(DataConstants.ProductMemoryCacheKey);
             return id;
         }
 
@@ -82,8 +81,8 @@ namespace WaiterChefBoss.Services
 
                 await context.SaveChangesAsync();
             }
-           // cache.Remove(DataConstants.ProductMemoryCacheKey);
-         //   cache.Remove(DataConstants.CategoryMemoryCacheKey);
+            // cache.Remove(DataConstants.ProductMemoryCacheKey);
+            //   cache.Remove(DataConstants.CategoryMemoryCacheKey);
         }
 
         public async Task DeleteProduct(int productId)
@@ -95,7 +94,7 @@ namespace WaiterChefBoss.Services
 
                 await context.SaveChangesAsync();
             }
-           // cache.Remove(DataConstants.ProductMemoryCacheKey);
+            // cache.Remove(DataConstants.ProductMemoryCacheKey);
 
         }
 
@@ -131,29 +130,29 @@ namespace WaiterChefBoss.Services
                     };
                     return cat;
                 }
-            
-                
-                
+
+
+
             }
             else
             {
                 return new CategoryViewModelService { Name = "No Such Category" };
             }
-           // cache.Remove(DataConstants.CategoryMemoryCacheKey);
 
         }
 
-       
+
 
         public async Task<ProductFormViewModel> EditProduct(ProductFormViewModel? product, int productId)
         {
-       //     cache.Remove(DataConstants.ProductMemoryCacheKey);
-            var ep = await context.CategoriesProducts.Where(p => p.ProductId == productId).FirstOrDefaultAsync();
+            var ep = await context.CategoriesProducts.Where(p => p.ProductId == productId)
+                .Include(p => p.Product).
+                FirstOrDefaultAsync();
             if (ep != null)
             {
                 if (product == null)
                 {
-                    var entity = new ProductFormViewModel
+                    var editProduct = new ProductFormViewModel
                     {
                         Id = ep.Product.Id,
                         Name = ep.Product.Name,
@@ -164,11 +163,11 @@ namespace WaiterChefBoss.Services
                         TimeCooking = ep.Product.TimeCooking,
                         Weight = ep.Product.Weight,
                         Price = ep.Product.Price,
-                        Categories = await category.AllCategories(),
+                        Categories = await category.AllActiveCategories(),
                         CategoryId = ep.CategoryId
 
                     };
-                    return entity;
+                    return editProduct;
                 }
                 else
                 {
@@ -181,8 +180,23 @@ namespace WaiterChefBoss.Services
                     ep.Product.TimeCooking = product.TimeCooking;
                     ep.Product.Weight = product.Weight;
                     ep.Product.Price = product.Price;
-                    ep.CategoryId = product.CategoryId;
+                   // ep.CategoryId = product.CategoryId;
+
                     await context.SaveChangesAsync();
+
+                    if (ep.CategoryId != product.CategoryId)
+                    {
+                        context.CategoriesProducts.Remove(ep);
+                        var newProdCat = new CategoriesProducts
+                        {
+                            CategoryId = product.CategoryId,
+                            ProductId = product.Id
+                        };
+                        await context.AddAsync(newProdCat);
+                        await context.SaveChangesAsync();
+
+                    }
+
                     var entity = new ProductFormViewModel
                     {
                         Id = product.Id,
@@ -195,9 +209,10 @@ namespace WaiterChefBoss.Services
                         TimeCooking = product.TimeCooking,
                         Weight = product.Weight,
                         Price = product.Price,
-                        Categories = await category.AllCategories()
+                        Categories = await category.AllActiveCategories()
                     };
                     return entity;
+
                 }
             }
             else
@@ -205,7 +220,7 @@ namespace WaiterChefBoss.Services
                 return new ProductFormViewModel { Name = "No Such Product" };
             }
 
-            
+
 
         }
     }

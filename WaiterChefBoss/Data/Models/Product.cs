@@ -31,6 +31,6 @@ namespace WaiterChefBoss.Data.Models
         public string ImageUrl { get; set; } = string.Empty;
         [StringLength(20, MinimumLength = 0)]
         public string Calories { get; set; } = string.Empty;
-  
+
     }
 }

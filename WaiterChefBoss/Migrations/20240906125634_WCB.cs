@@ -241,12 +241,14 @@ namespace WaiterChefBoss.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
+                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CategoriesProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
+                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 

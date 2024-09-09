@@ -254,7 +254,7 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("CategoriesProducts");
+                    b.ToTable("CategoriesProducts", (string)null);
 
                     b.HasData(
                         new
@@ -302,7 +302,7 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -351,7 +351,7 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Discounts");
+                    b.ToTable("Discounts", (string)null);
 
                     b.HasData(
                         new
@@ -396,7 +396,7 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
 
                     b.HasData(
                         new
@@ -444,7 +444,7 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrdersProducts");
+                    b.ToTable("OrdersProducts", (string)null);
                 });
 
             modelBuilder.Entity("WaiterChefBoss.Data.Models.Product", b =>
@@ -489,7 +489,7 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -576,7 +576,7 @@ namespace WaiterChefBoss.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
 
                     b.HasData(
                         new

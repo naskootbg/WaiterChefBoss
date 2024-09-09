@@ -19,6 +19,8 @@ namespace WaiterChefBoss.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CategoriesProducts>().HasKey(pc => new { pc.ProductId, pc.CategoryId });
+            builder.Entity<CategoriesProducts>().HasOne(c => c.Category).WithMany(p => p.Products).OnDelete(DeleteBehavior.Cascade);
+           
             const string USER_ID = "22e40406-8a9d-2d82-912c-5d6a640ee696";
 
 
@@ -173,8 +175,7 @@ namespace WaiterChefBoss.Data
        {
            Id = 2,
            Name = "Shkembe chorba",
-           Description = "Kg. tripe (veal)\r\nMilk\r\nsweet paprika\r\nCayenne pepper\r\nSalt to taste\r\ngarlic\r\nVinegar\r\nOil\r\nbutter"
-,
+           Description = "Kg. tripe (veal)\r\nMilk\r\nsweet paprika\r\nCayenne pepper\r\nSalt to taste\r\ngarlic\r\nVinegar\r\nOil\r\nbutter",
            Status = 1,
            TimeCooking = 15,
            Weight = 0.5,
