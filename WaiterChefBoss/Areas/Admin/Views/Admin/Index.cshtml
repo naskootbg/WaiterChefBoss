@@ -11,7 +11,7 @@
                 <a class="nav-link bg-outline-success" id="EditFood" href="#" runat="server">Mange Food</a>
                 <a class="nav-link bg-outline-success" id="EditProduct" href="#" runat="server">Manage Users</a>
                 <a class="nav-link bg-outline-success" id="OrderClick" href="#" runat="server">Orders Active Right Now</a>
-                <a class="nav-link bg-outline-success" id="" href="#" runat="server">Reports</a>
+                <a class="nav-link bg-outline-success" id="reports" href="#" runat="server">Reports</a>
             </nav>
         </div>
         <div class="col">
@@ -24,9 +24,9 @@
             <div id="dvProductDetails" style="display:none">
                 <partial name="_Products" />
             </div>
-            <div id="dvReports" style="display:none">
+            <canvas id="dvReports" style="display:none">
                 
-            </div>
+            </canvas>
              
                 <div id="OrderResults" style="display:none"></div>
              
@@ -43,18 +43,21 @@
             
             $('#EditFood').click(function () {
                 $('#OrderResults').hide();
+                $('#dvReports').hide();
                 $('#dvUserdetails').hide();
                 $('#dvProductDetails').show();
         });
 
             $('#EditProduct').click(function () {
                 $('#OrderResults').hide();
+                $('#dvReports').hide();
                 $('#dvUserdetails').show();
                 $('#dvProductDetails').hide();
             });
             
             $("#OrderClick").click(function (e) {
                 $('#OrderResults').show();
+                $('#dvReports').hide();
                 $('#dvUserdetails').hide();
                 $('#dvProductDetails').hide();
                     $.ajax({

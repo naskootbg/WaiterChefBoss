@@ -71,6 +71,7 @@ app.UseStatusCodePagesWithReExecute("/Home/Error", "?code={0}");
 app.UseResponseCaching();
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // Use the custom logging middleware

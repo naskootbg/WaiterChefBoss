@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
+using System.Globalization;
 using WaiterChefBoss.Data;
 
 namespace WaiterChefBoss.Controllers
@@ -21,9 +22,10 @@ namespace WaiterChefBoss.Controllers
         public JsonResult AllTime()
         {
             var jsonData = context.Orders
+                .Where(o => o.Status != 0)
                 .Select(t => new
                 {
-                    date = t.DateAdded.ToShortDateString(),
+                    date = t.DateAdded.ToString(),
                     total = t.Total
                 }).ToArray();
 
@@ -45,7 +47,7 @@ namespace WaiterChefBoss.Controllers
                     count = d.OrderProducts.Where(p => p.ProductId == id).Count()
                 })
                 .ToArray();
-          
+
 
 
             return new JsonResult(jsonData);
@@ -71,6 +73,25 @@ namespace WaiterChefBoss.Controllers
 
             return new JsonResult(jsonData);
         }
+        [Route("table")]
+        [HttpGet]
+        public JsonResult Table(int id)
+        {
+            var data = context.Orders
+                 .Where(o => o.Status != 0 && o.Table == id)
+                 .AsNoTracking()
+                 .ToList();
+
+            foreach (var item in data)
+            {
+
+            }
+
+
+            return new JsonResult(data);
+        }
+
+
     }
 }
- 
+
