@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
-using System.Globalization;
 using WaiterChefBoss.Data;
+using static WaiterChefBoss.Data.DataConstants;
 
 namespace WaiterChefBoss.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = BossRole)]
     public class ReportsController : ControllerBase
     {
         public readonly ApplicationDbContext context;
@@ -17,13 +18,36 @@ namespace WaiterChefBoss.Controllers
             context = _context;
         }
 
+        private IQueryable<Data.Models.Order> AllOrdersByDate(string period, int howMany)
+        {
+            switch (period)
+            {
+                case "d":
+                    return context.Orders
+                .Where(o => o.Status != 0 && o.DateAdded >= DateTime.Now.AddDays(-howMany)).AsQueryable();
+                    
+                case "m":
+                    return context.Orders
+                .Where(o => o.Status != 0 && o.DateAdded >= DateTime.Now.AddMonths(-howMany)).AsQueryable();
+                   
+                case "y":
+                    return context.Orders
+                .Where(o => o.Status != 0 && o.DateAdded >= DateTime.Now.AddYears(-howMany)).AsQueryable();
+                    
+                default:
+                    return context.Orders
+                .Where(o => o.Status != 0 && o.DateAdded >= DateTime.Now.AddMonths(-howMany)).AsQueryable();
+                    
+            }
+            
+        }
+
         [Route("full")]
         [HttpGet]
-        public JsonResult AllTime()
-        {
-            var jsonData = context.Orders
-                .Where(o => o.Status != 0)
-                .Select(t => new
+        public JsonResult AllTime(int howMany, string period)
+        {             
+
+            var jsonData = AllOrdersByDate( period, howMany).Select(t => new
                 {
                     date = t.DateAdded.ToString(),
                     total = t.Total

@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using WaiterChefBoss.Data;
+using static WaiterChefBoss.Data.DataConstants;
 
 namespace WaiterChefBoss.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = BossRole)]
     public class MenuController : ControllerBase
     {
         public readonly ApplicationDbContext context;

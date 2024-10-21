@@ -19,17 +19,28 @@
                 <partial name="_Users" />
             </div>
             <div id="Orders" style="display:none">
-            
             </div>
             <div id="dvProductDetails" style="display:none">
                 <partial name="_Products" />
             </div>
-            <canvas id="dvReports" style="display:none">
+            <div id="dvReports" style="display:none">
+                <div class="dvReportsForm">
+                    <lable asp-for="howMany">Last:</lable>
+                    <input type="number" min="-31" max="31" id="howMany" value="1">
+                    <select id="period">
+                        <option value="d">Days</option>
+                        <option value="m" selected>Monts</option>
+                        <option value="y">Years</option>
+                    </select>
+                    <button id="displayReport">Display Report</button>
+                </div>
+                <h6 id="reportPeriod">The report for the last 1 month</h6>
                 
-            </canvas>
-             
-                <div id="OrderResults" style="display:none"></div>
-             
+            </div>
+
+
+            <div id="OrderResults" style="display:none"></div>
+
 
         </div>
     </div>
@@ -39,14 +50,14 @@
 
     <script>
 
-    $(document).ready(function () {
-            
+        $(document).ready(function () {
+
             $('#EditFood').click(function () {
                 $('#OrderResults').hide();
                 $('#dvReports').hide();
                 $('#dvUserdetails').hide();
                 $('#dvProductDetails').show();
-        });
+            });
 
             $('#EditProduct').click(function () {
                 $('#OrderResults').hide();
@@ -54,30 +65,30 @@
                 $('#dvUserdetails').show();
                 $('#dvProductDetails').hide();
             });
-            
+
             $("#OrderClick").click(function (e) {
                 $('#OrderResults').show();
                 $('#dvReports').hide();
                 $('#dvUserdetails').hide();
                 $('#dvProductDetails').hide();
-                    $.ajax({
-                        type: "POST",
+                $.ajax({
+                    type: "POST",
                     url: "/Order/OrdersFromAll",
-                        contentType: "application/json; charset=utf-8",
-                        data: '{}',
-                        dataType: "html",
-                        success: function (result, status, xhr) {
+                    contentType: "application/json; charset=utf-8",
+                    data: '{}',
+                    dataType: "html",
+                    success: function (result, status, xhr) {
                         $("#OrderResults").html(result);
-                        },
-                        error: function (xhr, status, error) {
+                    },
+                    error: function (xhr, status, error) {
                         $("#OrderResults").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-                        }
-                    });
-                
-                
+                    }
+                });
+
+
             });
 
-    });
+        });
 
     </script>
 

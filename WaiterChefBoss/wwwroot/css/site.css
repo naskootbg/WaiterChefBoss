@@ -16,3 +16,18 @@ html {
 body {
   margin-bottom: 60px;
 }
+.dvReportsForm{
+    display: inline-block;
+ 
+ 
+}
+
+.dvReports {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.col col-lg-2{
+    margin-left: -3em;
+}
